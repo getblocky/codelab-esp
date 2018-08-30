@@ -1,0 +1,89 @@
+<!--
+
+    Copyright © 2017 The Blocky Authors
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+-->
+<!DOCTYPE html>
+<html ng-app="blocky" ng-strict-di>
+
+<head>
+  <title ng-bind="pageTitle">Blocky - IoT Made Simple</title>
+  <base href="/" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="description" content="" />
+  <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <link rel="icon" type="image/x-icon" href="static/blocky.ico" />
+  <link href="/iot-icons/styles.css" rel="stylesheet">
+</head>
+
+<cookie-law-banner message="This web app is now still in beta stage and not stable enough for critical products yet. This should only be used for IoT learning and prototype testing until it is released officially."></cookie-law-banner>
+
+<body>
+  <ui-view layout="row" layout-fill>
+  </ui-view>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYHV8yOWBFCA6B3kMY4ytr3E2u98CLumY" async defer></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/blockly_compressed.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/blocks_compressed.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/python_compressed.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/en.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/blocks/blocky.js"></script>        
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/main_loop.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/buttons.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/buzzer.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/lcd.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/led.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/light.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/message.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/moisture.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/sound.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/rotary.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/ultrasonic.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/mosfet.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/motion.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/music.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/neopixel.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/pins.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/pwm.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/relay.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/servo.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/temperature.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/time.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/touch.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/python.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/messages/en/messages.js"></script>
+  
+  <script src="/blockly/blocky-rules/blocks_blocky_rules.js"></script>
+  <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/javascript_compressed.js"></script>
+  <script src="/blockly/blocky-rules/generators_blocky_rules.js"></script>
+
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-108105662-2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-108105662-2');
+  </script>
+</body>
+
+</html>
