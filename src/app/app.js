@@ -45,24 +45,7 @@ import 'angular-material/angular-material.min.css';
 import 'angular-material-icons/angular-material-icons.css';
 import 'angular-hotkeys/build/hotkeys.min.css';
 import '../scss/main.scss';
-import 'ng-ripple/dist/css/ng-ripple.css';
-import 'ng-ripple/dist/js/ng-ripple.js';
-import 'angular-gridster2/dist/gridster.css';
-import 'angular-gridster2/dist/gridster.js';
-import 'angularjs-gauge/dist/angularjs-gauge.min.js';
-import 'chart.js/dist/Chart.min.js';
-import 'angular-chart.js/dist/angular-chart.min.js';
-import 'angular-radial-color-picker/dist/js/color-picker.min.js';
-import 'angular-radial-color-picker/dist/css/color-picker.min.css';
-import 'Propeller/dist/propeller.min.js';
-import 'angular-ui-tree/dist/angular-ui-tree.min.js';
-import 'angular-ui-tree/dist/angular-ui-tree.min.css'
-import 'md-steppers/dist/md-steppers.css';
-import 'md-steppers/dist/md-steppers.js';
 import 'angular-cookie-law/dist/angular-cookie-law.min.js';
-import 'ngGeolocation/ngGeolocation.min.js';
-import 'angular-clock/dist/angular-clock.min.js';
-import 'angular-clock/dist/angular-clock.css';
 import 'ngclipboard';
 
 import AppConfig from './app.config';
@@ -79,10 +62,6 @@ angular.module('blocky', [
         angularJwt,
         mdDataTable,
         angularStorage,
-        'ngRipple',
-        'angular-gridster2',
-        'angularjs-gauge',
-        'chart.js',
         blockyLocales,
         blockyToast,
         blockyHome,
@@ -90,11 +69,7 @@ angular.module('blocky', [
         blockyApiLogin,
         blockyApiUser,
         uiRouter,
-        'md-steppers',
         'angular-cookie-law',
-        'ngGeolocation',
-        'ds.clock',
-        'ui.tree',
         'ngclipboard'
     ])
     .config(AppConfig)

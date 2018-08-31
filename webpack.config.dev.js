@@ -38,8 +38,7 @@ module.exports = {
         new webpack.ProvidePlugin({
             $: "jquery",
             jQuery: "jquery",
-            "window.jQuery": "jquery",
-            moment: "moment"
+            "window.jQuery": "jquery"
         }),
         new CopyWebpackPlugin([{
                 from: './src/blocky.ico',
