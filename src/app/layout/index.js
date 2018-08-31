@@ -16,6 +16,7 @@
 import './home.scss';
 
 import uiRouter from 'angular-ui-router';
+import FBAngular from 'angular-fullscreen';
 
 import HomeRoutes from './home.routes';
 import HomeController from './home.controller';
@@ -27,6 +28,7 @@ import blockProfile from '../profile';
 
 export default angular.module('blocky.home', [
     uiRouter,
+    FBAngular.name,
     blockyCodeLab,
     blockyUserMenu,
     blockyMenu,
