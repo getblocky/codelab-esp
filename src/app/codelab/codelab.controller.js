@@ -63,6 +63,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.currentDevice = null;
     vm.currentLog = '';
     vm.isUploadSuccess = false;
+    vm.isEmbed = false;
     vm.pythonEditorOptions = {
         useWrapMode: true,
         showGutter: true,
@@ -124,6 +125,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.downloadProject = downloadProject;
     vm.toggleSidenav = toggleSidenav;
     vm.uploadScript = uploadScript;
+    vm.updateFirmware = updateFirmware;
     vm.cancel = cancel;
     vm.showBottomSheetActions = showBottomSheetActions;
     vm.renameProject = renameProject;
@@ -166,6 +168,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                                 vm.currentDevice = undefined;
                                 loadUserDevices();
                                 toast.showSuccess('Device ' + message.name + ' has come online');
+                                $log.log('device: ', message);
+                                // Check device firmware and update if any
+
                             } else if (message.event === 'offline') {
                                 vm.currentDevice = undefined;
                                 loadUserDevices();
@@ -213,7 +218,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 grid: {
                     spacing: 25,
                     length: 3,
-                    colour: '#ccc',
+                    colour: '#eee',
                     snap: true
                 },
                 toolbox: document.getElementById('toolbox'),
@@ -316,7 +321,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                     .targetEvent($event)
                     .ok($translate.instant('script.confirm-convert-ok'))
                     .cancel($translate.instant('script.confirm-convert-cancel'));
-
                 $mdDialog.show(confirm).then(function () {
                     restoreBlockMode();
                 });
@@ -325,6 +329,8 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             }
         } else {
             vm.script.mode = 'python';
+			vm.workspace.gl = 'some';
+		
             vm.script.python = Blockly.Python.workspaceToCode(vm.workspace);
             store.set('script', vm.script);
         }
@@ -402,6 +408,20 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         $state.go('home.codelab');
     }
 
+    function updateFirmware() {
+        var chipId = vm.currentDevice.chipId;
+        var topic = baseSysTopicUrl + '/' + chipId + '/run';
+        if (mqttClient && mqttClient.connected && chipId) {
+            mqttClient.publish(topic, '', null, function (err) {
+                if (err) {
+                    toast.showError($translate.instant('script.firmware-update-failed-error'));
+                }
+            });
+        } else {
+            toast.showError($translate.instant('script.firmware-update-failed-error'));
+        }
+    }
+
     function uploadScript(mode) {
         var chipId = vm.currentDevice.chipId;
         var topic = baseSysTopicUrl + '/' + chipId + '/' + mode;
@@ -413,8 +433,17 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             var maxSize = settings.maxBytesUpload;
 
             vm.isUploadSuccess = false;
+            var scriptToBeUploaded = vm.script.python;
+
+            if (vm.isEmbed) {
+                scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
+                $log.log(scriptToBeUploaded);
+            } else {
+                $log.log('Not embeed');
+            }
+            
             if (byteLength(vm.script.python) < maxSize) {
-                mqttClient.publish(topic, vm.script.python, null, function (err) {
+                mqttClient.publish(topic, scriptToBeUploaded, null, function (err) {
                     if (err) {
                         toast.showError($translate.instant('script.script-upload-failed-error'));
                     }
@@ -425,7 +454,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                     }, 10000);
                 });
             } else {
-                var splitedStrings = splitString(vm.script.python, maxSize);
+                var splitedStrings = splitString(scriptToBeUploaded, maxSize);
                 for (var i = 0; i < splitedStrings.length; i++) {
                     var sharedTopic = topic + '/' + (i + 1).toString();
                     if (i === splitedStrings.length - 1) {

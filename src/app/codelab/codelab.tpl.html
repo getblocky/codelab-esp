@@ -26,8 +26,19 @@
     <md-sidenav flex-gt-sm="25" flex="30" id="side-bar" class="md-whiteframe-1dp md-sidenav-right" md-is-locked-open="vm.isSidenavOpen && $mdMedia('gt-xs')"
         md-component-id="right">
         <div flex layout="column" layout-padding>
+            <div layout="row">
+                <md-switch ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-model="vm.isEmbed" aria-label="Embed Status">
+                    Embed status
+                </md-switch>
+            </div>
             <div layout="row" id="device-actions">
                 <div layout="row">
+                    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-click="vm.updateFirmware()" class="md-icon-button" aria-label="Device Menu">
+                        <md-tooltip md-direction="bottom">
+                            Update firmware to latest version
+                        </md-tooltip>
+                        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
+                    </md-button>
                     <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-click="vm.uploadScript('ota')" class="md-icon-button" aria-label="Device Menu">
                         <md-tooltip md-direction="bottom">
                             Send and save script. It will be run every time blocky starts.
@@ -126,6 +137,10 @@
     <!-- In Mobile -->
     <md-button aria-label="Save Project" ng-click="vm.saveProjectMobile()" hide-gt-xs>
         <i class="fa fa-floppy-o" aria-hidden="true"></i>
+    </md-button>
+    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" aria-label="Upload Script" ng-click="vm.updateFirmware()"
+        hide-gt-xs>
+        <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
     </md-button>
     <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" aria-label="Upload Script" ng-click="vm.uploadScript('ota')"
         hide-gt-xs>
