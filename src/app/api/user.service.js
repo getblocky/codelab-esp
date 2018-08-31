@@ -38,7 +38,6 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
         gotoDefaultPlace: gotoDefaultPlace,
         logout: logout,
         reloadUser: reloadUser,
-        updateDefaultDashboard: updateDefaultDashboard,
         changeAuthKey: changeAuthKey
     }
 
@@ -197,24 +196,8 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
         return deferred.promise;
     }
 
-    function userHasDefaultDashboard() {
-        return false;
-    }
-
     function gotoDefaultPlace(params) {
-        if (currentUser && isAuthenticated()) {
-            var place = 'home.codelab';
-            if (userHasDefaultDashboard()) {
-                place = 'home.dashboard';
-            }
-            $state.go(place, params);
-        } else {
-            $state.go('home.codelab', params);
-        }
-    }
-
-    function updateDefaultDashboard() {
-        // TODO
+        $state.go('home.codelab', params);
     }
 
     function changeAuthKey() {

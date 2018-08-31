@@ -34,8 +34,6 @@ export default function HomeController(menu, $state, Fullscreen, deviceService, 
     $scope.$on('$stateChangeSuccess', function () {
         if ($state.current.name === 'home' || $state.current.name.indexOf('codelab') > -1) {
             vm.currentNavItem = 'home.codelab';
-        } else if ($state.current.name.indexOf('rules') > -1) {
-            vm.currentNavItem = 'home.rules';
         } else {
             vm.currentNavItem = $state.current.name;
         }

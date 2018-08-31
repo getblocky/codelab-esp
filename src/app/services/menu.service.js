@@ -34,18 +34,6 @@ function Menu() {
                 attributeName: 'home.codelab',
                 state: 'home.codelab',
                 faIcon: 'fa-file-code-o'
-            },
-            {
-                name: 'home.dashboard',
-                attributeName: 'home.dashboard',
-                state: 'home.dashboard',
-                faIcon: 'fa-th'
-            },
-            {
-                name: 'home.rules',
-                attributeName: 'home.rules',
-                state: 'home.rules',
-                faIcon: 'fa-cogs'
             }
         ];
 
