@@ -1,8 +1,7 @@
 {
-  "name": "blocky",
-  "private": true,
-  "version": "1.2.3",
-  "description": "Blocky UI",
+  "name": "blocky-codelab-esp",
+  "version": "1.0.0",
+  "description": "Blocky Code Lab ESP",
   "licenses": [
     {
       "type": "Apache-2.0",
