@@ -45,19 +45,9 @@
 					</md-icon>
 					<input ng-required="true" id="password-input" type="password" ng-model="vm.user.password" />
 				</md-input-container>
-
-				<div layout-gt-sm="column" layout-align="space-between stretch">
-					<div layout-gt-sm="column" layout-align="space-between end">
-						<md-button ng-click="vm.resetPasswordRequest()">Forgot password?
-						</md-button>
-					</div>
-				</div>
 				<div layout="column">
 					<md-button ng-disabled="loading || theForm.$invalid" type="submit" class="md-accent md-raised">
 						Login
-					</md-button>
-					<div style="padding:10px 0;text-align:center">Do not have an account?</div>
-					<md-button class="md-raised md-primary" ng-click="vm.signUp()">Create an account
 					</md-button>
 				</div>
 			</div>

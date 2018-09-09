@@ -35,30 +35,10 @@ import showSharedProjectTemplate from './show-shared-project.tpl.html';
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, settings, $timeout, $log) {
+export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout) {
     var vm = this;
-    var mqttClient;
-    var authKey = '';
-    var baseSysTopicUrl = '';
 
     vm.isUserLoaded = userService.isAuthenticated();
-    if (vm.isUserLoaded) {
-        authKey = userService.getCurrentUser().authKey;
-        $rootScope.authKey = authKey;
-        baseSysTopicUrl = authKey + '/sys';
-    } else {
-        vm.devices = [{
-            id: 0,
-            name: 'Demo device',
-            status: 0
-        }];
-    }
-
-    try {
-        initMqttSession();
-    } catch (err) {
-        $log.log('Exception:', err.message);
-    }
 
     vm.currentDevice = null;
     vm.currentLog = '';
@@ -105,11 +85,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     $scope.$on("$destroy", function () {
         // Save project to local storage
         prepareProjectDataAndSaveToLocal();
-
-        // Clean up mqtt session
-        if (mqttClient) {
-            mqttClient.end();
-        }
         window.removeEventListener('resize', onResize, false);
     });
 
@@ -137,56 +112,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.deleteDevice = deleteDevice;
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
-
-    function initMqttSession() {
-        if (angular.isDefined(mqtt) && vm.isUserLoaded) {
-            mqttClient = mqtt.connect(settings.mqtt.url, {
-                host: settings.mqtt.host,
-                port: settings.mqtt.port,
-                username: '',
-                password: authKey
-            });
-            mqttClient.on('connect', function () {
-                $timeout(function () {
-                    loadUserDevices();
-                });
-            });
-            mqttClient.on('message', function (topic, message) {
-                $timeout(function () {
-                    try {
-                        var chipId = '';
-                        if (topic.indexOf('/log') > -1) {
-                            message = message.toString();
-                            chipId = topic.replace(baseSysTopicUrl, '').replace('/log', '').replace('/', '');
-                            var deviceLog = store.get('deviceLog_' + chipId) || '';
-                            if (vm.currentDevice && vm.currentDevice.chipId === chipId) {
-                                vm.currentLog = deviceLog;
-                            }
-                        } else {
-                            message = angular.fromJson(message.toString());
-                            if (message.event === 'register') {
-                                vm.currentDevice = undefined;
-                                loadUserDevices();
-                                toast.showSuccess('Device ' + message.name + ' has come online');
-                                $log.log('device: ', message);
-                                // Check device firmware and update if any
-
-                            } else if (message.event === 'offline') {
-                                vm.currentDevice = undefined;
-                                loadUserDevices();
-                                toast.showError('Device ' + message.name + ' just went offline');
-                            } else if (message.event === 'ota_ack') {
-                                vm.isUploadSuccess = true;
-                                toast.showSuccess($translate.instant('script.script-upload-success'));
-                            }
-                        }
-                    } catch (err) {
-                        $log.log('error', err.message);
-                    }
-                }, 500);
-            });
-        }
-    }
 
     function initScriptData() {
         if (vm.scriptId) { // Load existing script
@@ -270,45 +195,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             }
             Blockly.Xml.domToWorkspace(xml, vm.workspace);
             Blockly.svgResize(vm.workspace);
-        }
-    }
-
-    function loadUserDevices() {
-        deviceService.getAllDevices().then(function success(devices) {
-            mqttClient.unsubscribe(baseSysTopicUrl);
-            mqttClient.subscribe(baseSysTopicUrl, {
-                qos: 2
-            });
-            if (devices.length) {
-                vm.devices = devices;
-                loadSelectedDevice();
-                subscribeDeviceTopics();
-            }
-        });
-    }
-
-    function loadSelectedDevice() {
-        var selectedDeviceId = store.get('selectedDeviceId');
-        if (selectedDeviceId) {
-            for (var i = 0; i < vm.devices.length; i++) {
-                if (selectedDeviceId === vm.devices[i].id) {
-                    vm.currentDevice = vm.devices[i];
-                }
-            }
-        }
-    }
-
-    function subscribeDeviceTopics() {
-        var chipId = '';
-        if (mqttClient && mqttClient.connected) {
-            for (var i = 0; i < vm.devices.length; i++) {
-                chipId = vm.devices[i].chipId;
-                var logTopic = baseSysTopicUrl + '/' + chipId + '/log';
-                mqttClient.unsubscribe(logTopic);
-                mqttClient.subscribe(logTopic, {
-                    qos: 2
-                });
-            }
         }
     }
 
@@ -409,72 +295,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     }
 
     function updateFirmware() {
-        var chipId = vm.currentDevice.chipId;
-        var topic = baseSysTopicUrl + '/' + chipId + '/run';
-        if (mqttClient && mqttClient.connected && chipId) {
-            mqttClient.publish(topic, '', null, function (err) {
-                if (err) {
-                    toast.showError($translate.instant('script.firmware-update-failed-error'));
-                }
-            });
-        } else {
-            toast.showError($translate.instant('script.firmware-update-failed-error'));
-        }
     }
 
-    function uploadScript(mode) {
-        var chipId = vm.currentDevice.chipId;
-        var topic = baseSysTopicUrl + '/' + chipId + '/' + mode;
-        prepareProjectDataAndSaveToLocal();
-        if (vm.script.python.length === 0) {
-            return;
-        }
-        if (mqttClient && mqttClient.connected && chipId) {
-            var maxSize = settings.maxBytesUpload;
-
-            vm.isUploadSuccess = false;
-            var scriptToBeUploaded = vm.script.python;
-
-            if (vm.isEmbed) {
-                scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
-                $log.log(scriptToBeUploaded);
-            } else {
-                $log.log('Not embeed');
-            }
-            
-            if (byteLength(vm.script.python) < maxSize) {
-                mqttClient.publish(topic, scriptToBeUploaded, null, function (err) {
-                    if (err) {
-                        toast.showError($translate.instant('script.script-upload-failed-error'));
-                    }
-                    $timeout(function () {
-                        if (!vm.isUploadSuccess) {
-                            toast.showError($translate.instant('script.script-upload-failed-error'));
-                        }
-                    }, 10000);
-                });
-            } else {
-                var splitedStrings = splitString(scriptToBeUploaded, maxSize);
-                for (var i = 0; i < splitedStrings.length; i++) {
-                    var sharedTopic = topic + '/' + (i + 1).toString();
-                    if (i === splitedStrings.length - 1) {
-                        sharedTopic = topic + '/$';
-                    }
-                    mqttClient.publish(sharedTopic, splitedStrings[i], null, function (err) {
-                        if (err) {
-                            toast.showError($translate.instant('script.script-upload-failed-error'));
-                        }
-                        $timeout(function () {
-                            if (!vm.isUploadSuccess) {
-                                toast.showError($translate.instant('script.script-upload-failed-error'));
-                            }
-                        }, 10000);
-                    });
-                }
-            }
-        } else {
-            toast.showError($translate.instant('script.script-upload-failed-error'));
-        }
+    function uploadScript() {
     }
 
     function newProject() {
@@ -634,9 +457,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     function saveDevice() {
         deviceService.saveDevice(vm.currentDevice).then(
             function success() {
-                var chipId = vm.currentDevice.chipId;
-                var topic = baseSysTopicUrl + '/' + chipId + '/rename';
-                mqttClient.publish(topic, vm.currentDevice.name, null, function () {});
             },
             function fail() {}
         );
@@ -681,43 +501,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         if (vm.currentDevice) {
             store.set('deviceLog_' + vm.currentDevice.chipId, '');
             vm.currentLog = '';
-        }
-    }
-
-    function byteLength(str) {
-        // returns the byte length of an utf8 string
-        var s = str.length;
-        for (var i = str.length - 1; i >= 0; i--) {
-            var code = str.charCodeAt(i);
-            if (code > 0x7f && code <= 0x7ff) s++;
-            else if (code > 0x7ff && code <= 0xffff) s += 2;
-            if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
-        }
-        return s;
-    }
-
-    function splitString(str, size) {
-        var output = [];
-        var lines = str.split('\n');
-        var strPart = '';
-        var offsetBytes = 100;
-        if (byteLength(str) < size) {
-            output[0] = str;
-            return output[0];
-        } else {
-            if (size - offsetBytes < 0) {
-                size = offsetBytes;
-            }
-            for (var i = 0; i < lines.length; i++) {
-                strPart = strPart.concat('\n', lines[i]);
-                if (byteLength(strPart) > size) {
-                    output.push(strPart);
-                    strPart = '';
-                } else if (i === lines.length - 1) {
-                    output.push(strPart);
-                }
-            }
-            return output;
         }
     }
 

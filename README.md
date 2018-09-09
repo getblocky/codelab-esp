@@ -16,7 +16,6 @@ Features:
 * Upload code over the air (OTA) via cloud
 * Remote control from Internet with dashboard designed using easy drag and drop* 
 * Open RESTful APIs for integration with any other system
-* Lightweighted and open sourced broker server based on MQTT
 * Able to deploy a private server with Docker
 
 [Video: Build IoT Device.](https://youtu.be/z-Spw_wk3Uc)

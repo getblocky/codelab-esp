@@ -48,10 +48,6 @@ export default function AppRun($rootScope, $injector, $location, $state, $mdDial
             } else if (to.name === 'home') {
                 $state.go('home.codelab');
             }
-
-            if (to.name.indexOf('reset') === -1 && to.name.indexOf('forgot') === -1) {
-                store.set('lastState', to.name);
-            }
             
             if (angular.isDefined(to.data.pageTitle)) {
                 $translate(to.data.pageTitle).then(function (translation) {

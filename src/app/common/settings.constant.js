@@ -16,18 +16,10 @@
 export default angular.module('blocky.settings', [])
     .constant('settings',
         {
-            baseApiUrl: 'https://api.getblocky.com/prod',
+            baseApiUrl: 'http://localhost:3000/api/v1',
             localApiUrl: 'http://192.168.4.1',
             entryPoints: {
-                login: '/users/signup',
-                signup: '/users/login',
-                forgotPassword: '/users/forgotPassword',
-                resetPassword: '/users/resetPassword'
-            },
-            mqtt: {
-                url: 'wss://broker.getblocky.com',
-                host: 'broker.getblocky.com',
-                port: '8883'
+                login: '/login'
             },
             maxBytesUpload: 250,
             latestFirmwareVersion: "1.1"
