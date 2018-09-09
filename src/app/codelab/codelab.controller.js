@@ -29,7 +29,6 @@ import bottomSheetActionsTemplate from './bottom-sheet-actions.tpl.html';
 import bottomSheetDeviceLogTemplate from './bottom-sheet-device-log.tpl.html';
 import blocklyToolbox from './blockly-toolbox.tpl.html';
 import blocklyWorkspace from './blockly-workspace.tpl.html';
-import renameDeviceTemplate from './rename-device.tpl.html';
 import showSharedProjectTemplate from './show-shared-project.tpl.html';
 
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
@@ -107,9 +106,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.deleteProject = deleteProject;
     vm.shareProject = shareProject;
     vm.showDeviceLog = showDeviceLog;
-    vm.renameDevice = renameDevice;
     vm.saveDevice = saveDevice;
-    vm.deleteDevice = deleteDevice;
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
 
@@ -117,7 +114,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         if (vm.scriptId) { // Load existing script
             scriptService.getScript(vm.scriptId).then(
                 function success(script) {
-                    vm.script.id = script.id;
+                    vm.script._id = script._id;
                     vm.script.name = script.name;
                     vm.script.xml = script.xml || '';
                     vm.script.python = script.python || '';
@@ -236,7 +233,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         $mdDialog.hide();
         if (vm.isUserLoaded) {
             prepareProjectDataAndSaveToLocal();
-            if (angular.isUndefined(vm.script.id) || vm.script.id.length === 0) { // New project
+            if (angular.isUndefined(vm.script._id) || vm.script._id.length === 0) { // New project
                 addProject();
             } else { // Existing project
                 scriptService.saveScript(vm.script);
@@ -274,9 +271,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     function addProject() {
         scriptService.addScript(vm.script).then(
             function success(script) {
-                vm.script.id = script.id;
+                vm.script._id = script._id;
                 $state.go('home.codelab.view', {
-                    scriptId: script.id
+                    scriptId: script._id
                 });
             },
             function fail() {
@@ -287,7 +284,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
 
     function duplicateProject() {
         vm.script.name = vm.script.name + ' (Duplicated)';
-        vm.script.id = '';
+        delete vm.script._id;
         vm.script.isPublic = 0;
         store.set('script', vm.script);
         $mdBottomSheet.hide();
@@ -345,7 +342,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             .cancel($translate.instant('action.cancel'))
             .ok($translate.instant('action.delete'));
         $mdDialog.show(confirm).then(function () {
-                scriptService.deleteScript(vm.script.id).then(function success() {
+                scriptService.deleteScript(vm.script._id).then(function success() {
                     newProject();
                 });
             },
@@ -420,39 +417,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             controllerAs: 'vm',
         }).then(function () {}).catch(function () {});
     }
-
-    function renameDevice() {
-        $mdBottomSheet.hide();
-        $mdDialog.show({
-            controller: () => this,
-            controllerAs: 'vm',
-            templateUrl: renameDeviceTemplate,
-            parent: angular.element($document[0].body),
-            fullscreen: false
-        }).then(function () {}, function () {});
-    }
-
-    function deleteDevice($event) {
-        $mdBottomSheet.hide();
-        var confirm = $mdDialog.confirm()
-            .targetEvent($event)
-            .title($translate.instant('device.delete-device-title', {
-                deviceName: vm.currentDevice.name
-            }))
-            .htmlContent($translate.instant('device.delete-device-text'))
-            .ariaLabel($translate.instant('action.delete'))
-            .cancel($translate.instant('action.cancel'))
-            .ok($translate.instant('action.delete'));
-        $mdDialog.show(confirm).then(function () {
-                deviceService.deleteDevice(vm.currentDevice.id).then(function success() {
-                    $state.go($state.current, null, {
-                        reload: true
-                    });
-                });
-            },
-            function () {});
-    }
-
 
     function saveDevice() {
         deviceService.saveDevice(vm.currentDevice).then(

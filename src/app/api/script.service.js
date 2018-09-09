@@ -44,7 +44,7 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
         var deferred = $q.defer();
 
         if (!allScripts) {
-            var url = settings.baseApiUrl + '/scripts';
+            var url = settings.baseApiUrl + '/user/scripts';
             $http.get(url, null).then(function success(response) {
                 allScripts = response.data;
                 deferred.resolve();
@@ -73,7 +73,7 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
 
     function getScript(scriptId) {
         var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/scripts/' + scriptId;
+        var url = settings.baseApiUrl + '/script/' + scriptId;
         $http.get(url, null).then(function success(response) {
             deferred.resolve(response.data);
         }, function fail(response) {
@@ -84,7 +84,7 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
 
     function saveScript(script) {
         var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/scripts/' + script.id;
+        var url = settings.baseApiUrl + '/script/' + script._id;
         $http.put(url, script).then(function success(response) {
             invalidateScriptsCache();
             deferred.resolve(response.data);
@@ -96,7 +96,7 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
 
     function deleteScript(scriptId) {
         var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/scripts/' + scriptId;
+        var url = settings.baseApiUrl + '/script/' + scriptId;
         $http.delete(url).then(function success() {
             invalidateScriptsCache();
             deferred.resolve();
@@ -108,7 +108,7 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
 
     function addScript(script) {
         var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/scripts';
+        var url = settings.baseApiUrl + '/script';
         $http.post(url, script).then(function success(response) {
             invalidateScriptsCache();
             deferred.resolve(response.data);

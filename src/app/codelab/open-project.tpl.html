@@ -51,7 +51,7 @@
         </tr>
       </thead>
       <tbody md-body>
-        <tr ng-click="vm.openProject(item.id)" md-row md-select="item" ng-repeat="item in vm.projects | filter: vm.customSearch | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit">
+        <tr ng-click="vm.openProject(item._id)" md-row md-select="item" ng-repeat="item in vm.projects | filter: vm.customSearch | orderBy: vm.query.order | limitTo: vm.query.limit : (vm.query.page -1) * vm.query.limit">
           <td md-cell>{{item.name}}</td>
           <td md-cell>{{item.updatedAt | date:'yyyy-MM-dd HH:mm:ss'}}</td>
         </tr>

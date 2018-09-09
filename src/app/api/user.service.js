@@ -20,7 +20,7 @@ export default angular.module('blocky.api.user', [blockyApiLogin])
     .name;
 
 /*@ngInject*/
-function UserService($q, $rootScope, store, jwtHelper, $state, $log) {
+function UserService($q, $rootScope, store, jwtHelper, $state) {
     var currentUser = null,
         userLoaded = false;
 
@@ -135,7 +135,6 @@ function UserService($q, $rootScope, store, jwtHelper, $state, $log) {
             validateJwtToken().then(function success() {
                 var jwtToken = store.get('jwt_token');
                 currentUser = jwtHelper.decodeToken(jwtToken);
-                $log.log('currentUser', currentUser);
                 deferred.resolve();
             }, function fail() {
                 deferred.reject();

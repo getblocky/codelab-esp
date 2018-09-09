@@ -22,7 +22,6 @@ function DeviceService($http, $q, $rootScope, $filter, settings) {
     var service = {
         getAllDevices: getAllDevices,
         getDevice: getDevice,
-        deleteDevice: deleteDevice,
         saveDevice: saveDevice,
         loadAccessPointList: loadAccessPointList,
         saveDeviceConfig: saveDeviceConfig,
@@ -58,17 +57,6 @@ function DeviceService($http, $q, $rootScope, $filter, settings) {
         var url = settings.baseApiUrl + '/devices/' + device.id;
         $http.put(url, device).then(function success(response) {
             deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
-    function deleteDevice(deviceId) {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/devices/' + deviceId;
-        $http.delete(url).then(function success() {
-            deferred.resolve();
         }, function fail(response) {
             deferred.reject(response.data);
         });
