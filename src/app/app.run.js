@@ -16,19 +16,15 @@
 import UrlHandler from './url.handler';
 
 /*@ngInject*/
-export default function AppRun($rootScope, $injector, $location, $state, $mdDialog, userService, $translate, store) {
+export default function AppRun($rootScope, $injector, $location, $state, $mdDialog, userService, $translate) {
 
     var forbiddenDialog = null;
 
     initWatchers();
 
     function initWatchers() {
-        $rootScope.unauthenticatedHandle = $rootScope.$on('unauthenticated', function (event, doLogout) {
-            if (doLogout) {
-                $state.go('home.codelab');
-            } else {
-                UrlHandler($injector, $location);
-            }
+        $rootScope.unauthenticatedHandle = $rootScope.$on('unauthenticated', function () {
+            $state.go('home.codelab');
         });
 
         $rootScope.authenticatedHandle = $rootScope.$on('authenticated', function () {
@@ -42,13 +38,6 @@ export default function AppRun($rootScope, $injector, $location, $state, $mdDial
         $rootScope.pageTitle = 'Blocky';
 
         $rootScope.stateChangeSuccessHandle = $rootScope.$on('$stateChangeSuccess', function (evt, to) {
-            var lastState = store.get('lastState');
-            if (to.name === 'home' && lastState) {
-                $state.go(lastState);
-            } else if (to.name === 'home') {
-                $state.go('home.codelab');
-            }
-            
             if (angular.isDefined(to.data.pageTitle)) {
                 $translate(to.data.pageTitle).then(function (translation) {
                     $rootScope.pageTitle = 'Blocky | ' + translation;

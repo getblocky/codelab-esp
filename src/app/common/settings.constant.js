@@ -14,19 +14,17 @@
  * limitations under the License.
  */
 export default angular.module('blocky.settings', [])
-    .constant('settings',
-        {
-            baseApiUrl: 'https://blynk.getblocky.com:8443/api/v1',
-            localApiUrl: 'http://192.168.4.1',
-            entryPoints: {
-                login: '/login'
-            },
-            maxBytesUpload: 250,
-            latestFirmwareVersion: "1.1",
-            blynk: {
-                addr: 'blynk.getblocky.com',
-                port: 9443,
-                path: '/websockets'
-            }
+    .constant('settings', {
+        baseApiUrl: 'https://blynk.getblocky.com:8443/api/v1',
+        localApiUrl: 'http://192.168.4.1',
+        entryPoints: {
+            login: '/login'
+        },
+        maxBytesUpload: 250,
+        latestFirmwareVersion: "1.1",
+        blynk: {
+            addr: 'blynk.getblocky.com',
+            port: 9443,
+            path: '/websockets'
         }
-    ).name;
+    }).name;
