@@ -22,6 +22,11 @@ export default angular.module('blocky.settings', [])
                 login: '/login'
             },
             maxBytesUpload: 250,
-            latestFirmwareVersion: "1.1"
+            latestFirmwareVersion: "1.1",
+            blynk: {
+                addr: 'localhost',
+                port: 9443,
+                path: '/websockets'
+            }
         }
     ).name;
