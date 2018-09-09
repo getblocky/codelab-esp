@@ -34,7 +34,7 @@ import showSharedProjectTemplate from './show-shared-project.tpl.html';
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout) {
+export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log) {
     var vm = this;
 
     vm.isUserLoaded = userService.isAuthenticated();
@@ -71,13 +71,14 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
 
     initScriptData();
     loadUserDevices();
-    
 
     $scope.$watch(() => this.currentDevice, function (newValue, oldValue) {
         if (newValue && !angular.equals(newValue, oldValue)) {
             vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
             if (vm.currentDevice.id) {
                 store.set('selectedDeviceId', vm.currentDevice.id);
+                initBlynk(vm.currentDevice.token);
+                $log.log('initBlynk');
             }
         }
     });
@@ -110,6 +111,26 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.showDeviceLog = showDeviceLog;
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
+
+    function initBlynk(auth) {
+        var blynk = new Blynk.Blynk(auth, {
+            connector: new Blynk.WsClient(settings.blynk)
+        });
+
+        var v126 = new blynk.VirtualPin(126);
+
+        v126.on('write', function () {
+            $log.log("V126 written");
+        });
+
+        blynk.on('connect', function () {
+            $log.log("Blynk ready. Sending sync request...");
+            blynk.syncAll();
+        });
+        blynk.on('disconnect', function () {
+            $log.log("Blynk disconnected.");
+        });
+    }
 
     function initScriptData() {
         if (vm.scriptId) { // Load existing script
@@ -151,6 +172,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                     vm.currentDevice = vm.devices[i];
                 }
             }
+        } else {
+            vm.currentDevice = vm.devices[0];
+            store.set('selectedDeviceId', vm.currentDevice.id);
         }
     }
 
@@ -233,8 +257,8 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             }
         } else {
             vm.script.mode = 'python';
-			vm.workspace.gl = 'some';
-		
+            vm.workspace.gl = 'some';
+
             vm.script.python = Blockly.Python.workspaceToCode(vm.workspace);
             store.set('script', vm.script);
         }
@@ -312,11 +336,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         $state.go('home.codelab');
     }
 
-    function updateFirmware() {
-    }
+    function updateFirmware() {}
 
-    function uploadScript() {
-    }
+    function uploadScript() {}
 
     function newProject() {
         $mdBottomSheet.hide();

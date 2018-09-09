@@ -16,7 +16,7 @@
 export default angular.module('blocky.settings', [])
     .constant('settings',
         {
-            baseApiUrl: 'http://localhost:3000/api/v1',
+            baseApiUrl: 'https://blynk.getblocky.com:8443/api/v1',
             localApiUrl: 'http://192.168.4.1',
             entryPoints: {
                 login: '/login'
@@ -24,7 +24,7 @@ export default angular.module('blocky.settings', [])
             maxBytesUpload: 250,
             latestFirmwareVersion: "1.1",
             blynk: {
-                addr: 'localhost',
+                addr: 'blynk.getblocky.com',
                 port: 9443,
                 path: '/websockets'
             }
