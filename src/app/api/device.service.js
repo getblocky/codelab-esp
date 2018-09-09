@@ -20,11 +20,7 @@ export default angular.module('blocky.api.device', [])
 function DeviceService($http, $q, $rootScope, $filter, settings) {
 
     var service = {
-        getAllDevices: getAllDevices,
-        getDevice: getDevice,
-        saveDevice: saveDevice,
-        loadAccessPointList: loadAccessPointList,
-        saveDeviceConfig: saveDeviceConfig,
+        getAllDevices: getAllDevices
     }
 
     return service;
@@ -32,54 +28,11 @@ function DeviceService($http, $q, $rootScope, $filter, settings) {
     function getAllDevices() {
         var deferred = $q.defer();
 
-        var url = settings.baseApiUrl + '/devices';
+        var url = settings.baseApiUrl + '/user/devices';
         $http.get(url, null).then(function success(response) {
             deferred.resolve(response.data);
         }, function fail() {
             deferred.reject();
-        });
-        return deferred.promise;
-    }
-
-    function getDevice(deviceId) {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/devices/' + deviceId;
-        $http.get(url, null).then(function success(response) {
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
-    function saveDevice(device) { // Rename only
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/devices/' + device.id;
-        $http.put(url, device).then(function success(response) {
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
-    function loadAccessPointList() {
-        var deferred = $q.defer();
-        var url = settings.localApiUrl + '/aplist';
-        $http.get(url, null).then(function success(response) {
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
-    function saveDeviceConfig(url) {
-        var deferred = $q.defer();
-        $http.get(url, null).then(function success(response) {
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
         });
         return deferred.promise;
     }

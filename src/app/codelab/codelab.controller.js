@@ -70,10 +70,12 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.homeUrl = window.location.origin;
 
     initScriptData();
+    loadUserDevices();
+    
 
     $scope.$watch(() => this.currentDevice, function (newValue, oldValue) {
         if (newValue && !angular.equals(newValue, oldValue)) {
-            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.chipId) || '';
+            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
             if (vm.currentDevice.id) {
                 store.set('selectedDeviceId', vm.currentDevice.id);
             }
@@ -106,7 +108,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.deleteProject = deleteProject;
     vm.shareProject = shareProject;
     vm.showDeviceLog = showDeviceLog;
-    vm.saveDevice = saveDevice;
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
 
@@ -130,6 +131,26 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             );
         } else if (vm.localScript) {
             vm.script = vm.localScript;
+        }
+    }
+
+    function loadUserDevices() {
+        deviceService.getAllDevices().then(function success(devices) {
+            if (devices.length) {
+                vm.devices = devices;
+                loadSelectedDevice();
+            }
+        });
+    }
+
+    function loadSelectedDevice() {
+        var selectedDeviceId = store.get('selectedDeviceId');
+        if (selectedDeviceId) {
+            for (var i = 0; i < vm.devices.length; i++) {
+                if (selectedDeviceId === vm.devices[i].id) {
+                    vm.currentDevice = vm.devices[i];
+                }
+            }
         }
     }
 
@@ -418,15 +439,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         }).then(function () {}).catch(function () {});
     }
 
-    function saveDevice() {
-        deviceService.saveDevice(vm.currentDevice).then(
-            function success() {
-            },
-            function fail() {}
-        );
-        $mdDialog.hide();
-    }
-
     function downloadProject() {
         prepareProjectDataAndSaveToLocal();
         exportToPc(vm.script.python, vm.script.name + '.py');
@@ -463,7 +475,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
 
     function clearDeviceLog() {
         if (vm.currentDevice) {
-            store.set('deviceLog_' + vm.currentDevice.chipId, '');
+            store.set('deviceLog_' + vm.currentDevice.id, '');
             vm.currentLog = '';
         }
     }
