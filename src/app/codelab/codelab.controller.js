@@ -127,7 +127,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             $log.log("Blynk ready. Sending sync request...");
             blynk.syncAll();
         });
-
         blynk.on('disconnect', function () {
             $log.log("Blynk disconnected.");
         });
