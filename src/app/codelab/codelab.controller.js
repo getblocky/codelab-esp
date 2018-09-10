@@ -68,6 +68,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.localScript = store.get('script');
     vm.workspace = null;
     vm.homeUrl = window.location.origin;
+    vm.blynk = null;
 
     initScriptData();
     loadUserDevices();
@@ -78,7 +79,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             if (vm.currentDevice.id) {
                 store.set('selectedDeviceId', vm.currentDevice.id);
                 initBlynk(vm.currentDevice.token);
-                $log.log('initBlynk');
             }
         }
     });
@@ -113,21 +113,16 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.duplicateProject = duplicateProject;
 
     function initBlynk(auth) {
-        var blynk = new Blynk.Blynk(auth, {
+        $log.log('initBlynk');
+        vm.blynk = new Blynk.Blynk(auth, {
             connector: new Blynk.WsClient(settings.blynk)
         });
 
-        var v126 = new blynk.VirtualPin(126);
-
-        v126.on('write', function () {
-            $log.log("V126 written");
-        });
-
-        blynk.on('connect', function () {
+        vm.blynk.on('connect', function () {
             $log.log("Blynk ready. Sending sync request...");
-            blynk.syncAll();
+            vm.blynk.syncAll();
         });
-        blynk.on('disconnect', function () {
+        vm.blynk.on('disconnect', function () {
             $log.log("Blynk disconnected.");
         });
     }
@@ -338,7 +333,19 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
 
     function updateFirmware() {}
 
-    function uploadScript() {}
+    function uploadScript() {
+        var otaPin = new vm.blynk.VirtualPin(126);
+        prepareProjectDataAndSaveToLocal();
+        if (vm.script.python.length === 0) {
+            return;
+        }
+        var scriptToBeUploaded = vm.script.python;
+
+        if (vm.isEmbed) {
+            scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
+        }
+        otaPin.write(scriptToBeUploaded);
+    }
 
     function newProject() {
         $mdBottomSheet.hide();

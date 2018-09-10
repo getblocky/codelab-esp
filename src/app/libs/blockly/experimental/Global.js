@@ -58,7 +58,7 @@ function GeneratePortList (port=null)
 			}
 		}
 	}
-	console.log(list);
+	
 	*/
 	for (var i = 0 ; i <PortList.length ; i++)
 	{
@@ -102,7 +102,7 @@ function AddPort(port,module,id)
 				if (Global['port'][i][2] == id) return ;
 			}
 			Global['port'][i] = [port , module , id];
-			console.log('add port' , port , module , id.substring(0,3),Global['port'][port]);
+			
 			break ;
 		}
 	}
@@ -115,17 +115,17 @@ function AddPort(port,module,id)
 function PortUsed(b){
 	/*
 	var result = null ;
-	var portlist = Global['port'];console.log(portlist['A']);
+	var portlist = Global['port'];
 	if (Global['port'][b][0] == 'none') result = false ;
 	else result = true ;
-	console.log('check port ',b ,Global['port'],Global['port'].b, Global['port'][String(b)] ,result)
+	
 	*/
 	/*
-	console.log(i++, Global['port'].toString());
+	
 	for (port in Global['port'])
 	{
-		console.log(i++, Global['port'][b][0].toString());
-		//console.log(port,Global['port'][port]);console.log(Global['port']);
+		
+		//
 	}
 	
 	return false ;
@@ -133,18 +133,18 @@ function PortUsed(b){
 	var result = false ;
 	for (var i = 0 ; i < Global['port'].length ; i++)
 	{
-		//console.log('readl' , Global['port'][i][0].toString(),Global['port'][i][1].toString(),b);
+		//
 		if (Global['port'][i][0] == b && Global['port'][i][1] != 'none')
 		{
-			//console.log('readl' , Global['port'][i][1].toString());
+			//
 			result = true ;break ;
 		}
 	}
-	console.log('check port used' , result ,b,Global['port']);
+	
 	return result;
 }
 function RemovePort(port , id,workspace){
-	console.log('remove try',port,id.substring(0,3),Global['port']);
+	
 	/*
 	if (Global['port'][port][1] == id )
 	{
@@ -161,7 +161,7 @@ function RemovePort(port , id,workspace){
 		{
 			if (Global['port'][i][0] == port && Global['port'][i][2] == id)
 			{
-				console.log('remove port',port,id.substring(0,3));
+				
 				Global['port'][i][2] = 'none' ;Global['port'][i][1] = 'none' ;
 				break ;
 			}
@@ -176,20 +176,20 @@ function AddName(type , name , id , workspace )
 	{
 		if (NameExist(name)) return ;
 		Global['name'].push( [name,type,id] );
-		console.log('add name',name,type,id.substring(0,3),list_name());
+		
 	}
 }
 function RemoveName(type , name , id,workspace)
 {
 	
-	//console.log('remove_sate' , type , name , id , Global['name']);
+	//
 	if (workspace.getBlockById(id).isInFlyout == false )
 	{
 		for (var i = 0 ; i < Global['name'].length;i++)
 		{
 			if (Global['name'][i][0] == name && Global['name'][i][1] == type && Global['name'][i][2] ==id){
 				Global['name'].splice(i,1);
-				console.log('remove ',name,type,id.substring(0,5),list_name());
+				
 				break ;
 			}
 		}

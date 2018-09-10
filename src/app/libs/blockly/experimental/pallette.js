@@ -10,7 +10,7 @@ Colour.Variables= '#ff6680';
 Colour.Math= '#9966ff';
 Colour.Advanced= '#213237';
 Colour.Warning= '#000000';
-console.log(Colour);
+
 
 /*
 var Colour = {};
@@ -23,7 +23,7 @@ Colour.Logic= '#4cbfe6';
 Colour.Variables= '#ff6680';
 Colour.Math= '#9966ff';
 Colour.Advanced= '#213237';
-console.log(Colour);
+
 */
 
 

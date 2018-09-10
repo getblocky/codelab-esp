@@ -21,8 +21,8 @@ Blockly.Python['button_setup'] = function(block) {
   var dropdown_port = block.getFieldValue('PORT');
   // TODO: Assemble Python into code variable.
   Blockly.Python.definitions_['import_machine'] = 'import machine';
-  console.log(dropdown_port);
-  console.log(Blockly.Python.ports[dropdown_port]);
+  
+  
   var code = variable_name + ' = machine.Pin(' + Blockly.Python.ports[dropdown_port].Pin1 + ', machine.Pin.IN)\n';
   return code;
 };

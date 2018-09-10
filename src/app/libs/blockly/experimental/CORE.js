@@ -11,7 +11,7 @@ var PortList = ['A1','A2','A3','A4','D1','D2','D3','D4'];
 var PORT_ASSIGN = [] ; 
 var previous_change = null ; 
 //var  GlobalWorkspace =  Blockly.getMainWorkspace();
-console.log(workspace);
+
 /*
 	Add some lazy function :))
 */
@@ -234,7 +234,7 @@ function HandlerGlobal(change)
 	if (isEqual(change,prev_change)) return 
 	prev_change = change ; 
 	
-	console.log(GlobalWorkspace.getBlockById(change.blockId)) ; 
+	
 	updatePort() ; 
 	list = PORT_ASSIGN; 
 	// Now we get a list of which module use which block 
@@ -273,7 +273,7 @@ function HandlerGlobal(change)
 			if (true)	
 			{
 				block.getField('PORT').setValue(cur) ;
-				console.log(block.type) ; 
+				
 			}
 			Blockly.Events.enable() ; 
 		}

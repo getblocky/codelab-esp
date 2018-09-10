@@ -68,7 +68,7 @@ Blockly.Workspace.prototype.getAllBlocksOfType = function(prototypeName) {
 Blockly.blockHash = {};
 
 function onchgupdatecountsfunc(event) {
-// 	console.log(this, a, b)
+// 	
 	var blocks = Blockly.mainWorkspace.getAllBlocks();
 	Blockly.blockHash = {};
 	for (var i = 0; i < blocks.length; i++) {
@@ -80,7 +80,7 @@ function onchgupdatecountsfunc(event) {
 	}
 }
 $(document).on("blocklyLoaded", function() {
-	console.log("Loaded");
+	
 	Blockly.bindEvent_(Blockly.mainWorkspace.getCanvas(), 'blocklyWorkspaceChange', null, onchgupdatecountsfunc);
 });
 
@@ -94,10 +94,10 @@ $(document).on("blocklyLoaded", function() {
 Blockly.Flyout.prototype.filterForCapacity_ = function() {
   var remainingCapacity = this.targetWorkspace_.remainingCapacity();
   var blocks = this.workspace_.getTopBlocks(false); //Blocks in this flyout menu (workspace_ is the flyout)
-  // console.log("Blocks in this flyout menu:", blocks);
+  // 
   for (var i = 0, block; block = blocks[i]; i++) {
-    // console.log(block.fred);
-    // console.log(block.type, block.id, block.fred,"\n");
+    // 
+    // 
     var allBlocks = block.getDescendants(); // blocks which are containted (value blocks or statement blocks)
 
     var disabled = allBlocks.length > remainingCapacity;
@@ -114,7 +114,7 @@ Blockly.Flyout.prototype.filterForCapacity_ = function() {
 
 // @todo
 //     if (block.maxAvailable !== null) {
-//       console.log("Not Null!");
+//       
 //       var blocksoftype = this.targetWorkspace_.getAllBlocksOfType(block.type);
 //     }
 
@@ -203,7 +203,7 @@ Blockly.Variables.flyoutCategory = function(blocks, gaps, margin, workspace) {
   // gaps.push(margin, margin * 3);
   variableList.sort(goog.string.caseInsensitiveCompare);
   a('boolean');
-//   console.log(Blockly.Blocks['variables_get_int']);
+//   
 // var type = 'int';
 //   var defaultVariable = undefined;
 //   for (var i = 0; i < variableList.length; i++) {

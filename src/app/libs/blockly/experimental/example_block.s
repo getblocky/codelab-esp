@@ -24,7 +24,7 @@ Blockly.Blocks['legit-declare'] =
 			{
 				// delete event is handle by 'MainBlock'
 				// every event will be handle by mainblock to avoid duplicate
-				//console.log(event.type);
+				//
 				/* 
 					Keynote , every function define this block will be run in MainRunOnce
 					To avoid duplicate event , 
@@ -65,7 +65,7 @@ Blockly['legit-declare'] = function (change,workspace)
 					block.setDisabled(true);
 				}
 				else {
-					console.log('legit-declare' , 'created' , block.id.substring(0,5));
+					
 					AddName('legit',block.getFieldValue('NAME') , block.id)
 					AddPort(block.getFieldValue('PORT') ,'legit', block.id)
 				}
