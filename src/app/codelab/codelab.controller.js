@@ -71,7 +71,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.blynk = null;
 
     initScriptData();
-    loadUserDevices();
+    if (vm.isUserLoaded) {
+        loadUserDevices();
+    }
 
     $scope.$watch(() => this.currentDevice, function (newValue, oldValue) {
         if (newValue && !angular.equals(newValue, oldValue)) {
@@ -279,6 +281,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 scriptService.saveScript(vm.script);
             }
         } else {
+            store.set('script', vm.script);
             $rootScope.login();
         }
     }
@@ -376,6 +379,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 targetEvent: $event
             }).then(function () {}, function () {});
         } else {
+            store.set('script', vm.script);
             $rootScope.login();
         }
     }

@@ -39,7 +39,7 @@ function UserMenu() {
     };
 }
 
-function UserMenuController($scope, $rootScope, userService, $translate, $state, $mdDialog, $document, $window, store) {
+function UserMenuController($scope, $rootScope, userService, $mdDialog, $document, $window) {
 
     var vm = this;
 
@@ -73,8 +73,7 @@ function UserMenuController($scope, $rootScope, userService, $translate, $state,
 
     function logout() {
         userService.logout();
-        store.remove('script');
+        $window.localStorage.clear();
         $window.location.reload();
-        store.remove('script');
     }
 }

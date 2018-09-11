@@ -18,7 +18,7 @@
 /* eslint-enable import/no-unresolved, import/default */
 
 /*@ngInject*/
-export default function LoginController(loginService, userService, $mdDialog, $window) {
+export default function LoginController(loginService, userService, $mdDialog, $window, Facebook) {
     var vm = this;
 
     vm.user = {
@@ -28,6 +28,7 @@ export default function LoginController(loginService, userService, $mdDialog, $w
     };
 
     vm.login = login;
+    vm.loginFacebook = loginFacebook;
     vm.cancel = cancel;
 
     function login() {
@@ -36,6 +37,18 @@ export default function LoginController(loginService, userService, $mdDialog, $w
             userService.setUserFromJwtToken(token, true);
             $window.location.reload();
         }, function fail() {});
+    }
+
+    function loginFacebook() {
+        Facebook.login(function (response) {
+            loginService.loginFacebook(response.authResponse.accessToken).then(function success(response) {
+                var token = response.data.token;
+                userService.setUserFromJwtToken(token, true);
+                $window.location.reload();
+            }, function fail() {});
+        }, {
+            scope: 'public_profile, email'
+        });
     }
 
     function cancel() {

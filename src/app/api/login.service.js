@@ -22,6 +22,7 @@ function LoginService($http, $q, settings) {
 
     var service = {
         login: login,
+        loginFacebook: loginFacebook
     }
 
     return service;
@@ -34,6 +35,19 @@ function LoginService($http, $q, settings) {
         };
         var url = settings.baseApiUrl + '/user/login';
         $http.post(url, loginRequest).then(function success(response) {
+            deferred.resolve(response);
+        }, function fail(response) {
+            deferred.reject(response);
+        });
+        return deferred.promise;
+    }
+
+    function loginFacebook(accessToken) {
+        var deferred = $q.defer();
+        var url = settings.baseApiUrl + '/user/facebook/login';
+        $http.post(url, {
+            access_token: accessToken
+        }).then(function success(response) {
             deferred.resolve(response);
         }, function fail(response) {
             deferred.reject(response);

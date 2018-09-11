@@ -28,11 +28,12 @@ export default function AppConfig($provide,
     $urlRouterProvider,
     $locationProvider,
     $mdIconProvider,
-    $mdThemingProvider,
     $httpProvider,
     $translateProvider,
     storeProvider,
-    locales) {
+    locales,
+    FacebookProvider,
+    settings) {
 
     $locationProvider.html5Mode(false);
     $urlRouterProvider.otherwise(UrlHandler);
@@ -67,4 +68,5 @@ export default function AppConfig($provide,
     }]);
 
     $mdIconProvider.iconSet('mdi', mdiIconSet);
+    FacebookProvider.init(settings.facebook.clientId);
 }
