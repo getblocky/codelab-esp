@@ -68,7 +68,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.localScript = store.get('script');
     vm.workspace = null;
     vm.homeUrl = window.location.origin;
-    vm.blynk = null;
+    vm.blynk = {};
 
     initScriptData();
     if (vm.isUserLoaded) {
@@ -77,16 +77,14 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
 
     $scope.$watch(() => this.currentDevice, function (newValue, oldValue) {
         if (newValue && !angular.equals(newValue, oldValue)) {
-            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
             if (vm.currentDevice.id) {
                 store.set('selectedDeviceId', vm.currentDevice.id);
-                initBlynk(vm.currentDevice.token);
             }
         }
     });
 
     window.addEventListener('resize', onResize, false);
-    $scope.$on("$destroy", function () {
+    $scope.$on('$destroy', function () {
         // Save project to local storage
         prepareProjectDataAndSaveToLocal();
         window.removeEventListener('resize', onResize, false);
@@ -114,18 +112,24 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
 
-    function initBlynk(auth) {
-        $log.log('initBlynk');
-        vm.blynk = new Blynk.Blynk(auth, {
+    function initBlynk(deviceId, token) {
+        vm.blynk['"' + deviceId + '"'] = new Blynk.Blynk(token, {
             connector: new Blynk.WsClient(settings.blynk)
         });
 
-        vm.blynk.on('connect', function () {
-            $log.log("Blynk ready. Sending sync request...");
-            vm.blynk.syncAll();
+        var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(127);
+
+        logPin.on('write', function (param) {
+            var log = param[0];
+            updateDevicesLogs(deviceId, log);
         });
-        vm.blynk.on('disconnect', function () {
-            $log.log("Blynk disconnected.");
+
+        vm.blynk['"' + deviceId + '"'].on('connect', function () {
+            $log.log(deviceId, 'Blynk ready. Sending sync request...');
+            vm.blynk['"' + deviceId + '"'].syncAll();
+        });
+        vm.blynk['"' + deviceId + '"'].on('disconnect', function () {
+            $log.log(deviceId, 'Blynk disconnected.');
         });
     }
 
@@ -156,6 +160,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         deviceService.getAllDevices().then(function success(devices) {
             if (devices.length) {
                 vm.devices = devices;
+                for (var i = 0; i < vm.devices.length; i++) {
+                    initBlynk(vm.devices[i].id, vm.devices[i].token);
+                }
                 loadSelectedDevice();
             }
         });
@@ -172,6 +179,24 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         } else {
             vm.currentDevice = vm.devices[0];
             store.set('selectedDeviceId', vm.currentDevice.id);
+        }
+    }
+
+    function updateDevicesLogs(deviceId, log) {
+        var deviceLog = store.get('deviceLog_' + deviceId) || '';
+        if (deviceLog.length) {
+            log = log + '<br>' + deviceLog;
+        }
+        store.set('deviceLog_' + deviceId, log);
+        $timeout(function () {
+            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
+        });
+    }
+
+    function clearDeviceLog() {
+        if (vm.currentDevice) {
+            store.set('deviceLog_' + vm.currentDevice.id, '');
+            vm.currentLog = '';
         }
     }
 
@@ -337,7 +362,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     function updateFirmware() {}
 
     function uploadScript() {
-        var otaPin = new vm.blynk.VirtualPin(126);
+        var otaPin = new vm.blynk['"' + vm.currentDevice.id + '"'].VirtualPin(126);
         prepareProjectDataAndSaveToLocal();
         if (vm.script.python.length === 0) {
             return;
@@ -503,13 +528,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             e.initEvent('click', true, false, window,
                 0, 0, 0, 0, 0, false, false, false, false, 0, null);
             a.dispatchEvent(e);
-        }
-    }
-
-    function clearDeviceLog() {
-        if (vm.currentDevice) {
-            store.set('deviceLog_' + vm.currentDevice.id, '');
-            vm.currentLog = '';
         }
     }
 
