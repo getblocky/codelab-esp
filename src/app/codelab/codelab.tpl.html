@@ -51,6 +51,13 @@
                         <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'" aria-hidden="true"></i> {{device.name}}
                     </md-option>
                 </md-select>
+
+                <md-button ng-show="vm.isUserLoaded" ng-click="vm.reloadLoadUserDevices()" class="md-icon-button" aria-label="Reload Device">
+                    <md-tooltip md-direction="bottom">
+                        Reload devices
+                    </md-tooltip>
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </md-button>
             </div>
             <md-card flex id="device-log">
                 <md-toolbar class="md-primary md-hue-1">

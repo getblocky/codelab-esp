@@ -111,11 +111,14 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.showDeviceLog = showDeviceLog;
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
+    vm.reloadLoadUserDevices = reloadLoadUserDevices;
 
     function initBlynk(deviceId, token) {
-        vm.blynk['"' + deviceId + '"'] = new Blynk.Blynk(token, {
-            connector: new Blynk.WsClient(settings.blynk)
-        });
+        if (angular.isUndefined(vm.blynk['"' + deviceId + '"'])) {
+            vm.blynk['"' + deviceId + '"'] = new Blynk.Blynk(token, {
+                connector: new Blynk.WsClient(settings.blynk)
+            });
+        }
 
         var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(127);
 
@@ -154,6 +157,10 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         } else if (vm.localScript) {
             vm.script = vm.localScript;
         }
+    }
+
+    function reloadLoadUserDevices() {
+        loadUserDevices();
     }
 
     function loadUserDevices() {
