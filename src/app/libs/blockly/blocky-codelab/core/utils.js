@@ -473,10 +473,10 @@ Blockly.utils.checkMessageReferences = function(message) {
     var msgKey = match[1];
     msgKey = msgKey.toUpperCase();
     if (msgKey.substr(0, 4) != 'BKY_') {
-      console.log('WARNING: Unsupported message table prefix in %{' + match[1] + '}.');
+      
       validSoFar = false;  // Continue to report other errors.
     } else if (msgTable[msgKey.substr(4)] == undefined) {
-      console.log('WARNING: No message string for %{' + match[1] + '}.');
+      
       validSoFar = false;  // Continue to report other errors.
     }
 

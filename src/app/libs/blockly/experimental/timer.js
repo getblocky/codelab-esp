@@ -54,7 +54,7 @@ Blockly.Blocks['timer-event-alarm'] = {
 
 Blockly.Python['timer-event-alarm'] = function(block)
 {
-	console.log('TIMER');
+	
 	var hour = block.getFieldValue('HOUR');
 	var minute = block.getFieldValue('MINUTE');
 	var unit = block.getFieldValue('UNIT');
@@ -66,7 +66,7 @@ Blockly.Python['timer-event-alarm'] = function(block)
 		AddToSection('import','from Blocky.Timer import *\n');
 		//----------------------------------------------------------
 		var function_name  = 'Timer_Every_' + time + unit;
-		console.log(isFunctionNameExist(function_name));
+		
 		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
 		GlobalFunctionName.push(function_name);
 		var function_code = 'def '+ function_name + '():\n' + statement;
@@ -201,7 +201,7 @@ Blockly.Blocks['timer-event-repeat'] = {
 
 Blockly.Python['timer-event-repeat'] = function(block)
 {
-	console.log('TIMER');
+	
 	var time = block.getFieldValue('TIME');
 	var unit = block.getFieldValue('UNIT');
 	var statement = Blockly.Python.statementToCode(block,'CODE');
@@ -212,7 +212,7 @@ Blockly.Python['timer-event-repeat'] = function(block)
 		AddToSection('import','from Blocky.Timer import *\n');
 		//----------------------------------------------------------
 		var function_name  = 'Timer_Every_' + time + unit;
-		console.log(isFunctionNameExist(function_name));
+		
 		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
 		GlobalFunctionName.push(function_name);
 		var function_code = 'def '+ function_name + '():\n' + statement;

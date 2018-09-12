@@ -58,7 +58,7 @@ function AddModuleName(module , name){
 		if (GlobalModuleName[module][i] === name) return ;
 	}
 	GlobalModuleName[module].push(name);
-	console.log(GlobalModuleName);
+	
 }
 function GetListModule(module){
 	var list = [];
@@ -67,7 +67,7 @@ function GetListModule(module){
 		list.push( [GlobalModuleName[module][i],GlobalModuleName[module][i]] );		
 	}
 	if (list.length==0) list.push(['None','None']);
-	console.log(list);
+	
 	return list ;
 	
 }

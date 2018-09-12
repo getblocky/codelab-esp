@@ -125,7 +125,7 @@ function HandlePublicBlock(  change , workspace , blocks )
 		{
 			list_port_used.push( list_declare_block[i].getFieldValue('PORT'));
 		}
-		console.log(list_port_used);
+		
 	}
 	var available_port_list = []
 	for (var i = 0 ; i < PortList.length ; i++)
@@ -134,14 +134,14 @@ function HandlePublicBlock(  change , workspace , blocks )
 	}
 	
 	//Blockly.Events.disable();
-	console.log(available_port_list);
+	
 	for (var i = 0 ; i < list_declare_block.length ; i++)
 	{
 		// Position of the PORT in the structure 
 		var input = list_declare_block[i].getInput('MAIN');
 		var pos = input.fieldRow.indexOf( list_declare_block[i].getField('PORT') );
 		var curr = list_declare_block[i].getFieldValue('PORT');
-		console.log('Exist in ' , pos , input);
+		
 		if (pos > 0)
 		{
 			Blockly.Events.disable();
@@ -167,10 +167,10 @@ function HandlePublicBlock(  change , workspace , blocks )
 	{
 		
 		var block = list_declare_block[i];
-		console.log(block);
+		
 		if (block.disabled)
 		{
-			console.log(list_name.includes(block.getFieldValue('NAME')));
+			
 			if (!list_name.contains(block.getFieldValue('NAME'))&&!list_port.contains(block.getFieldValue('PORT')))
 			{
 				block.setDisabled(false);
@@ -202,7 +202,7 @@ function HandlePublicBlock(  change , workspace , blocks )
 		
 		
 	}
-	console.log(list_name , list_port);
+	
 	Blockly.Events.enable();
 	
 }

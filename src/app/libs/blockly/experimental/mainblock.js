@@ -58,8 +58,12 @@ Blockly.Blocks['MainRunOnce'] = {
 		this.setOnChange(
 			function(change)
 			{
+<<<<<<< HEAD
 				return 
 				//console.log(change.type , change.element , change.name);
+=======
+				//
+>>>>>>> 9d8b2e67066e93b99b86c57db8fe9311d3c0bcf1
 				//this.workspace.addChangeListener(); 
 				//Blockly['legit-declare'](change,this.workspace);
 				if (true)//change.type != 'ui'&&change.type != 'move')
@@ -158,7 +162,7 @@ Blockly.Blocks['MainRunLoop'] = {
 						Global['port'][i][1] = 'none';
 						Global['port'][i][2] = 'none';
 					}
-					console.log(Global['port']);
+					
 				}
 		}
 	)
