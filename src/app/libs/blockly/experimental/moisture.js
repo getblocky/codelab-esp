@@ -28,7 +28,7 @@ Blockly.Python['moisture-get'] = function(block) {
 	var mode = block.getFieldValue('MODE');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.Moisture import *\n');
+	AddToSection('import' , 'from Blocky.Moisture import Moisture' + version('MOISTURE') + '\n');
 	AddToSection('declare' , object + " = Moisture(port='" + port +"')\n");
 	
 	var code = object + '.' + 'value()'  ;

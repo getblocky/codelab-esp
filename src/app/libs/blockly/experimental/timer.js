@@ -111,7 +111,7 @@ Blockly.Blocks['timer-runtime'] = {
 Blockly.Python['timer-runtime'] = function(block) {
 	var name = block.getFieldValue('NAME');
 
-	var code = 'runtime()' ;
+	var code = 'core.Timer.runtime()' ;
 	return [code, Blockly.Python.ORDER_NONE];
 };
 
@@ -157,7 +157,7 @@ Blockly.Python['timer-wait'] = function(block) {
 	var time = block.getFieldValue('TIME');
 	var unit = block.getFieldValue('UNIT');
 	if ( unit == 'seconds' ) time += '000';
-	var code = 'await asyncio.sleep_ms('+  time + ')\n' ;
+	var code = 'await core.asyncio.sleep_ms('+  time + ')\n' ;
 	return code;
 };
 
@@ -166,6 +166,7 @@ Blockly.Python['timer-wait'] = function(block) {
 Blockly.Blocks['timer-event-repeat'] = {
   init: function() {
     this.appendDummyInput("MAIN")
+		.appendField(new Blockly.FieldImage("http://www.mentalhealthamerica.net/sites/default/files/clock%20icon.png", 20, 20, "*"))
         .appendField('Every')
         .appendField(new Blockly.FieldNumber(0, 1), "TIME")
         .appendField(new Blockly.FieldDropdown([["seconds","seconds"], ["miliseconds","miliseconds"]]), "UNIT")
@@ -228,7 +229,7 @@ Blockly.Python['timer-event-repeat'] = function(block)
 		
 		var function_code =  async_cancellable+'async def ' + function_name + '():\n' + Blockly.Python.INDENT + 'while True:\n' ;
 		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await asyncio.sleep_ms(' +  time + ')\n' +  statement + '\n';
-		var event_code = 'loop.create_task(Cancellable(' + function_name + ')())\n';
+		var event_code = 'core.mainthread.create_task(core.asyn.Cancellable(' + function_name + ')())\n';
 		AddToSection('async',event_code);
 		AddToSection('function',function_code);
 	}

@@ -28,7 +28,7 @@ Blockly.Python['light-get'] = function(block) {
 	var mode = block.getFieldValue('MODE');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.Light import *\n');
+	AddToSection('import' , 'from Blocky.Light import Light' + version('LIGHT') + '\n');
 	AddToSection('declare' , object + " = Light(port='" + port +"')\n");
 	
 	var code = object + '.' + 'value()'  ;

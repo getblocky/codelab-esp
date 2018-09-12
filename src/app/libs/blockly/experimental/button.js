@@ -52,7 +52,6 @@ Blockly.Blocks['button-get'] = {
 			;
 		this.module = 'button' ;
 		this.setOutput(true , null );
-		this.setColour(230);
 		this.category  = 'Input' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
@@ -64,7 +63,7 @@ Blockly.Python['button-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Button import *\n');
+	AddToSection('import' , 'from Blocky.Button import Button' + version('BUTTON') + '\n');
 	AddToSection('declare' , object + " = Button(port='" + port +"')\n");
 	
 	var code = object + '.value()' ;
@@ -102,9 +101,8 @@ Blockly.Python['button-event'] = function(block) {
 	var object =  port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' +port+'_' + type + '_' + time   ;
-	AddToSection('import' , 'from Blocky.Button import *\n');
+	AddToSection('import' , 'from Blocky.Button import Button' + version('BUTTON') + '\n');
 	AddToSection('declare' , object + " = Button(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type='" + type + "',time=" + time + ",function="+function_name+")\n");
-
-	AddToSection('function',async_cancellable + 'async def '+function_name+'():\n' + code + '\n');
+	AddToSection('function',async_cancellable_decorator + 'async def '+function_name+'():\n' + code + '\n');
 };

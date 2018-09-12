@@ -64,7 +64,7 @@ Blockly.Python['motion-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Motion import *\n');
+	AddToSection('import' , 'from Blocky.Motion import Motion' + version('MOTION') + '\n');
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
 	
 	var code = object + '.value()' ;
@@ -96,9 +96,9 @@ Blockly.Python['motion-event'] = function(block) {
 	var object =  port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' +port   ;
-	AddToSection('import' , 'from Blocky.Motion import *\n');
+	AddToSection('import' , 'from Blocky.Motion import Motion' + version('MOTION') + '\n');
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(function="+function_name+")\n");
 
-	AddToSection('function',async_cancellable+'async def '+function_name+'():\n' + code + '\n');
+	AddToSection('function',async_cancellable_decorator+'async def '+function_name+'():\n' + code + '\n');
 };

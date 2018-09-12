@@ -3,20 +3,20 @@ goog.require('Blockly.Blocks');
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-Blockly.Blocks['mosfet-set']=
+Blockly.Blocks['relay-set']=
 {
 	init : function()
 	{
 		this.appendValueInput('MAIN')
-			.appendField('Mosfet')
+			.appendField('Relay')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('mosfet') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('relay') ) , 'PORT' ) 
 			.appendField('turn')
 			;
 		
 		this.category  = 'Output' ;
 		this.role = 'Set';
-		this.module = 'mosfet';
+		this.module = 'relay';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
@@ -25,56 +25,51 @@ Blockly.Blocks['mosfet-set']=
 	
 };
 
-Blockly.Python['mosfet-set'] = function(block) {
+Blockly.Python['relay-set'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	var state = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Mosfet import Mosfet' + version('MOSFET') + '\n');
-	AddToSection('declare' , object + " = Mosfet(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.Relay import *\n');
+	AddToSection('declare' , object + " = Relay(port='" + port +"')\n");
 	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	return code ;
 };
 
-Blockly.Blocks['mosfet-fade']=
-{
-	init : function()
-	{
-		this.appendValueInput('MAIN')
-			.appendField('Mosfet')
+
+
+Blockly.Blocks['relay-get'] = {
+	init: function() {
+		this.appendDummyInput('MAIN')
+			.appendField('get')
+			.appendField('Relay')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('mosfet') ) , 'PORT' ) 
-			.appendField('fade')
+			.appendField(new Blockly.FieldDropdown( PORT('relay') ) , 'PORT' )
+			.appendField("'s state")
 			;
-		
-		this.category  = 'Output' ;
-		this.role = 'Set';
-		this.module = 'mosfet';
+		this.module = 'relay' ;
+		this.setOutput(true , null );
+		this.setColour(230);
+		this.category  = 'Input' ;
+		this.role = 'Get';
 		this.setColour(Colour[this.category]);
-		this.setPreviousStatement(true , null);
-		this.setNextStatement(true , null);
 		
 	}
-	
 };
 
-Blockly.Python['mosfet-fade'] = function(block) {
-	var name = block.module;
+Blockly.Python['relay-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
-	var state = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	if (port == 'None') return '';
-	var code = '';
-	var object = port ; 
-	AddToSection('import' , 'from Blocky.Mosfet import Mosfet' + version('MOSFET') + '\n');
-	AddToSection('declare' , object + " = Mosfet(port='" + port +"')\n");
-	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
-	// TODO: Assemble Python into code variable.
-	// Do not let user put this anyywhere except from setup block;
-	return code ;
+	var object = port ;
+	AddToSection('import' , 'from Blocky.Relay import *\n');
+	AddToSection('declare' , object + " = Relay(port='" + port +"')\n");
+	
+	var code = object + '.value()' ;
+	return [code, Blockly.Python.ORDER_ATOMIC ];
 };
 
 

@@ -286,3 +286,49 @@ Blockly.Python['math_convert'] = function(block) {
 	var code = mode + '(' + obj + ')';
 	return [code, Blockly.Python.ORDER_NONE];
 };
+
+
+
+Blockly.Blocks['math_scale'] = {
+	init: function() {
+		this.appendValueInput('VALUE')
+			.appendField('map')
+			
+			;
+		this.appendDummyInput();
+		this.appendValueInput('A1')
+			.appendField("from low")
+			;
+		this.appendDummyInput();
+		this.appendValueInput('A2')
+			.appendField("high")
+			;
+		this.appendDummyInput();
+		this.appendValueInput('B1')
+			.appendField('to low')
+			;
+		this.appendDummyInput();
+		this.appendValueInput('B2')
+			.appendField("high")
+			
+			;
+		this.module = 'light' ;
+		this.setOutput(true , null );
+		this.setColour(230);
+		this.category  = 'Math' ;
+		this.role = 'Get';
+		this.inputsInline = true;
+		this.setColour(Colour[this.category]);
+		
+	}
+};
+
+Blockly.Python['math_scale'] = function(block) {
+	var port = block.getFieldValue('PORT');
+	var mode = block.getFieldValue('MODE');
+	if (port == 'None') return '';
+	var object = port ;
+	
+	var code = object + '.' + 'value()'  ;
+	return [code, Blockly.Python.ORDER_NONE];
+};

@@ -6,8 +6,9 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.Generator');
 goog.require('Blockly.BlockSvg');
 
-var PortList = ['A1','A2','A3','A4','D1','D2','D3','D4'];
-//var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
+var async_cancellable = "@core.asyn.cancellable\n" ;
+//var PortList = ['A1','A2','A3','A4','D1','D2','D3','D4'];
+var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
 var PORT_ASSIGN = [] ; 
 var previous_change = null ; 
 //var  GlobalWorkspace =  Blockly.getMainWorkspace();
@@ -15,6 +16,12 @@ console.log(workspace);
 /*
 	Add some lazy function :))
 */
+
+function version(module){
+	// Return the current library version of the module .
+	return "#version 1.0";
+}
+
 Array.prototype.clone = function() {
 	return this.slice(0);
 }
@@ -100,7 +107,9 @@ function AddToSection(section , code)
 {
 	if (Blockly.Python.definitions_[section].indexOf(code)==-1)
 	{
+		
 		Blockly.Python.definitions_[section]+=code;
+		
 	}
 		
 }

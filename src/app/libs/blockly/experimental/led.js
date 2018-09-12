@@ -3,20 +3,20 @@ goog.require('Blockly.Blocks');
 
 
 ////////////////////////////////////////////////////////////////////////////////////
-Blockly.Blocks['mosfet-set']=
+Blockly.Blocks['led-set']=
 {
 	init : function()
 	{
 		this.appendValueInput('MAIN')
-			.appendField('Mosfet')
+			.appendField('LED')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('mosfet') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('led') ) , 'PORT' ) 
 			.appendField('turn')
 			;
 		
 		this.category  = 'Output' ;
 		this.role = 'Set';
-		this.module = 'mosfet';
+		this.module = 'led';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
@@ -25,35 +25,35 @@ Blockly.Blocks['mosfet-set']=
 	
 };
 
-Blockly.Python['mosfet-set'] = function(block) {
+Blockly.Python['led-set'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	var state = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Mosfet import Mosfet' + version('MOSFET') + '\n');
-	AddToSection('declare' , object + " = Mosfet(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.LED import LED' + version('LED') + '\n');
+	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
 	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	return code ;
 };
 
-Blockly.Blocks['mosfet-fade']=
+Blockly.Blocks['led-fade']=
 {
 	init : function()
 	{
 		this.appendValueInput('MAIN')
-			.appendField('Mosfet')
+			.appendField('LED')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('mosfet') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('led') ) , 'PORT' ) 
 			.appendField('fade')
 			;
 		
 		this.category  = 'Output' ;
 		this.role = 'Set';
-		this.module = 'mosfet';
+		this.module = 'led';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
@@ -62,15 +62,15 @@ Blockly.Blocks['mosfet-fade']=
 	
 };
 
-Blockly.Python['mosfet-fade'] = function(block) {
+Blockly.Python['led-fade'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	var state = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Mosfet import Mosfet' + version('MOSFET') + '\n');
-	AddToSection('declare' , object + " = Mosfet(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.LED import LED' + version('LED') + '\n');
+	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
 	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;

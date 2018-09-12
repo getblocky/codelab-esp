@@ -11,11 +11,15 @@ Blockly.Python.addReservedWords('machine');
 Blockly.Python.addReservedWords('blocky');
 
 
-
+Blockly.Blocks['network_dummy'] = {
+	
+	
+}
 
 Blockly.Blocks['network-event'] = {
   init: function() {
     this.appendDummyInput("MAIN")
+		.appendField(new Blockly.FieldImage("http://www.free-icons-download.net/images/cloud-logo-icon-22859.png", 20, 20, "*"))
         .appendField("when receive topic ")
         .appendField(new Blockly.FieldTextInput('HelloBlocky'), "TOPIC")
 		.appendField('save message to')
@@ -54,6 +58,7 @@ Blockly.Python['network-event'] = function(block) {
 Blockly.Blocks['network_send'] = {
   init: function() {
 	this.appendValueInput("DATA")
+		.appendField(new Blockly.FieldImage("http://www.free-icons-download.net/images/cloud-logo-icon-22859.png", 20, 20, "*"))
         .appendField("send to topic")
         .appendField(new Blockly.FieldTextInput('HelloBlocky'), "TOPIC")
 		.appendField("=");
@@ -83,6 +88,7 @@ Blockly.Python['network_send'] = function(block) {
 Blockly.Blocks['network_log'] = {
   init: function() {
     this.appendValueInput("LOG")
+		.appendField(new Blockly.FieldImage("http://www.free-icons-download.net/images/cloud-logo-icon-22859.png", 20, 20, "*"))
         .setCheck(null)
         .appendField("send log");
     this.appendDummyInput();

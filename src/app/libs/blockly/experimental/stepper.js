@@ -74,3 +74,87 @@ Blockly.Python['stepper-get'] = function(block) {
 	return [code, Blockly.Python.ORDER_NONE];
 };
 
+
+
+
+Blockly.Blocks['car-fw']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField('Car')
+			.appendField('move')
+			.appendField('FORWARD')
+			;
+		
+		this.category  = 'Input' ;
+		this.role = 'Set';
+		this.module = 'stepper';
+		this.setColour(Colour[this.category]);
+		this.setPreviousStatement(true , null);
+		this.setNextStatement(true , null);
+		
+	}
+	
+};
+
+Blockly.Blocks['car-bw']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField('Car')
+			.appendField('move')
+			.appendField('BACKWARD')
+			;
+		
+		this.category  = 'Loops' ;
+		this.role = 'Set';
+		this.module = 'stepper';
+		this.setColour(Colour[this.category]);
+		this.setPreviousStatement(true , null);
+		this.setNextStatement(true , null);
+		
+	}
+	
+};
+Blockly.Blocks['car-tr']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField('Car')
+			.appendField('turn')
+			.appendField('RIGHT')
+			;
+		
+		this.category  = 'Logic' ;
+		this.role = 'Set';
+		this.module = 'stepper';
+		this.setColour(Colour[this.category]);
+		this.setPreviousStatement(true , null);
+		this.setNextStatement(true , null);
+		
+	}
+	
+};
+Blockly.Blocks['car-tl']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField('Car')
+			.appendField('turn')
+			.appendField('LEFT')
+			;
+		
+		this.category  = 'Output' ;
+		this.role = 'Set';
+		this.module = 'stepper';
+		this.setColour(Colour[this.category]);
+		this.setPreviousStatement(true , null);
+		this.setNextStatement(true , null);
+		
+	}
+	
+};
