@@ -383,7 +383,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         var otaRequest = [];
         otaRequest[0] = scriptToBeUploaded.toString();
 
-        deviceService.sendOTA(vm.currentDevice.token, scriptToBeUploaded).then(function success() {
+        deviceService.sendOTA(vm.currentDevice.token, otaRequest).then(function success() {
             toast.showSuccess($translate.instant('script.script-upload-success'));
         });
     }
