@@ -25,7 +25,9 @@ export default angular.module('blocky.settings', [])
         blynk: {
             addr: 'blynk.getblocky.com',
             port: 9443,
-            path: '/websockets'
+            path: '/websockets',
+            otaPin: 'V126',
+            logPin: 127
         },
         facebook: {
             clientId: '2045602205749965'

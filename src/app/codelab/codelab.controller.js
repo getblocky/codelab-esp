@@ -121,7 +121,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             });
         }
 
-        var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(127);
+        var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(settings.logPin);
 
         logPin.on('write', function (param) {
             var log = param[0];
@@ -370,7 +370,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     function updateFirmware() {}
 
     function uploadScript() {
-        var otaPin = new vm.blynk['"' + vm.currentDevice.id + '"'].VirtualPin(126);
         prepareProjectDataAndSaveToLocal();
         if (vm.script.python.length === 0) {
             return;
@@ -380,8 +379,15 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         if (vm.isEmbed) {
             scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
         }
-        otaPin.write(scriptToBeUploaded);
+        
+        var otaRequest = [];
+        otaRequest[0] = scriptToBeUploaded.toString();
+
+        deviceService.sendOTA(vm.currentDevice.token, scriptToBeUploaded).then(function success() {
+            toast.showSuccess($translate.instant('script.script-upload-success'));
+        });
     }
+
 
     function newProject() {
         $mdBottomSheet.hide();

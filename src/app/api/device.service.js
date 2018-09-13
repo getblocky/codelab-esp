@@ -17,10 +17,11 @@ export default angular.module('blocky.api.device', [])
     .factory('deviceService', DeviceService).name;
 
 /*@ngInject*/
-function DeviceService($http, $q, $rootScope, $filter, settings) {
+function DeviceService($http, $q, settings) {
 
     var service = {
-        getAllDevices: getAllDevices
+        getAllDevices: getAllDevices,
+        sendOTA: sendOTA
     }
 
     return service;
@@ -31,6 +32,19 @@ function DeviceService($http, $q, $rootScope, $filter, settings) {
         var url = settings.baseApiUrl + '/user/devices';
         $http.get(url, null).then(function success(response) {
             deferred.resolve(response.data);
+        }, function fail() {
+            deferred.reject();
+        });
+        return deferred.promise;
+    }
+
+
+    function sendOTA(token, dataArray) {
+        var deferred = $q.defer();
+
+        var url = 'https://' + settings.blynk.addr + ':' + settings.blynk.port + '/' + token + '/update/' + settings.blynk.otaPin;
+        $http.put(url, dataArray).then(function success(response) {
+            deferred.resolve(response);
         }, function fail() {
             deferred.reject();
         });
