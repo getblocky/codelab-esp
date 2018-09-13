@@ -80,6 +80,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             if (vm.currentDevice.id) {
                 store.set('selectedDeviceId', vm.currentDevice.id);
             }
+            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
         }
     });
 
