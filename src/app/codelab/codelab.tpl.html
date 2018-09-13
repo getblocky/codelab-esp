@@ -33,13 +33,15 @@
             </div>
             <div layout="row" id="device-actions">
                 <div layout="row">
-                    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-click="vm.updateFirmware()" class="md-icon-button" aria-label="Device Menu">
+                    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-click="vm.updateFirmware()" class="md-icon-button"
+                        aria-label="Device Menu">
                         <md-tooltip md-direction="bottom">
                             Update firmware to latest version
                         </md-tooltip>
                         <i class="fa fa-arrow-circle-right" aria-hidden="true"></i>
                     </md-button>
-                    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-click="vm.uploadScript('ota')" class="md-icon-button" aria-label="Device Menu">
+                    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" ng-click="vm.uploadScript('ota')"
+                        class="md-icon-button" aria-label="Device Menu">
                         <md-tooltip md-direction="bottom">
                             Send and save script. It will be run every time blocky starts.
                         </md-tooltip>
@@ -48,41 +50,18 @@
                 </div>
                 <md-select ng-model="vm.currentDevice" placeholder="Select a device" class="md-no-underline">
                     <md-option ng-repeat="device in vm.devices | orderBy:'name'" ng-value="device">
-                        <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'" aria-hidden="true"></i> {{device.name}}
+                        <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'"
+                            aria-hidden="true"></i> {{device.name}}
                     </md-option>
                 </md-select>
 
-<<<<<<< HEAD
-                <md-menu md-position-mode="target-right target">
-                    <md-button ng-disabled="!vm.isUserLoaded || !vm.currentDevice" class="md-icon-button" aria-label="Device Menu" ng-click="$mdOpenMenu($event)">
-                        <md-tooltip md-direction="bottom">
-                            Device Settings
-                        </md-tooltip>
-                        <i class="fa fa-cog" aria-hidden="true"></i>
-                    </md-button>
-                    <md-menu-content width="4">
-                        <md-menu-item ng-show="vm.currentDevice">
-                            <md-button ng-click="vm.renameDevice()">
-                                <md-icon md-menu-align-target aria-label="Rename Device" class="material-icons">edit</md-icon>
-                                <span translate>Rename Device</span>
-                            </md-button>
-                        </md-menu-item>
-                        <md-menu-item ng-show="vm.currentDevice">
-                            <md-button ng-click="vm.deleteDevice()">
-                                <md-icon md-menu-align-target aria-label="Delete Device" class="material-icons">delete</md-icon>
-                                <span translate>Delete Device</span>
-                            </md-button>
-                        </md-menu-item>
-                    </md-menu-content>
-                </md-menu>
-=======
-                <md-button ng-show="vm.isUserLoaded" ng-click="vm.reloadLoadUserDevices()" class="md-icon-button" aria-label="Reload Device">
+                <md-button ng-show="vm.isUserLoaded" ng-click="vm.reloadLoadUserDevices()" class="md-icon-button"
+                    aria-label="Reload Device">
                     <md-tooltip md-direction="bottom">
                         Reload devices
                     </md-tooltip>
                     <i class="fa fa-refresh" aria-hidden="true"></i>
                 </md-button>
->>>>>>> parent of 9d8b2e6... Add reload device button on mobile
             </div>
             <md-card flex id="device-log">
                 <md-toolbar class="md-primary md-hue-1">
@@ -125,7 +104,7 @@
         <i class="fa fa-folder-open-o" aria-hidden="true"></i>
         <span hide-sm> Open</span>
     </md-button>
-    <md-button ng-show="vm.script.id" ng-click="vm.duplicateProject()" hide-xs>
+    <md-button ng-show="vm.script._id" ng-click="vm.duplicateProject()" hide-xs>
         <i class="fa fa-files-o" aria-hidden="true"></i>
         <span hide-sm> Duplicate</span>
     </md-button>
@@ -133,16 +112,13 @@
         <i class="fa fa-download" aria-hidden="true"></i>
         <span hide-sm> Download</span>
     </md-button>
-    <md-button ng-show="vm.script.id" ng-click="vm.deleteProject()" hide-xs>
+    <md-button ng-show="vm.script._id" ng-click="vm.deleteProject()" hide-xs>
         <i class="fa fa-trash-o" aria-hidden="true"></i>
         <span hide-sm> Delete</span>
     </md-button>
 
-<<<<<<< HEAD
-    <md-button ng-style="{'color': vm.script.isPublic ? 'green' : ''}" ng-show="vm.script.id" ng-click="vm.shareProject()" hide-xs>
-=======
-    <md-button ng-style="{'color': vm.script.isPublic ? 'green' : ''}" ng-show="vm.script._id" ng-click="vm.shareProject()" hide-xs>
->>>>>>> parent of 9d8b2e6... Add reload device button on mobile
+    <md-button ng-style="{'color': vm.script.isPublic ? 'green' : ''}" ng-show="vm.script._id" ng-click="vm.shareProject()"
+        hide-xs>
         <i class="fa fa-share-alt" aria-hidden="true"></i>
         <span hide-sm> {{vm.script.isPublic ? "Shared" : "Share"}}</span>
     </md-button>
@@ -161,9 +137,14 @@
     </md-button>
     <md-select ng-model="vm.currentDevice" placeholder="Select a device" class="md-no-underline" hide-gt-xs>
         <md-option ng-repeat="device in vm.devices | orderBy:'name'" ng-value="device">
-            <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'" aria-hidden="true"></i> {{device.name}}
+            <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'" aria-hidden="true"></i>
+            {{device.name}}
         </md-option>
     </md-select>
+    <md-button ng-show="vm.isUserLoaded" ng-click="vm.reloadLoadUserDevices()" aria-label="Reload Device"
+        hide-gt-xs>
+        <i class="fa fa-refresh" aria-hidden="true"></i>
+    </md-button>
 
     <span flex></span>
     <md-button aria-label="Side Nav" ng-click="vm.toggleSidenav()" hide-xs>

@@ -21,11 +21,8 @@ export default angular.module('blocky.api.login', [])
 function LoginService($http, $q, settings) {
 
     var service = {
-        signUp: signUp,
         login: login,
-        changePassword: changePassword,
-        resetPassword: resetPassword,
-        forgotPassword: forgotPassword,
+        loginFacebook: loginFacebook
     }
 
     return service;
@@ -36,7 +33,7 @@ function LoginService($http, $q, settings) {
             email: user.name,
             password: user.password
         };
-        var url = settings.baseApiUrl + '/users/login';
+        var url = settings.baseApiUrl + '/user/login';
         $http.post(url, loginRequest).then(function success(response) {
             deferred.resolve(response);
         }, function fail(response) {
@@ -45,62 +42,15 @@ function LoginService($http, $q, settings) {
         return deferred.promise;
     }
 
-    function signUp(user) {
+    function loginFacebook(accessToken) {
         var deferred = $q.defer();
-        var signUpRequest = {
-            name: user.name,
-            email: user.email,
-            password: user.password
-        };
-        var url = settings.baseApiUrl + '/users/signup';
-        $http.post(url, signUpRequest).then(function success(response) {
+        var url = settings.baseApiUrl + '/user/facebook/login';
+        $http.post(url, {
+            access_token: accessToken
+        }).then(function success(response) {
             deferred.resolve(response);
         }, function fail(response) {
             deferred.reject(response);
-        });
-        return deferred.promise;
-    }
-
-    function changePassword(currentPassword, newPassword) {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/users/password';
-        var changePasswordRequest = {
-            password: currentPassword,
-            newPassword: newPassword
-        }
-        $http.post(url, changePasswordRequest).then(function success(response) {
-            deferred.resolve(response);
-        }, function fail() {
-            deferred.reject();
-        });
-        return deferred.promise;
-    }
-
-    function forgotPassword(email) {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/users/forgotPassword';
-        var forgotPasswordRequest = {
-            email: email
-        }
-        $http.post(url, forgotPasswordRequest).then(function success(response) {
-            deferred.resolve(response);
-        }, function fail() {
-            deferred.reject();
-        });
-        return deferred.promise;
-    }
-
-    function resetPassword(token, newPassword) {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/users/resetPassword';
-        var resetPasswordRequest = {
-            token: token,
-            newPassword: newPassword
-        }
-        $http.post(url, resetPasswordRequest).then(function success(response) {
-            deferred.resolve(response);
-        }, function fail() {
-            deferred.reject();
         });
         return deferred.promise;
     }

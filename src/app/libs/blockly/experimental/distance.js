@@ -28,7 +28,7 @@ Blockly.Python['distance-get'] = function(block) {
 	var mode = block.getFieldValue('MODE');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.Distance import Distance' + version('DISTANCE') + '\n');
+	AddToSection('import' , 'from Blocky.Distance import *\n');
 	AddToSection('declare' , object + " = Distance(port='" + port +"')\n");
 	
 	var code = object + '.' + 'value()'  ;

@@ -21,8 +21,6 @@ import './user-menu.scss';
 import userMenuTemplate from './user-menu.tpl.html';
 import LoginController from './login.controller';
 import loginTemplate from './login.tpl.html';
-import SignUpController from './sign-up.controller';
-import signUpTemplate from './sign-up.tpl.html';
 
 /* eslint-enable import/no-unresolved, import/default */
 
@@ -41,14 +39,12 @@ function UserMenu() {
     };
 }
 
-function UserMenuController($scope, $rootScope, userService, $translate, $state, $mdDialog, $document, $window, store) {
+function UserMenuController($scope, $rootScope, userService, $mdDialog, $document, $window) {
 
     var vm = this;
 
     $rootScope.login = login;
-    $rootScope.signUp = signUp;
     vm.logout = logout;
-    vm.openProfile = openProfile;
     vm.userDisplayName = '';
     vm.userLoaded = false;
 
@@ -75,27 +71,9 @@ function UserMenuController($scope, $rootScope, userService, $translate, $state,
         });
     }
 
-    function signUp($event) {
-        $mdDialog.show({
-            controller: SignUpController,
-            controllerAs: 'vm',
-            templateUrl: signUpTemplate,
-            parent: angular.element($document[0].body),
-            fullscreen: true,
-            targetEvent: $event,
-            scope: $scope,
-            preserveScope: true
-        });
-    }
-
-    function openProfile() {
-        $state.go('home.profile');
-    }
-
     function logout() {
         userService.logout();
-        store.remove('script');
+        $window.localStorage.clear();
         $window.location.reload();
-        store.remove('script');
     }
 }

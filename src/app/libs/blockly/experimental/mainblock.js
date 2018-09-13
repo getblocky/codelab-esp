@@ -16,10 +16,7 @@ Blockly.BlockSvg.START_HAT = false;
 Blockly.Python.addReservedWords('machine');
 Blockly.Python.addReservedWords('blocky');
 
-var async_cancellable_decorator = '@core.asyn.cancellable\n' ;
-function async_cancellable_wrapper(task){
-	return  'core.asyn.Cancellable(' + task + ')'
-}
+var async_cancellable = '@cancellable\n' ;
 
 Blockly.Extensions.register('setup', function() {
   // Example validation upon block change:
@@ -58,12 +55,7 @@ Blockly.Blocks['MainRunOnce'] = {
 		this.setOnChange(
 			function(change)
 			{
-<<<<<<< HEAD
-				return 
-				//console.log(change.type , change.element , change.name);
-=======
 				//
->>>>>>> 9d8b2e67066e93b99b86c57db8fe9311d3c0bcf1
 				//this.workspace.addChangeListener(); 
 				//Blockly['legit-declare'](change,this.workspace);
 				if (true)//change.type != 'ui'&&change.type != 'move')
@@ -104,7 +96,7 @@ Blockly.Blocks['MainRunOnce'] = {
 				}
 				// Hightlight block that share the same object !
 				
-				//if (change.type == 'move') Blockly.Events.disableOrphans(change);
+				if (change.type == 'move') Blockly.Events.disableOrphans(change);
 			}
 		);
 	},
@@ -117,13 +109,13 @@ Blockly.Generator.prototype.unprefixLines = function(text, prefix) {
 
 Blockly.Python['MainRunOnce'] = function(block) {
 	GlobalFunctionName = [];
-	Blockly.Python.definitions_['import'] = "";
+	Blockly.Python.definitions_['import'] = "import Blocky.uasyncio as asyncio\nfrom Blocky.asyn import Cancellable , cancellable\n";
 	Blockly.Python.definitions_['variable'] = "";
 	Blockly.Python.definitions_['declare'] = "";
 	Blockly.Python.definitions_['function'] = "";
 	Blockly.Python.definitions_['event'] = "";
 	Blockly.Python.definitions_['once'] ='';
-	Blockly.Python.definitions_['async'] ='';
+	Blockly.Python.definitions_['async'] ='loop = asyncio.get_event_loop()\n';
 	var statement = Blockly.Python.statementToCode(block, 'NAME');
 	
 	if (statement.length)Blockly.Python.definitions_['once'] += 'if True:\n' + statement;

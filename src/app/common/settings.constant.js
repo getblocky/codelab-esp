@@ -14,22 +14,20 @@
  * limitations under the License.
  */
 export default angular.module('blocky.settings', [])
-    .constant('settings',
-        {
-            baseApiUrl: 'https://api.getblocky.com/prod',
-            localApiUrl: 'http://192.168.4.1',
-            entryPoints: {
-                login: '/users/signup',
-                signup: '/users/login',
-                forgotPassword: '/users/forgotPassword',
-                resetPassword: '/users/resetPassword'
-            },
-            mqtt: {
-                url: 'wss://broker.getblocky.com',
-                host: 'broker.getblocky.com',
-                port: '8883'
-            },
-            maxBytesUpload: 250,
-            latestFirmwareVersion: "1.1"
+    .constant('settings', {
+        baseApiUrl: 'https://blynk.getblocky.com:8443/api/v1',
+        localApiUrl: 'http://192.168.4.1',
+        entryPoints: {
+            login: '/login'
+        },
+        maxBytesUpload: 250,
+        latestFirmwareVersion: "1.1",
+        blynk: {
+            addr: 'blynk.getblocky.com',
+            port: 9443,
+            path: '/websockets'
+        },
+        facebook: {
+            clientId: '2045602205749965'
         }
-    ).name;
+    }).name;

@@ -47,6 +47,8 @@ import 'angular-hotkeys/build/hotkeys.min.css';
 import '../scss/main.scss';
 import 'angular-cookie-law/dist/angular-cookie-law.min.js';
 import 'ngclipboard';
+import 'bootstrap-social/bootstrap-social.css';
+import 'angularjs-facebook/lib/angular-facebook.js';
 
 import AppConfig from './app.config';
 import GlobalInterceptor from './global-interceptor.service';
@@ -70,7 +72,8 @@ angular.module('blocky', [
         blockyApiUser,
         uiRouter,
         'angular-cookie-law',
-        'ngclipboard'
+        'ngclipboard',
+        'facebook'
     ])
     .config(AppConfig)
     .factory('globalInterceptor', GlobalInterceptor)

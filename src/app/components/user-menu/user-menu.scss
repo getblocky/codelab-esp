@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 .tb-user-info {
   line-height: 1.5;
+
   span {
     text-transform: none;
     text-align: left;
   }
+
   span.tb-user-display-name {
     font-size: 1rem;
     font-weight: 300;
@@ -34,11 +35,11 @@ md-icon.tb-mini-avatar {
   width: 36px;
 }
 
-
 .tb-login-button .md-button {
   i {
     vertical-align: middle !important;
   }
+
   i+span {
     margin-left: 8px;
   }
@@ -50,4 +51,11 @@ tb-user-menu {
     padding-right: 15px !important;
     margin-right: 15px !important;
   }
+}
+
+.btn-facebook {
+  padding: 6px;
+  text-align: center !important;
+  margin: 8px;
+  cursor: pointer;
 }

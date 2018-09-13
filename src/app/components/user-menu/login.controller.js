@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-import resetPasswordRequestTemplate from './reset-password-request.tpl.html';
 
 /* eslint-enable import/no-unresolved, import/default */
 
 /*@ngInject*/
-export default function LoginController(toast, loginService, userService, $rootScope, $mdDialog, $window, $document, $scope, $translate) {
+export default function LoginController(loginService, userService, $mdDialog, $window, Facebook) {
     var vm = this;
 
     vm.user = {
@@ -28,11 +27,9 @@ export default function LoginController(toast, loginService, userService, $rootS
         email: ''
     };
 
-    vm.forgotPassword = forgotPassword;
     vm.login = login;
+    vm.loginFacebook = loginFacebook;
     vm.cancel = cancel;
-    vm.signUp = signUp;
-    vm.resetPasswordRequest = resetPasswordRequest;
 
     function login() {
         loginService.login(vm.user).then(function success(response) {
@@ -42,31 +39,19 @@ export default function LoginController(toast, loginService, userService, $rootS
         }, function fail() {});
     }
 
-    function cancel() {
-        $mdDialog.cancel();
-    }
-
-    function signUp() {
-        $rootScope.signUp();
-    }
-
-    function resetPasswordRequest($event) {
-        $mdDialog.show({
-            controller: () => this,
-            controllerAs: 'vm',
-            templateUrl: resetPasswordRequestTemplate,
-            parent: angular.element($document[0].body),
-            fullscreen: true,
-            targetEvent: $event,
-            scope: $scope,
-            preserveScope: true
+    function loginFacebook() {
+        Facebook.login(function (response) {
+            loginService.loginFacebook(response.authResponse.accessToken).then(function success(response) {
+                var token = response.data.token;
+                userService.setUserFromJwtToken(token, true);
+                $window.location.reload();
+            }, function fail() {});
+        }, {
+            scope: 'public_profile, email'
         });
     }
 
-    function forgotPassword() {
-        loginService.forgotPassword(vm.user.email).then(function success() {
-            toast.showSuccess($translate.instant('login.password-link-sent-message'));
-            $mdDialog.cancel();
-        }, function fail() {});
+    function cancel() {
+        $mdDialog.cancel();
     }
 }

@@ -24,7 +24,6 @@ import HomeController from './home.controller';
 import blockyCodeLab from '../codelab';
 import blockyUserMenu from '../components/user-menu/user-menu.directive';
 import blockyMenu from '../services/menu.service';
-import blockProfile from '../profile';
 
 export default angular.module('blocky.home', [
     uiRouter,
@@ -32,7 +31,6 @@ export default angular.module('blocky.home', [
     blockyCodeLab,
     blockyUserMenu,
     blockyMenu,
-    blockProfile,
 ])
     .config(HomeRoutes)
     .controller('HomeController', HomeController)

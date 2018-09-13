@@ -24,14 +24,13 @@ Blockly.Python['number_output']=function(block)
 
 
 
-
 Blockly.Blocks['buzzer-beep'] =
 {
 	init:function(){
 		this.appendValueInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('template') ) , 'PORT' ) 
 			.appendField('beeps')
 		this.appendDummyInput()
 			.appendField('times')
@@ -58,7 +57,7 @@ Blockly.Python['buzzer-beep'] = function(block) {
 	var time =  Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	var mode = block.getFieldValue('MODE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
-	AddToSection('import' , 'from Blocky.Buzzer import Buzzer' + version('BUZZER') + '\n');
+	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	var code = object + ".beep(time="+time+",speed="+mode+")\n";
@@ -71,7 +70,7 @@ Blockly.Blocks['buzzer-set'] =
 		this.appendValueInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('template') ) , 'PORT' ) 
 			.appendField('turn')
 			;
 		
@@ -96,7 +95,7 @@ Blockly.Python['buzzer-set'] = function(block) {
 	var time = block.getFieldValue('TIME');
 	var mode = block.getFieldValue('MODE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
-	AddToSection('import' , 'from Blocky.Buzzer import Buzzer' + version('BUZZER') + '\n');
+	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	var code = object + ".turn(" + value + ")\n";

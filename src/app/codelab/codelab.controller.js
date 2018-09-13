@@ -29,36 +29,15 @@ import bottomSheetActionsTemplate from './bottom-sheet-actions.tpl.html';
 import bottomSheetDeviceLogTemplate from './bottom-sheet-device-log.tpl.html';
 import blocklyToolbox from './blockly-toolbox.tpl.html';
 import blocklyWorkspace from './blockly-workspace.tpl.html';
-import renameDeviceTemplate from './rename-device.tpl.html';
 import showSharedProjectTemplate from './show-shared-project.tpl.html';
 
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, settings, $timeout, $log) {
+export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log) {
     var vm = this;
-    var mqttClient;
-    var authKey = '';
-    var baseSysTopicUrl = '';
 
     vm.isUserLoaded = userService.isAuthenticated();
-    if (vm.isUserLoaded) {
-        authKey = userService.getCurrentUser().authKey;
-        $rootScope.authKey = authKey;
-        baseSysTopicUrl = authKey + '/sys';
-    } else {
-        vm.devices = [{
-            id: 0,
-            name: 'Demo device',
-            status: 0
-        }];
-    }
-
-    try {
-        initMqttSession();
-    } catch (err) {
-        $log.log('Exception:', err.message);
-    }
 
     vm.currentDevice = null;
     vm.currentLog = '';
@@ -89,12 +68,15 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.localScript = store.get('script');
     vm.workspace = null;
     vm.homeUrl = window.location.origin;
+    vm.blynk = {};
 
     initScriptData();
+    if (vm.isUserLoaded) {
+        loadUserDevices();
+    }
 
     $scope.$watch(() => this.currentDevice, function (newValue, oldValue) {
         if (newValue && !angular.equals(newValue, oldValue)) {
-            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.chipId) || '';
             if (vm.currentDevice.id) {
                 store.set('selectedDeviceId', vm.currentDevice.id);
             }
@@ -102,14 +84,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     });
 
     window.addEventListener('resize', onResize, false);
-    $scope.$on("$destroy", function () {
+    $scope.$on('$destroy', function () {
         // Save project to local storage
         prepareProjectDataAndSaveToLocal();
-
-        // Clean up mqtt session
-        if (mqttClient) {
-            mqttClient.end();
-        }
         window.removeEventListener('resize', onResize, false);
     });
 
@@ -132,67 +109,38 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.deleteProject = deleteProject;
     vm.shareProject = shareProject;
     vm.showDeviceLog = showDeviceLog;
-    vm.renameDevice = renameDevice;
-    vm.saveDevice = saveDevice;
-    vm.deleteDevice = deleteDevice;
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
+    vm.reloadLoadUserDevices = reloadLoadUserDevices;
 
-    function initMqttSession() {
-        if (angular.isDefined(mqtt) && vm.isUserLoaded) {
-            mqttClient = mqtt.connect(settings.mqtt.url, {
-                host: settings.mqtt.host,
-                port: settings.mqtt.port,
-                username: '',
-                password: authKey
-            });
-            mqttClient.on('connect', function () {
-                $timeout(function () {
-                    loadUserDevices();
-                });
-            });
-            mqttClient.on('message', function (topic, message) {
-                $timeout(function () {
-                    try {
-                        var chipId = '';
-                        if (topic.indexOf('/log') > -1) {
-                            message = message.toString();
-                            chipId = topic.replace(baseSysTopicUrl, '').replace('/log', '').replace('/', '');
-                            var deviceLog = store.get('deviceLog_' + chipId) || '';
-                            if (vm.currentDevice && vm.currentDevice.chipId === chipId) {
-                                vm.currentLog = deviceLog;
-                            }
-                        } else {
-                            message = angular.fromJson(message.toString());
-                            if (message.event === 'register') {
-                                vm.currentDevice = undefined;
-                                loadUserDevices();
-                                toast.showSuccess('Device ' + message.name + ' has come online');
-                                $log.log('device: ', message);
-                                // Check device firmware and update if any
-
-                            } else if (message.event === 'offline') {
-                                vm.currentDevice = undefined;
-                                loadUserDevices();
-                                toast.showError('Device ' + message.name + ' just went offline');
-                            } else if (message.event === 'ota_ack') {
-                                vm.isUploadSuccess = true;
-                                toast.showSuccess($translate.instant('script.script-upload-success'));
-                            }
-                        }
-                    } catch (err) {
-                        $log.log('error', err.message);
-                    }
-                }, 500);
+    function initBlynk(deviceId, token) {
+        if (angular.isUndefined(vm.blynk['"' + deviceId + '"'])) {
+            vm.blynk['"' + deviceId + '"'] = new Blynk.Blynk(token, {
+                connector: new Blynk.WsClient(settings.blynk)
             });
         }
+
+        var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(127);
+
+        logPin.on('write', function (param) {
+            var log = param[0];
+            updateDevicesLogs(deviceId, log);
+        });
+
+        vm.blynk['"' + deviceId + '"'].on('connect', function () {
+            $log.log(deviceId, 'Blynk ready. Sending sync request...');
+            vm.blynk['"' + deviceId + '"'].syncAll();
+        });
+        vm.blynk['"' + deviceId + '"'].on('disconnect', function () {
+            $log.log(deviceId, 'Blynk disconnected.');
+        });
     }
 
     function initScriptData() {
         if (vm.scriptId) { // Load existing script
             scriptService.getScript(vm.scriptId).then(
                 function success(script) {
-                    vm.script.id = script.id;
+                    vm.script._id = script._id;
                     vm.script.name = script.name;
                     vm.script.xml = script.xml || '';
                     vm.script.python = script.python || '';
@@ -208,6 +156,54 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             );
         } else if (vm.localScript) {
             vm.script = vm.localScript;
+        }
+    }
+
+    function reloadLoadUserDevices() {
+        loadUserDevices();
+    }
+
+    function loadUserDevices() {
+        deviceService.getAllDevices().then(function success(devices) {
+            if (devices.length) {
+                vm.devices = devices;
+                for (var i = 0; i < vm.devices.length; i++) {
+                    initBlynk(vm.devices[i].id, vm.devices[i].token);
+                }
+                loadSelectedDevice();
+            }
+        });
+    }
+
+    function loadSelectedDevice() {
+        var selectedDeviceId = store.get('selectedDeviceId');
+        if (selectedDeviceId) {
+            for (var i = 0; i < vm.devices.length; i++) {
+                if (selectedDeviceId === vm.devices[i].id) {
+                    vm.currentDevice = vm.devices[i];
+                }
+            }
+        } else {
+            vm.currentDevice = vm.devices[0];
+            store.set('selectedDeviceId', vm.currentDevice.id);
+        }
+    }
+
+    function updateDevicesLogs(deviceId, log) {
+        var deviceLog = store.get('deviceLog_' + deviceId) || '';
+        if (deviceLog.length) {
+            log = log + '<br>' + deviceLog;
+        }
+        store.set('deviceLog_' + deviceId, log);
+        $timeout(function () {
+            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
+        });
+    }
+
+    function clearDeviceLog() {
+        if (vm.currentDevice) {
+            store.set('deviceLog_' + vm.currentDevice.id, '');
+            vm.currentLog = '';
         }
     }
 
@@ -273,45 +269,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         }
     }
 
-    function loadUserDevices() {
-        deviceService.getAllDevices().then(function success(devices) {
-            mqttClient.unsubscribe(baseSysTopicUrl);
-            mqttClient.subscribe(baseSysTopicUrl, {
-                qos: 2
-            });
-            if (devices.length) {
-                vm.devices = devices;
-                loadSelectedDevice();
-                subscribeDeviceTopics();
-            }
-        });
-    }
-
-    function loadSelectedDevice() {
-        var selectedDeviceId = store.get('selectedDeviceId');
-        if (selectedDeviceId) {
-            for (var i = 0; i < vm.devices.length; i++) {
-                if (selectedDeviceId === vm.devices[i].id) {
-                    vm.currentDevice = vm.devices[i];
-                }
-            }
-        }
-    }
-
-    function subscribeDeviceTopics() {
-        var chipId = '';
-        if (mqttClient && mqttClient.connected) {
-            for (var i = 0; i < vm.devices.length; i++) {
-                chipId = vm.devices[i].chipId;
-                var logTopic = baseSysTopicUrl + '/' + chipId + '/log';
-                mqttClient.unsubscribe(logTopic);
-                mqttClient.subscribe(logTopic, {
-                    qos: 2
-                });
-            }
-        }
-    }
-
     function changeMode($event) {
         if (vm.script.mode === 'python') {
             if (vm.script.python.replace(/(\r\n|\n|\r)/gm, '') !== store.get('script').python.replace(/(\r\n|\n|\r)/gm, '')) {
@@ -329,8 +286,8 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             }
         } else {
             vm.script.mode = 'python';
-			vm.workspace.gl = 'some';
-		
+            vm.workspace.gl = 'some';
+
             vm.script.python = Blockly.Python.workspaceToCode(vm.workspace);
             store.set('script', vm.script);
         }
@@ -350,12 +307,13 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         $mdDialog.hide();
         if (vm.isUserLoaded) {
             prepareProjectDataAndSaveToLocal();
-            if (angular.isUndefined(vm.script.id) || vm.script.id.length === 0) { // New project
+            if (angular.isUndefined(vm.script._id) || vm.script._id.length === 0) { // New project
                 addProject();
             } else { // Existing project
                 scriptService.saveScript(vm.script);
             }
         } else {
+            store.set('script', vm.script);
             $rootScope.login();
         }
     }
@@ -388,9 +346,9 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     function addProject() {
         scriptService.addScript(vm.script).then(
             function success(script) {
-                vm.script.id = script.id;
+                vm.script._id = script._id;
                 $state.go('home.codelab.view', {
-                    scriptId: script.id
+                    scriptId: script._id
                 });
             },
             function fail() {
@@ -401,80 +359,27 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
 
     function duplicateProject() {
         vm.script.name = vm.script.name + ' (Duplicated)';
-        vm.script.id = '';
+        delete vm.script._id;
         vm.script.isPublic = 0;
         store.set('script', vm.script);
         $mdBottomSheet.hide();
         $state.go('home.codelab');
     }
 
-    function updateFirmware() {
-        var chipId = vm.currentDevice.chipId;
-        var topic = baseSysTopicUrl + '/' + chipId + '/run';
-        if (mqttClient && mqttClient.connected && chipId) {
-            mqttClient.publish(topic, '', null, function (err) {
-                if (err) {
-                    toast.showError($translate.instant('script.firmware-update-failed-error'));
-                }
-            });
-        } else {
-            toast.showError($translate.instant('script.firmware-update-failed-error'));
-        }
-    }
+    function updateFirmware() {}
 
-    function uploadScript(mode) {
-        var chipId = vm.currentDevice.chipId;
-        var topic = baseSysTopicUrl + '/' + chipId + '/' + mode;
+    function uploadScript() {
+        var otaPin = new vm.blynk['"' + vm.currentDevice.id + '"'].VirtualPin(126);
         prepareProjectDataAndSaveToLocal();
         if (vm.script.python.length === 0) {
             return;
         }
-        if (mqttClient && mqttClient.connected && chipId) {
-            var maxSize = settings.maxBytesUpload;
+        var scriptToBeUploaded = vm.script.python;
 
-            vm.isUploadSuccess = false;
-            var scriptToBeUploaded = vm.script.python;
-
-            if (vm.isEmbed) {
-                scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
-                $log.log(scriptToBeUploaded);
-            } else {
-                $log.log('Not embeed');
-            }
-            
-            if (byteLength(vm.script.python) < maxSize) {
-                mqttClient.publish(topic, scriptToBeUploaded, null, function (err) {
-                    if (err) {
-                        toast.showError($translate.instant('script.script-upload-failed-error'));
-                    }
-                    $timeout(function () {
-                        if (!vm.isUploadSuccess) {
-                            toast.showError($translate.instant('script.script-upload-failed-error'));
-                        }
-                    }, 10000);
-                });
-            } else {
-                var splitedStrings = splitString(scriptToBeUploaded, maxSize);
-                for (var i = 0; i < splitedStrings.length; i++) {
-                    var sharedTopic = topic + '/' + (i + 1).toString();
-                    if (i === splitedStrings.length - 1) {
-                        sharedTopic = topic + '/$';
-                    }
-                    mqttClient.publish(sharedTopic, splitedStrings[i], null, function (err) {
-                        if (err) {
-                            toast.showError($translate.instant('script.script-upload-failed-error'));
-                        }
-                        $timeout(function () {
-                            if (!vm.isUploadSuccess) {
-                                toast.showError($translate.instant('script.script-upload-failed-error'));
-                            }
-                        }, 10000);
-                    });
-                }
-            }
-        } else {
-            toast.showError($translate.instant('script.script-upload-failed-error'));
+        if (vm.isEmbed) {
+            scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
         }
+        otaPin.write(scriptToBeUploaded);
     }
 
     function newProject() {
@@ -506,6 +411,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 targetEvent: $event
             }).then(function () {}, function () {});
         } else {
+            store.set('script', vm.script);
             $rootScope.login();
         }
     }
@@ -522,7 +428,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             .cancel($translate.instant('action.cancel'))
             .ok($translate.instant('action.delete'));
         $mdDialog.show(confirm).then(function () {
-                scriptService.deleteScript(vm.script.id).then(function success() {
+                scriptService.deleteScript(vm.script._id).then(function success() {
                     newProject();
                 });
             },
@@ -598,51 +504,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         }).then(function () {}).catch(function () {});
     }
 
-    function renameDevice() {
-        $mdBottomSheet.hide();
-        $mdDialog.show({
-            controller: () => this,
-            controllerAs: 'vm',
-            templateUrl: renameDeviceTemplate,
-            parent: angular.element($document[0].body),
-            fullscreen: false
-        }).then(function () {}, function () {});
-    }
-
-    function deleteDevice($event) {
-        $mdBottomSheet.hide();
-        var confirm = $mdDialog.confirm()
-            .targetEvent($event)
-            .title($translate.instant('device.delete-device-title', {
-                deviceName: vm.currentDevice.name
-            }))
-            .htmlContent($translate.instant('device.delete-device-text'))
-            .ariaLabel($translate.instant('action.delete'))
-            .cancel($translate.instant('action.cancel'))
-            .ok($translate.instant('action.delete'));
-        $mdDialog.show(confirm).then(function () {
-                deviceService.deleteDevice(vm.currentDevice.id).then(function success() {
-                    $state.go($state.current, null, {
-                        reload: true
-                    });
-                });
-            },
-            function () {});
-    }
-
-
-    function saveDevice() {
-        deviceService.saveDevice(vm.currentDevice).then(
-            function success() {
-                var chipId = vm.currentDevice.chipId;
-                var topic = baseSysTopicUrl + '/' + chipId + '/rename';
-                mqttClient.publish(topic, vm.currentDevice.name, null, function () {});
-            },
-            function fail() {}
-        );
-        $mdDialog.hide();
-    }
-
     function downloadProject() {
         prepareProjectDataAndSaveToLocal();
         exportToPc(vm.script.python, vm.script.name + '.py');
@@ -674,50 +535,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             e.initEvent('click', true, false, window,
                 0, 0, 0, 0, 0, false, false, false, false, 0, null);
             a.dispatchEvent(e);
-        }
-    }
-
-    function clearDeviceLog() {
-        if (vm.currentDevice) {
-            store.set('deviceLog_' + vm.currentDevice.chipId, '');
-            vm.currentLog = '';
-        }
-    }
-
-    function byteLength(str) {
-        // returns the byte length of an utf8 string
-        var s = str.length;
-        for (var i = str.length - 1; i >= 0; i--) {
-            var code = str.charCodeAt(i);
-            if (code > 0x7f && code <= 0x7ff) s++;
-            else if (code > 0x7ff && code <= 0xffff) s += 2;
-            if (code >= 0xDC00 && code <= 0xDFFF) i--; //trail surrogate
-        }
-        return s;
-    }
-
-    function splitString(str, size) {
-        var output = [];
-        var lines = str.split('\n');
-        var strPart = '';
-        var offsetBytes = 100;
-        if (byteLength(str) < size) {
-            output[0] = str;
-            return output[0];
-        } else {
-            if (size - offsetBytes < 0) {
-                size = offsetBytes;
-            }
-            for (var i = 0; i < lines.length; i++) {
-                strPart = strPart.concat('\n', lines[i]);
-                if (byteLength(strPart) > size) {
-                    output.push(strPart);
-                    strPart = '';
-                } else if (i === lines.length - 1) {
-                    output.push(strPart);
-                }
-            }
-            return output;
         }
     }
 

@@ -20,16 +20,14 @@ export default angular.module('blocky.api.user', [blockyApiLogin])
     .name;
 
 /*@ngInject*/
-function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelper, $translate, $state, settings) {
+function UserService($q, $rootScope, store, jwtHelper, $state) {
     var currentUser = null,
         userLoaded = false;
 
     var service = {
         isAuthenticated: isAuthenticated,
         getCurrentUser: getCurrentUser,
-        getUser: getUser,
         isUserLoaded: isUserLoaded,
-        saveUser: saveUser,
         setUserFromJwtToken: setUserFromJwtToken,
         clearJwtToken: clearJwtToken,
         isJwtTokenValid: isJwtTokenValid,
@@ -37,8 +35,7 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
         updateAuthorizationHeader: updateAuthorizationHeader,
         gotoDefaultPlace: gotoDefaultPlace,
         logout: logout,
-        reloadUser: reloadUser,
-        changeAuthKey: changeAuthKey
+        reloadUser: reloadUser
     }
 
     reloadUser();
@@ -65,6 +62,7 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
                 store.set(prefix + '_expiration', clientExpiration);
                 valid = true;
             }
+            $rootScope.$broadcast('authenticated');
         }
         if (!valid && notify) {
             $rootScope.$broadcast('unauthenticated');
@@ -85,16 +83,6 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
             }
         } else {
             updateAndValidateToken(jwtToken, 'jwt_token', true);
-            if (notify) {
-                loadUser().then(function success() {
-                    $rootScope.$broadcast('authenticated');
-                    notifyUserLoaded();
-                }, function fail() {
-                    $rootScope.$broadcast('unauthenticated');
-                });
-            } else {
-                loadUser();
-            }
         }
     }
 
@@ -146,7 +134,7 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
         function procceedJwtTokenValidate() {
             validateJwtToken().then(function success() {
                 var jwtToken = store.get('jwt_token');
-                currentUser = jwtHelper.decodeToken(jwtToken).user;
+                currentUser = jwtHelper.decodeToken(jwtToken);
                 deferred.resolve();
             }, function fail() {
                 deferred.reject();
@@ -174,41 +162,7 @@ function UserService($http, $q, $rootScope, loginService, toast, store, jwtHelpe
         return jwtToken;
     }
 
-    function saveUser(user) {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/users/profile';
-        $http.post(url, user).then(function success(response) {
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
-    function getUser() {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/users/profile';
-        $http.get(url).then(function success(response) { // TODO: replace PUT by GET
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
     function gotoDefaultPlace(params) {
         $state.go('home.codelab', params);
     }
-
-    function changeAuthKey() {
-        var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/users/changeAuthKey';
-        $http.post(url, null).then(function success(response) {
-            deferred.resolve(response.data);
-        }, function fail(response) {
-            deferred.reject(response.data);
-        });
-        return deferred.promise;
-    }
-
 }
