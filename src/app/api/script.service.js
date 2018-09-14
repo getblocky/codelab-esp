@@ -31,7 +31,7 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
         deleteScript: deleteScript,
         saveScript: saveScript,
         addScript: addScript,
-        uploadScript: uploadScript
+        sendOTA: sendOTA
     }
 
     return service;
@@ -118,13 +118,15 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
         return deferred.promise;
     }
 
-    function uploadScript(scriptId, deviceId) {
+    function sendOTA(token, dataArray) {
         var deferred = $q.defer();
-        var url = settings.baseApiUrl + '/script/' + scriptId + '/upload';
-        var uploadRequest = {
-            deviceId: deviceId
-        };
-        $http.post(url, uploadRequest).then(function success(response) {
+        var url = settings.baseApiUrl + '/script/ota';
+        var otaRequest = {
+            url: 'https://' + settings.blynk.addr + ':' + settings.blynk.port + '/' + token + '/update/' + settings.blynk.otaPin,
+            data: dataArray
+        }
+
+        $http.post(url, otaRequest).then(function success(response) {
             deferred.resolve(response);
         }, function fail(response) {
             deferred.reject(response);
