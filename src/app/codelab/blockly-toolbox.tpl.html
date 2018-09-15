@@ -13,14 +13,8 @@
 		<category name='LIGHT' colour='#3b96fc'>
 			<block type='light-get'></block>
 		</category>
-		<category name='SMOKE' colour='#3b96fc'>
-			<block type='smoke-get'></block>
-		</category>
 		<category name='SOUND' colour='#3b96fc'>
 			<block type='sound-event'></block>
-		</category>
-		<category name='RFID' colour='#3b96fc'>
-			<block type='rfid-event'></block>
 		</category>
 		<category name='DISTANCE' colour='#3b96fc'>
 			<block type='distance-get'></block>
@@ -33,17 +27,18 @@
 		</category>
 	</category>
 	<category name='CONTROL' colour='#f99205'>
-		<category name='STEPPER' colour='#f99205'>
-			<block type='stepper-set'>
+		<category name='RELAY' colour='#f99205'>
+			<block type='relay-set'>
 				<value name='MAIN'>
-					<shadow type='number_output'>
+					<shadow type='state_output'>
 					</shadow>
 				</value>
 			</block>
-		</category>
 
-		<category name='SWITCH' colour='#f99205'>
-			<block type='switch-set'>
+		</category>
+		
+		<category name='LED' colour='#f99205'>
+			<block type='led-set'>
 				<value name='MAIN'>
 					<shadow type='state_output'>
 					</shadow>
@@ -83,22 +78,15 @@
 			<block type='remote-event'></block>
 		</category>
 	</category>
-	<category name='NETWORK' colour='#f92d52'>
-		<block type='network-event'>
-			<value name='MAIN'>
-				<block type="network_message">
-				</block>
-			</value>
-
-		</block>
-		<block type='network_send'></block>
-		<block type='network_log'></block>
+	<category name='NETWORK' colour='#23c890'>
+		<block type='blynk_event_vr'></block>
+		<block type='blynk_write_vw'></block>
 	</category>
 	<category name='TIMER' colour='#973999'>
 		<block type='timer-event-repeat'></block>
-		<block type='timer-event-alarm'></block>
 		<block type='timer-wait'></block>
 		<block type='timer-runtime'></block>
+		<block type='timer-ntp'></block>
 	</category>
 	<category name='LOOPS' colour='#40bf4a'>
 		<block type="controls_repeat_ext">2
@@ -221,13 +209,7 @@
 			<field name="TEXT"></field>
 		</block>
 	</category>
-	<category name='FUNCTIONS' colour='#213237' custom="PROCEDURE">
 
-	</category>
-
-	<category name='ADVANCED' colour='#213237'>
-
-	</category>
 
 </xml>
 <style>

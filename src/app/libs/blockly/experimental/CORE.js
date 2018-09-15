@@ -6,8 +6,8 @@ goog.require('Blockly.Workspace');
 goog.require('Blockly.Generator');
 goog.require('Blockly.BlockSvg');
 
-var PortList = ['A1','A2','A3','A4','D1','D2','D3','D4'];
-//var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
+//var PortList = ['A1','A2','A3','A4','D1','D2','D3','D4'];
+var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
 var PORT_ASSIGN = [] ; 
 var previous_change = null ; 
 //var  GlobalWorkspace =  Blockly.getMainWorkspace();
@@ -83,11 +83,11 @@ var isEqual = function (value, other) {
 			}
 		}
 	}
-
 	// If nothing failed, return true
 	return true;
 
 };
+
 
 /*
 	Interfere the way we generate code 
