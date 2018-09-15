@@ -13,30 +13,12 @@ Blockly.Python.addReservedWords('blocky');
 
 var BlynkColor = '#23c890';
 
-Blockly.Blocks['blynk_declare_server'] = {
-	init : function(){
-		this.appendDummyInput('MAIN')
-			.appendField(new Blockly.FieldImage("https://avatars1.githubusercontent.com/u/11541426?s=400&v=4", 20, 20, "*"))
-			.appendField('Set Blynk server Address')
-			.appendField(new Blocky.FieldDropdown([["blynk.getblocky.com","BLOCKY"],["blynk-cloud.com","BLYNK"]]),'SERVER')
-			;
-		this.setPreviousStatement(true, null);
-		this.setNextStatement(true, null);
-		this.setColour(Colour.Network);
-		this.setTooltip("");
-		this.setHelpUrl("");
-	}
-	
-	
-}
-
 
 Blockly.Blocks['blynk_event_vr'] = {
   init: function() {
 	var GeneratedList = [];
-	for (var i = 1 ; i < 21 ; i ++){GeneratedList.push(["V"+String(i) , String(i)]);}
+	for (var i = 0 ; i < 21 ; i ++){GeneratedList.push(["V"+String(i) , String(i)]);}
     this.appendDummyInput("MAIN")
-		.appendField(new Blockly.FieldImage("https://raw.githubusercontent.com/riftbit/docker-blynk/master/logo.png", 50, 50, "*"))
         .appendField("when receive data from channel \n")
 		.appendField(new Blockly.FieldDropdown(GeneratedList) , "CHANNEL")
 		;
@@ -44,7 +26,7 @@ Blockly.Blocks['blynk_event_vr'] = {
         .setCheck(null)
 		;
     this.appendDummyInput();
-    this.setColour("#000000");
+    this.setColour(BlynkColor);
 	this.setTooltip("");
 	this.setHelpUrl("");
 	this.role = 'Event';
@@ -54,69 +36,25 @@ Blockly.Blocks['blynk_event_vr'] = {
 };
 
 Blockly.Python['blynk_event_vr'] = function(block) {
-  var topic = block.getFieldValue('CHANNEL');
+  var channel = block.getFieldValue('CHANNEL');
   var code = Blockly.Python.statementToCode(block, 'CODE');
   // TODO: Assemble Python into code variable.
   if (code.length){
 
   
   // function code 
-  var function_name = 'blynk_' + topic ;
+  var function_name = 'blynk_' + channel ;
  
   
-  AddToSection('once' ,"blynk.listen(channel=" + topic + ",function=" + function_name + ')\n' );
-  AddToSection('function' , async_cancellable+'async def '+function_name +"(topic,message):\n" + code );
+  //AddToSection('once' ,"blynk.listen(channel=" + topic + ",function=" + function_name + ')\n' );
+  //AddToSection('function' , async_cancellable+'async def '+function_name +"(topic,message):\n" + code );
+	AddToSection('function',async_cancellable + 'async def '+ function_name + "(message):\n" + code);
+	AddToSection('once',"core.blynk.add_virtual_pin(pin=" + String(channel) + ",write=" + function_name + ")\n" );
   }
   return '';
 };
 
 
-Blockly.Blocks['blynk_logo'] = {
-	init:function(){
-		this.appendValueInput("MAIN").appendField(new Blockly.FieldImage("http://www.free-icons-download.net/images/cloud-logo-icon-22859.png", 50, 50, "*"));
-		;
-		this.setColour(BlynkColor);
-		
-		
-		
-	}
-	
-}
-Blockly.Blocks['blynk_declare_server'] = {
-  init: function() {
-	var GeneratedList = [];
-	for (var i = 0 ; i < 20 ; i ++){GeneratedList.push(["V"+String(i) , String(i)]);}
-	var data = this.appendDummyInput("DATA")
-		.appendField("                  ")
-		.appendField(new Blockly.FieldImage("https://avatars1.githubusercontent.com/u/11541426?s=400&v=4", 50, 50, "*"))
-        ;
-	data.setAlign (Blockly.Input.ALIGN_CENTRE)
-	this.appendDummyInput("TEMP")
-		.appendField("SERVER:")
-		.appendField(new Blockly.FieldDropdown([["blynk.getblocky.com","BLOCKY"],["blynk-cloud.com" , "BLYNK"]]), "SERVER")
-        ;
-	this.appendDummyInput("")
-		.appendField("TOKEN:")
-		.appendField(new Blockly.FieldTextInput("My Token") , "TOKEN")
-		;
-	
-	this.inputsInline = false ;
-    this.setColour(BlynkColor);
-	this.setTooltip("");
-	this.setHelpUrl("");
-	
-  }
-};
-Blockly.Python['blynk_declare_server'] = function(block) {
-  var topic = this.getFieldValue('TOPIC');
-  var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
-  if (!data.length)data = 'None' ;
-  // TODO: Assemble Python into code variable.
-  
-  
-  var code = "await network.send(topic='" + topic + "',data=str(" + String(data) + "))\n";
-  return code;
-};
 
 
 Blockly.Blocks['blynk_write_vw'] = {
@@ -124,7 +62,6 @@ Blockly.Blocks['blynk_write_vw'] = {
 	var GeneratedList = [];
 	for (var i = 0 ; i < 20 ; i ++){GeneratedList.push(["V"+String(i) , String(i)]);}
 	this.appendValueInput("DATA")
-		.appendField(new Blockly.FieldImage("https://avatars1.githubusercontent.com/u/11541426?s=400&v=4", 20, 20, "*"))
         .appendField("write to channel")
         .appendField(new Blockly.FieldDropdown(GeneratedList), "VP")
 		.appendField("=");
@@ -139,13 +76,13 @@ Blockly.Blocks['blynk_write_vw'] = {
   }
 };
 Blockly.Python['blynk_write_vw'] = function(block) {
-  var topic = this.getFieldValue('TOPIC');
+  var topic = this.getFieldValue('VP');
   var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
   if (!data.length)data = 'None' ;
   // TODO: Assemble Python into code variable.
   
   
-  var code = "await network.send(topic='" + topic + "',data=str(" + String(data) + "))\n";
+  var code = "core.blynk.virtual_write(pin=" + String(topic) + ",val=" + String(data) + ")\n";
   return code;
 };
 

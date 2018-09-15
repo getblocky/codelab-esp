@@ -32,7 +32,7 @@ Blockly.Python['led-set'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LED import LED' + version('LED') + '\n');
+	AddToSection('import' , 'from Blocky.LED import *\n');
 	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
 	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -40,41 +40,36 @@ Blockly.Python['led-set'] = function(block) {
 	return code ;
 };
 
-Blockly.Blocks['led-fade']=
-{
-	init : function()
-	{
-		this.appendValueInput('MAIN')
+
+
+Blockly.Blocks['led-get'] = {
+	init: function() {
+		this.appendDummyInput('MAIN')
+			.appendField('get')
 			.appendField('LED')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('led') ) , 'PORT' ) 
-			.appendField('fade')
+			.appendField(new Blockly.FieldDropdown( PORT('led') ) , 'PORT' )
+			.appendField("'s state")
 			;
-		
-		this.category  = 'Output' ;
-		this.role = 'Set';
-		this.module = 'led';
+		this.module = 'led' ;
+		this.setOutput(true , null );
+		this.setColour(230);
+		this.category  = 'Input' ;
+		this.role = 'Get';
 		this.setColour(Colour[this.category]);
-		this.setPreviousStatement(true , null);
-		this.setNextStatement(true , null);
 		
 	}
-	
 };
 
-Blockly.Python['led-fade'] = function(block) {
-	var name = block.module;
+Blockly.Python['led-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
-	var state = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	if (port == 'None') return '';
-	var code = '';
-	var object = port ; 
-	AddToSection('import' , 'from Blocky.LED import LED' + version('LED') + '\n');
+	var object = port ;
+	AddToSection('import' , 'from Blocky.LED import *\n');
 	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
-	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
-	// TODO: Assemble Python into code variable.
-	// Do not let user put this anyywhere except from setup block;
-	return code ;
+	
+	var code = object + '.value()' ;
+	return [code, Blockly.Python.ORDER_ATOMIC ];
 };
 
 
