@@ -377,9 +377,11 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         var scriptToBeUploaded = vm.script.python;
 
         if (vm.isEmbed) {
-            scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
+            scriptToBeUploaded = "core.eeprom.set('OTA_LOCK',True)\n" + scriptToBeUploaded;
         }
-        
+        else {
+			scriptToBeUploaded = "core.eeprom.set('OTA_LOCK',False)\n" + scriptToBeUploaded;
+		}
         var otaRequest = [];
         otaRequest[0] = scriptToBeUploaded.toString();
 
