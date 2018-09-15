@@ -121,7 +121,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             });
         }
 
-        var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(settings.logPin);
+        var logPin = new vm.blynk['"' + deviceId + '"'].VirtualPin(settings.blynk.logPin);
 
         logPin.on('write', function (param) {
             var log = param[0];
