@@ -2,6 +2,7 @@ var Colour = {};
 
 Colour.Input= '#0376f7';
 Colour.Output= '#f99205';
+Colour.Display= '#297fb8';
 Colour.Network= '#23c890';
 Colour.Timer= '#973999';
 Colour.Loops= '#40bf4a';

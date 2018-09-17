@@ -63,9 +63,6 @@
 
 			</block>
 		</category>
-		<category name='SERVO' colour='#f99205'>
-			<block type='servo-set'></block>
-		</category>
 		<category name='MUSIC' colour='#f99205'>
 			<block type='music-set-play'></block>
 			<block type='music-set-volume'></block>
@@ -75,7 +72,29 @@
 		<category name='REMOTE' colour='#f99205'>
 			<block type='remote-learn'></block>
 			<block type='remote-send'></block>
-			<block type='remote-event'></block>
+		</category>
+	</category>
+	
+	<category name = 'DISPLAY' colour = '#297fb8'>
+		<category name = 'LCD' colour = '#297fb8'>
+			<block type = 'lcd-display'>
+				<value name="LEFT">
+					<shadow type="display_text">
+						<field name="TEXT">NAME</field>
+					</shadow>
+				</value>
+				<value name="RIGHT">
+					<shadow type="display_text">
+						<field name="TEXT">VALUE</field>
+					</shadow>
+				</value>
+			</block>
+			<block type = 'lcd-clear'>
+			</block>
+			<block type = 'lcd-backlight'>
+			</block>
+		</category>
+		<category name = 'OLED'>
 		</category>
 	</category>
 	<category name='NETWORK' colour='#23c890'>
@@ -208,6 +227,11 @@
 		<block type="text">
 			<field name="TEXT"></field>
 		</block>
+	</category>
+	<category name = 'FUNCTION' colour = "#F1C40F">
+	</category>
+	<sep></sep>
+	<category name = 'ADVANCED' colour = "#00272b">
 	</category>
 
 
