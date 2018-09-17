@@ -410,31 +410,8 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         }, 10000);
 
         if (vm.isEmbed) {
-            scriptToBeUploaded = "core.eeprom.set('OTA_LOCK',True)\n" + scriptToBeUploaded;
+            scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
         }
-<<<<<<< HEAD
-        else {
-			scriptToBeUploaded = "core.eeprom.set('OTA_LOCK',False)\n" + scriptToBeUploaded;
-		}
-		
-		// Dummy implementation of embed mode
-		/*
-			When no Blynk block is used , ESP will not connect to the internet
-			This is to allow a smooth performance of the hardware due to blocking of 
-			"Connecting to wifi" and "Socket Block lwip"
-		*/
-		if (scriptToBeUploaded.search('blynk') == -1)
-		{
-			scriptToBeUploaded = "core.eeprom.set('OFFLINE',True)\n" + scriptToBeUploaded;
-		}
-		else {
-			scriptToBeUploaded = "core.eeprom.set('OFFLINE',False)\n" + scriptToBeUploaded;
-		}
-		
-        var otaRequest = [];
-        otaRequest[0] = scriptToBeUploaded.toString();
-=======
->>>>>>> master
 
         if (byteLength(vm.script.python) < maxSize) {
             otaRequest[0] = scriptToBeUploaded.toString();
