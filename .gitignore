@@ -3,5 +3,3 @@ node_modules
 dist
 *.log
 package-lock.json
-.vscode
-src/app/codelab/codelab.controller.js
