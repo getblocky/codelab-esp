@@ -29,12 +29,6 @@ function Menu() {
 
     function getNavItems() {
         var navItems = [
-            {
-                name: 'home.codelab',
-                attributeName: 'home.codelab',
-                state: 'home.codelab',
-                faIcon: 'fa-file-code-o'
-            }
         ];
 
         return navItems;
