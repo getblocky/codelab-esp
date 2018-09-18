@@ -5,33 +5,32 @@ goog.require('Blockly.Blocks');
 ////////////////////////////////////////////////////////////////////////////////////
 
 
-Blockly.Blocks['moisture-get'] = {
+Blockly.Blocks['potentiometer-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
 			.appendField('get')
-			.appendField("Moisture")
+			.appendField("Potentiometer 's value")
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('moisture') ) , 'PORT' )
+			.appendField(new Blockly.FieldDropdown( PORT('potentiometer') ) , 'PORT' )
 			;
-		this.module = 'moisture' ;
+		this.module = 'potentiometer' ;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Sensor' ;
+		this.category  = 'Input' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		
 	}
 };
 
-Blockly.Python['moisture-get'] = function(block) {
+Blockly.Python['potentiometer-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	var mode = block.getFieldValue('MODE');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.Moisture import *\n');
-	AddToSection('declare' , object + " = Moisture(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.Potentiometer  import *\n');
+	AddToSection('declare' , object + " = Potentiometer (port='" + port +"')\n");
 	
 	var code = object + '.' + 'value()'  ;
 	return [code, Blockly.Python.ORDER_NONE];
 };
-

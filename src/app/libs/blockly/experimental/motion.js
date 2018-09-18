@@ -15,7 +15,7 @@ Blockly.Blocks['motion-set']=
 			.appendField('fly')
 			;
 		
-		this.category  = 'Input' ;
+		this.category  = 'Sensor' ;
 		this.role = 'Set';
 		this.module = 'motion';
 		this.setColour(Colour[this.category]);
@@ -53,7 +53,7 @@ Blockly.Blocks['motion-get'] = {
 		this.module = 'motion' ;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Input' ;
+		this.category  = 'Sensor' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		
@@ -81,7 +81,7 @@ Blockly.Blocks['motion-event'] = {
 			;
 			
 		this.appendStatementInput('CODE');
-		this.category  = 'Input' ;
+		this.category  = 'Sensor' ;
 		this.module = 'motion';
 		this.role = 'Event';
 		this.setColour(Colour[this.category]);

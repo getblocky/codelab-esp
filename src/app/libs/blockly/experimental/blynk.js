@@ -11,7 +11,8 @@ goog.require('Blockly.Input');
 Blockly.Python.addReservedWords('machine');
 Blockly.Python.addReservedWords('blocky');
 
-var BlynkColor = '#23c890';
+//var BlynkColor = '#23c890';
+var BlynkColor = Colour.Network;
 
 
 Blockly.Blocks['blynk_event_vr'] = {
@@ -139,3 +140,51 @@ Blockly.Python['blynk_event_bridge'] = function(block) {
   return '';
 };
 
+Blockly.Blocks['blynk_message']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField('message')
+			;
+		
+		this.setColour(BlynkColor);
+		this.setOutput(true , null);
+	}
+} ;
+
+Blockly.Python['blynk_message'] = function(block) {
+	var code = "message";
+	return [code, Blockly.Python.ORDER_ATOMIC ];
+};
+
+
+
+
+
+Blockly.Blocks['blynk_message_iter']=
+{
+	
+	init : function()
+	{
+		var list = [] ; 
+		for (var i = 1 ; i < 6 ; i ++)
+		{
+			list.push([String(i),String(i)]) ; 
+		}
+		this.appendDummyInput('MAIN')
+			.appendField('item')
+			.appendField(new Blockly.FieldDropdown(list) , "ITER")
+			.appendField("of")
+			.appendField('message')
+			;
+		
+		this.setColour(BlynkColor);
+		this.setOutput(true , null);
+	}
+} ;
+
+Blockly.Python['blynk_message_iter'] = function(block) {
+	var code = "message[" + block.getFieldValue("ITER") + "-1]"; // 1 based
+	return [code, Blockly.Python.ORDER_ATOMIC ];
+};

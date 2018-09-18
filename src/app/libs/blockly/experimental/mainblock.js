@@ -109,7 +109,7 @@ Blockly.Generator.prototype.unprefixLines = function(text, prefix) {
 
 Blockly.Python['MainRunOnce'] = function(block) {
 	GlobalFunctionName = [];
-	Blockly.Python.definitions_['import'] = "import sys\ncore=sys.modules['Blocky.Core']\n";
+	Blockly.Python.definitions_['import'] = "";
 	Blockly.Python.definitions_['variable'] = "";
 	Blockly.Python.definitions_['declare'] = "";
 	Blockly.Python.definitions_['function'] = "";
