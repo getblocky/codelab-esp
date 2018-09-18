@@ -91,12 +91,12 @@
 
     md-select {
       margin: 0;
-      max-width: 55%;
+      max-width: 65%;
       @media (max-width: $layout-breakpoint-md) {
-        max-width: 40%;
+        max-width: 50%;
       }
       @media (max-width: $layout-breakpoint-sm) {
-        max-width: 30%;
+        max-width: 40%;
       }
     }
   }
