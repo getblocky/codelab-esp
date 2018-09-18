@@ -16,7 +16,7 @@ Blockly.Blocks['distance-get'] = {
 		this.module = 'distance' ;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Input' ;
+		this.category  = 'Sensor' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		

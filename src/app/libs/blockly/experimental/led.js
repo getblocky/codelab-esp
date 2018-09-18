@@ -14,7 +14,7 @@ Blockly.Blocks['led-set']=
 			.appendField('turn')
 			;
 		
-		this.category  = 'Output' ;
+		this.category  = 'Display' ;
 		this.role = 'Set';
 		this.module = 'led';
 		this.setColour(Colour[this.category]);
@@ -82,7 +82,7 @@ Blockly.Blocks['state_output'] = {
 			;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Output' ;
+		this.category  = 'Display' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		this.setMovable(false);

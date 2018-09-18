@@ -27,14 +27,14 @@ Blockly.Python['display_text'] = function(block) {
 };
 
 
-Blockly.Blocks['lcd-display']=
+Blockly.Blocks['oled-display']=
 {
 	init : function()
 	{
 		this.appendDummyInput('MAIN')
-			.appendField('LCD')
+			.appendField('OLED')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('lcd') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('oled') ) , 'PORT' ) 
 			.appendField('display on')
 			.appendField(new Blockly.FieldDropdown( [["LINE1","1"],["LINE2","2"] ] ) , 'LINE' )
 			.appendField('  ')
@@ -49,7 +49,7 @@ Blockly.Blocks['lcd-display']=
 		this.appendDummyInput('DUMMY2');
 		this.category  = 'Display' ;
 		this.role = 'Set';
-		this.module = 'lcd';
+		this.module = 'oled';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
@@ -58,7 +58,7 @@ Blockly.Blocks['lcd-display']=
 	
 };
 
-Blockly.Python['lcd-display'] = function(block) {
+Blockly.Python['oled-display'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	var line = block.getFieldValue('LINE');
@@ -69,8 +69,8 @@ Blockly.Python['lcd-display'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LCD import *\n');
-	AddToSection('declare' , object + " = LCD(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.OLED import *\n');
+	AddToSection('declare' , object + " = OLED(port='" + port +"')\n");
 	code = object + '.' + 'display(line=' + line + ',left=' + left + ',right=' + right + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -78,21 +78,21 @@ Blockly.Python['lcd-display'] = function(block) {
 };
 
 
-Blockly.Blocks['lcd-clear']=
+Blockly.Blocks['oled-clear']=
 {
 	init : function()
 	{
 		this.appendDummyInput('MAIN')
-			.appendField('LCD')
+			.appendField('OLED')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('lcd') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('oled') ) , 'PORT' ) 
 			.appendField('clear')
 			.appendField(new Blockly.FieldDropdown([ ["LINE 1","1"],["LINE 2","2"],["ALL","None"] ]) , 'LINE')
 			;
 		
 		this.category  = 'Display' ;
 		this.role = 'Set';
-		this.module = 'lcd';
+		this.module = 'oled';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
@@ -101,15 +101,15 @@ Blockly.Blocks['lcd-clear']=
 	
 };
 
-Blockly.Python['lcd-clear'] = function(block) {
+Blockly.Python['oled-clear'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	var state = block.getFieldValue('LINE');
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LCD import *\n');
-	AddToSection('declare' , object + " = LCD(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.OLED import *\n');
+	AddToSection('declare' , object + " = OLED(port='" + port +"')\n");
 	code = object + '.' + 'clear(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -117,21 +117,21 @@ Blockly.Python['lcd-clear'] = function(block) {
 };
 
 
-Blockly.Blocks['lcd-backlight']=
+Blockly.Blocks['oled-backlight']=
 {
 	init : function()
 	{
 		this.appendDummyInput('MAIN')
-			.appendField('LCD')
+			.appendField('OLED')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('lcd') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('oled') ) , 'PORT' ) 
 			.appendField('turn backlight')
 			.appendField(new Blockly.FieldDropdown([ ["ON","on"],["OFF","off"],["ALL","None"] ]) , 'LINE')
 			;
 		
 		this.category  = 'Display' ;
 		this.role = 'Set';
-		this.module = 'lcd';
+		this.module = 'oled';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
@@ -140,15 +140,15 @@ Blockly.Blocks['lcd-backlight']=
 	
 };
 
-Blockly.Python['lcd-backlight'] = function(block) {
+Blockly.Python['oled-backlight'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	var state = block.getFieldValue('LINE');
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LCD import *\n');
-	AddToSection('declare' , object + " = LCD(port='" + port +"')\n");
+	AddToSection('import' , 'from Blocky.OLED import *\n');
+	AddToSection('declare' , object + " = OLED(port='" + port +"')\n");
 	code = object + '.' + 'backlight("' + state + '")' + '\n' ; 
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;

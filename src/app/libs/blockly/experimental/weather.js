@@ -16,7 +16,7 @@ Blockly.Blocks['weather-get'] = {
 		this.module = 'weather' ;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Input' ;
+		this.category  = 'Sensor' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		
@@ -47,7 +47,7 @@ Blockly.Blocks['weather-event'] = {
 			;
 			
 		this.appendStatementInput('CODE');
-		this.category  = 'Input' ;
+		this.category  = 'Sensor' ;
 		this.module = 'weather';
 		this.role = 'Event';
 		this.setColour(Colour[this.category]);

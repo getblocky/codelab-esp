@@ -67,7 +67,7 @@ Blockly.Python['button-get'] = function(block) {
 	AddToSection('import' , 'from Blocky.Button import *\n');
 	AddToSection('declare' , object + " = Button(port='" + port +"')\n");
 	
-	var code = object + '.value()' ;
+	var code = object + '.is_pressed()' ;
 	return [code, Blockly.Python.ORDER_NONE];
 };
 

@@ -116,7 +116,8 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
     vm.reloadLoadUserDevices = reloadLoadUserDevices;
-
+	
+    var otaRequest = [];
     function initBlynk(deviceId, token) {
         if (angular.isUndefined(vm.blynk['"' + deviceId + '"'])) {
             vm.blynk['"' + deviceId + '"'] = new Blynk.Blynk(token, {
@@ -202,9 +203,11 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             }
         } else if (log.indexOf('[OTA_READY]') >= 0 && vm.otaInProgress) {
             otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
-            partTobeUploaded = partTobeUploaded + 1;
-            otaRequest[1] = partTobeUploaded.toString() + '/' + vm.splitedScripts.length.toString();
-
+			if (otaRequest[0].length == 0) return ;
+            vm.partTobeUploaded = vm.partTobeUploaded + 1;
+			//if (vm.partTobeUploaded > vm.splitString.length-1) return ;
+            otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
+			if (otaRequest)
             scriptService.sendOTA(vm.currentDevice.token, otaRequest);
             $timeout.cancel(vm.otaTimeout);
             vm.otaTimeout = $timeout(function () {
@@ -402,7 +405,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         var maxSize = settings.maxBytesUpload;
         vm.otaInProgress = true;
         var scriptToBeUploaded = vm.script.python;
-        var otaRequest = [];
+     
 
         vm.otaTimeout = $timeout(function () {
             toast.showError($translate.instant('script.script-upload-failed-error'));
@@ -412,18 +415,23 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         if (vm.isEmbed) {
             scriptToBeUploaded = '#embed = True\n' + scriptToBeUploaded;
         }
-
+		
+		scriptService.sendOTA(vm.currentDevice.token, ["","OTA"]);
+		vm.partTobeUploaded = 0;
+		/*
         if (byteLength(vm.script.python) < maxSize) {
             otaRequest[0] = scriptToBeUploaded.toString();
             otaRequest[1] = "1/1";
-
+			
             scriptService.sendOTA(vm.currentDevice.token, otaRequest);
         } else {
-            vm.partTobeUploaded = 0;
+            
             vm.splitedScripts = splitString(scriptToBeUploaded, maxSize);
         }
+		*/
+		vm.splitedScripts = splitString(scriptToBeUploaded, maxSize);
     }
-
+	/*
     function byteLength(str) {
         // returns the byte length of an utf8 string
         var s = str.length;
@@ -435,7 +443,19 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         }
         return s;
     }
+	*/
+	
+	function splitString(str, size) {
+		var out = [];
+		var piece = Math.ceil(str.length/size);
+		for (var i = 0 ; i < piece;i++)
+		{
+			out.push(str.slice(i*size,(i+1)*size))
 
+		}
+		return out;
+	}
+	/*
     function splitString(str, size) {
         var output = [];
         var lines = str.split('\n');
@@ -460,7 +480,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             return output;
         }
     }
-
+	*/
     function newProject() {
         $mdBottomSheet.hide();
         store.remove('script');
