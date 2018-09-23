@@ -35,7 +35,7 @@ Blockly.Blocks['blynk_event_vr'] = {
 
   }
 };
-
+ 
 Blockly.Python['blynk_event_vr'] = function(block) {
   var channel = block.getFieldValue('CHANNEL');
   var code = Blockly.Python.statementToCode(block, 'CODE');
@@ -49,7 +49,7 @@ Blockly.Python['blynk_event_vr'] = function(block) {
   
   //AddToSection('once' ,"blynk.listen(channel=" + topic + ",function=" + function_name + ')\n' );
   //AddToSection('function' , async_cancellable+'async def '+function_name +"(topic,message):\n" + code );
-	AddToSection('function',async_cancellable + 'async def '+ function_name + "(message):\n" + code);
+	AddToSection('function',async_cancellable + 'async def '+ function_name + "():\n  message = core.blynk.message\n" + code);
 	AddToSection('once',"core.blynk.add_virtual_pin(pin=" + String(channel) + ",write=" + function_name + ")\n" );
   }
   return '';
@@ -89,6 +89,33 @@ Blockly.Python['blynk_write_vw'] = function(block) {
 
 
 
+Blockly.Blocks['blynk_log'] = {
+  init: function() {
+	var GeneratedList = [];
+	for (var i = 0 ; i < 20 ; i ++){GeneratedList.push(["V"+String(i) , String(i)]);}
+	this.appendValueInput("DATA")
+        .appendField("log")
+		;
+	this.appendDummyInput('NAME');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(BlynkColor);
+	this.setTooltip("");
+	this.setHelpUrl("");
+	
+  }
+};
+Blockly.Python['blynk_log'] = function(block) {
+  var topic = this.getFieldValue('VP');
+  var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
+  if (!data.length)data = 'None' ;
+  // TODO: Assemble Python into code variable.
+  
+  
+  var code = "core.blynk.log(" +  String(data) + ",http=True)\n";
+  return code;
+};
 
 
 /*
@@ -150,6 +177,26 @@ Blockly.Blocks['blynk_message']=
 		
 		this.setColour(BlynkColor);
 		this.setOutput(true , null);
+		this.setOnChange(
+			function (event)
+			{
+				if (this.isInFlyout||!this.getRootBlock()) return ;
+				if (event.type=='create'||event.type=='change'||event.type=='move')
+				{
+					if (this.getRootBlock().type.indexOf('blynk_event')==-1)
+					{
+						this.setDisabled(true);
+						this.setWarningText('This block should be inside a blynk event block')
+					}
+					else 
+					{
+						this.setDisabled(false);
+						this.setWarningText();
+					}
+				}
+				
+			}
+		);
 	}
 } ;
 
@@ -185,6 +232,6 @@ Blockly.Blocks['blynk_message_iter']=
 } ;
 
 Blockly.Python['blynk_message_iter'] = function(block) {
-	var code = "message[" + block.getFieldValue("ITER") + "-1]"; // 1 based
+	var code = "message[" + String(parseInt(block.getFieldValue('ITER'))-1) + ']'; // 1 based
 	return [code, Blockly.Python.ORDER_ATOMIC ];
 };

@@ -95,7 +95,7 @@ Blockly.Python['timer-event-alarm'] = function(block)
 Blockly.Blocks['timer-runtime'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField(new Blockly.FieldLabel("current time"));
+			.appendField(new Blockly.FieldLabel("system runtime"));
 
 		this.setOutput(true , null );
 		this.setColour(230);
@@ -112,6 +112,29 @@ Blockly.Python['timer-runtime'] = function(block) {
 	var name = block.getFieldValue('NAME');
 
 	var code = 'core.Timer.runtime()' ;
+	return [code, Blockly.Python.ORDER_NONE];
+};
+
+Blockly.Blocks['timer-ntp'] = {
+	init: function() {
+		this.appendDummyInput('MAIN')
+			.appendField(new Blockly.FieldLabel("current time"));
+
+		this.setOutput(true , null );
+		this.setColour(230);
+		this.setTooltip("");
+		this.setHelpUrl("");
+		this.Colour = Colour.Timer;
+		this.setColour(Colour.Timer);
+		this.self_disabled = true;
+		this.self_enabled = true ;
+	}
+};
+
+Blockly.Python['timer-ntp'] = function(block) {
+	var name = block.getFieldValue('NAME');
+
+	var code = 'core.Timer.current_time()' ;
 	return [code, Blockly.Python.ORDER_NONE];
 };
 

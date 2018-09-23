@@ -9,7 +9,7 @@ Blockly.Blocks['moisture-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
 			.appendField('get')
-			.appendField("Moisture")
+			.appendField("Water Sensor's value")
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('moisture') ) , 'PORT' )
 			;
