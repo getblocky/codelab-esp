@@ -43,16 +43,13 @@ Blockly.Python['motion-set'] = function(block) {
 Blockly.Blocks['motion-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('')
 			.appendField('Motion')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('motion') ) , 'PORT' )
-			.appendField("is being")
-			.appendField(new Blockly.FieldDropdown( [['pressed','pressed'],['released','released'] ],'MODE'))
+			.appendField("see motion")
 			;
 		this.module = 'motion' ;
 		this.setOutput(true , null );
-		this.setColour(230);
 		this.category  = 'Sensor' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
@@ -67,15 +64,15 @@ Blockly.Python['motion-get'] = function(block) {
 	AddToSection('import' , 'from Blocky.Motion import *\n');
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
 	
-	var code = object + '.value()' ;
+	var code = object + '.motion.value()' ;
 	return [code, Blockly.Python.ORDER_NONE];
 };
 
 Blockly.Blocks['motion-event'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField("when")
-			.appendField('motion detected')
+			.appendField("when motion is")
+			.appendField(new Blockly.FieldDropdown([['detected','detect'],['not detected','notdetect']]) , "MODE")
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('motion') ) , 'PORT' )
 			;
@@ -92,13 +89,14 @@ Blockly.Python['motion-event'] = function(block) {
 	var name = block.module ;
 	var port = block.getFieldValue('PORT');
 	var code = Blockly.Python.statementToCode(block, 'CODE');
+	var mode = block.getFieldValue('MODE')
 	if (!code.length||port == 'None') return '';
 	var object =  port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' +port   ;
 	AddToSection('import' , 'from Blocky.Motion import *\n');
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
-	AddToSection('event' , object  + ".event(function="+function_name+")\n");
+	AddToSection('event' , object  + ".event(type = '" + mode + "' ,function="+function_name+")\n");
 
 	AddToSection('function',async_cancellable+'async def '+function_name+'():\n' + code + '\n');
 };
