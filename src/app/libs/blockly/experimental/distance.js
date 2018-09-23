@@ -9,7 +9,7 @@ Blockly.Blocks['distance-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
 			.appendField('get')
-			.appendField("Distance")
+			.appendField("distance value")
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('distance') ) , 'PORT' )
 			;

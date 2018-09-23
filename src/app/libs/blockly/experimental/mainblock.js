@@ -97,6 +97,10 @@ Blockly.Blocks['MainRunOnce'] = {
 				// Hightlight block that share the same object !
 				
 				if (change.type == 'move') Blockly.Events.disableOrphans(change);
+				if (change.type == "ui")
+				{
+					console.log(this.workspace.getBlockById(change.blockId));
+				}
 			}
 		);
 	},
