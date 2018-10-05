@@ -36,7 +36,7 @@ Blockly.Python['rgb-set-multiple'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.RGB import *\n');
+	AddToSection('import' , 'from Blocky.RGB import * ' + getLibraryVersion('RGB') + '\n');
 	AddToSection('declare' , object + " = RGB(port='" + port +"')\n");
 	code = object + '.' + 'colour(' +  colour + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.

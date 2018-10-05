@@ -28,7 +28,7 @@ Blockly.Python['smoke-get'] = function(block) {
 	var mode = block.getFieldValue('MODE');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.Smoke import *\n');
+	AddToSection('import' , 'from Blocky.Smoke import * ' + getLibraryVersion('Smoke') + '\n');
 	AddToSection('declare' , object + " = Smoke(port='" + port +"')\n");
 	
 	var code = object + '.' + 'value()'  ;

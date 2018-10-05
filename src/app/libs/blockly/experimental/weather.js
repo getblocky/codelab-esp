@@ -28,7 +28,7 @@ Blockly.Python['weather-get'] = function(block) {
 	var mode = block.getFieldValue('MODE');
 	if (port == 'None') return '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Weather import *\n');
+	AddToSection('import' , 'from Blocky.Weather import * ' + getLibraryVersion('Weather') + '\n');
 	AddToSection('declare' , object + " = Weather(port='" + port +"')\n");
 	
 	var code = object + '.' + mode + '()' ;
@@ -63,7 +63,7 @@ Blockly.Python['weather-event'] = function(block) {
 	var object = port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' + object +'_' + type  ;
-	AddToSection('import' , 'from Blocky.Weather import *\n');
+	AddToSection('import' , 'from Blocky.Weather import * ' + getLibraryVersion('Weather') + '\n');
 	AddToSection('declare' , object + " = Weather(port='" + port +"')\n");
 	AddToSection('event' ,object  + ".event(type='" + type +"',function="+function_name+")\n");
 

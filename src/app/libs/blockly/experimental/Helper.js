@@ -214,3 +214,33 @@ function HandlePublicBlock(  change , workspace , blocks )
 
 
 */
+var supported_module = ['Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','Remote','RFID','RGB','Servo','Smoke','Sound','Stepper','Switch','WaterSensor','Weather'];
+var module_version = {};
+for (var i = 0 ; i < supported_module.length ; i++)
+{
+	update_module_version(supported_module[i]);
+}
+
+function update_module_version( module )
+{
+	const Http = new XMLHttpRequest();
+	const url='https://raw.githubusercontent.com/getblocky/blocky_firmware/master/ESP32/Firmware/lib/' + module + '.py';
+	Http.open("GET", url);
+	Http.send();
+	Http.onreadystatechange=(e)=>{
+		var version = Http.responseText.split('\n')[0] ; 
+		if (version.startsWith('#version'))
+		{
+			module_version[module] = version ; 
+		}
+		else 
+		{
+			module_version[module] = '';
+		}
+	}
+}
+
+function getLibraryVersion(module)
+{
+	return module_version[module];
+}

@@ -39,11 +39,11 @@ Blockly.Python['remote-event'] = function(block) {
 	if (!code.length) return '';
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' + object + '_' + command ;
-	AddToSection('import' , 'from Blocky.Remote import *\n');
+	AddToSection('import' , 'from Blocky.Remote import * ' + getLibraryVersion('Remote') + '\n');
 	AddToSection('declare' ,object + " = Remote(port='" + object +"')\n");
 	AddToSection('event' , object  + ".event(command='" + command  + "',function="+function_name+")\n");
 
-	AddToSection('function', async_cancellable+'async def '+function_name+'():\n' + code + '\n');
+	AddToSection('function', async_cancellable+'async def '+function_name+'():\n' +Blockly.Python.INDENT+GlobalVariable+ code + '\n');
 	return '';
 };
 
@@ -80,7 +80,7 @@ Blockly.Python['remote-learn'] = function(block) {
 	var object = block.getFieldValue('PORT');
 	var command = block.getFieldValue('CMD');
 	if (object=='None') return '';
-	AddToSection('import' , 'from Blocky.Remote import *\n');
+	AddToSection('import' , 'from Blocky.Remote import * ' + getLibraryVersion('Remote') + '\n');
 	AddToSection('declare' , object + " = Remote(port='" + object +"')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -116,7 +116,7 @@ Blockly.Python['remote-send'] = function(block) {
 	var object = block.getFieldValue('PORT');
 	var command = block.getFieldValue('CMD');
 	if (object=='None') return '';
-	AddToSection('import' , 'from Blocky.Remote import *\n');
+	AddToSection('import' , 'from Blocky.Remote import * ' + getLibraryVersion('Remote') + '\n');
 	AddToSection('declare' , object + " = Remote(port='" + object +"')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;

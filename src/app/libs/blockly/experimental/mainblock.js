@@ -120,6 +120,19 @@ Blockly.Python['MainRunOnce'] = function(block) {
 	Blockly.Python.definitions_['event'] = "";
 	Blockly.Python.definitions_['once'] ='';
 	Blockly.Python.definitions_['async'] ='';
+	// Generate Global Variable string here 
+	var temp = block.workspace.getAllVariables() ; 
+	GlobalVariable = "global " ;
+	for (var i = 0 ; i < temp.length ; i++)
+	{
+		GlobalVariable += temp[i].name;
+		GlobalVariable += ",";
+		Blockly.Python.definitions_['variable'] += temp[i].name + "=None\n";
+	}	
+	GlobalVariable = GlobalVariable.slice(0, -1);
+	GlobalVariable += '\n';
+	console.log(GlobalVariable) ; 
+	
 	var statement = Blockly.Python.statementToCode(block, 'NAME');
 	
 	if (statement.length)Blockly.Python.definitions_['once'] += 'if True:\n' + statement;

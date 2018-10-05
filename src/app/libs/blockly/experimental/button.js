@@ -64,7 +64,7 @@ Blockly.Python['button-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Button import *\n');
+	AddToSection('import' , 'from Blocky.Button import * ' + getLibraryVersion('Button') + '\n');
 	AddToSection('declare' , object + " = Button(port='" + port +"')\n");
 	
 	var code = object + '.is_pressed()' ;
@@ -102,9 +102,9 @@ Blockly.Python['button-event'] = function(block) {
 	var object =  port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' +port+'_' + type + '_' + time   ;
-	AddToSection('import' , 'from Blocky.Button import *\n');
+	AddToSection('import' , 'from Blocky.Button import * ' + getLibraryVersion('Button') + '\n');
 	AddToSection('declare' , object + " = Button(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type='" + type + "',time=" + time + ",function="+function_name+")\n");
 
-	AddToSection('function',async_cancellable + 'async def '+function_name+'():\n' + code + '\n');
+	AddToSection('function',async_cancellable + 'async def '+function_name+'():\n'+Blockly.Python.INDENT+GlobalVariable+ code + '\n');
 };

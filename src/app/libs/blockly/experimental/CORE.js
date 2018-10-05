@@ -10,6 +10,8 @@ goog.require('Blockly.BlockSvg');
 var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
 var PORT_ASSIGN = [] ; 
 var previous_change = null ; 
+var GlobalVariable = '' ;
+
 //var  GlobalWorkspace =  Blockly.getMainWorkspace();
 
 /*
@@ -231,6 +233,7 @@ function HandlerGlobal(change)
 		Loop Trap :
 		
 	*/
+	console.log(PORT_ASSIGN) ; 
 	if (isEqual(change,prev_change)) return 
 	prev_change = change ; 
 	

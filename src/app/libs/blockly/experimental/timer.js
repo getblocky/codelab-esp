@@ -79,8 +79,7 @@ Blockly.Python['timer-event-alarm'] = function(block)
 		if (unit == 'seconds')  time += '000';
 		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
 		GlobalFunctionName.push(function_name);
-		
-		var function_code =  async_cancellable+'async def ' + function_name + '():\n';
+		var function_code =  async_cancellable+'async def ' + function_name + '():\n'+Blockly.Python.INDENT+GlobalVarialble;
 		function_code +=   statement  + Blockly.Python.INDENT + 'await asyncio.sleep_ms(0)\n';
 		var event_code = "AddTask(name='" + function_name + "',mode='repeat',time='" + hour + ':' + minute  + "',function=" + function_name + ')\n';
 		AddToSection('once',event_code)
@@ -249,7 +248,7 @@ Blockly.Python['timer-event-repeat'] = function(block)
 		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
 		GlobalFunctionName.push(function_name);
 		
-		var function_code =  async_cancellable+'async def ' + function_name + '():\n' + Blockly.Python.INDENT + 'while True:\n' ;
+		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +Blockly.Python.INDENT+GlobalVariable+ Blockly.Python.INDENT + 'while True:\n' ;
 		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await core.asyncio.sleep_ms(' +  time + ')\n' +  statement + '\n';
 		var event_code = 'core.mainthread.create_task(core.asyn.Cancellable(' + function_name + ')())\n';
 		AddToSection('async',event_code);

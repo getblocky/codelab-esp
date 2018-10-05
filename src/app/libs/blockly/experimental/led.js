@@ -5,7 +5,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['led_pwm_output'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField(new Blockly.FieldNumber( 0 , 0 , 4095) , 'PORT' )
+			.appendField(new Blockly.FieldNumber( 0 , 0 , 4095) , 'VAL' )
 			;
 		this.module = 'led' ;
 		this.setOutput(true , null );
@@ -18,14 +18,9 @@ Blockly.Blocks['led_pwm_output'] = {
 };
 
 Blockly.Python['led_pwm_output'] = function(block) {
-	var port = block.getFieldValue('PORT');
+	var fade = block.getFieldValue('VAL');
 	if (port == 'None') return '';
-	var object = port ;
-	AddToSection('import' , 'from Blocky.LED import *\n');
-	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
-	
-	var code = object + '.value()' ;
-	return [code, Blockly.Python.ORDER_ATOMIC ];
+	return [fade, Blockly.Python.ORDER_ATOMIC ];
 };
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -80,7 +75,7 @@ Blockly.Python['led-fade'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LED import *\n');
+	AddToSection('import' , 'from Blocky.LED import * ' + getLibraryVersion('LED') + '\n');
 	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
 	code = object + '.' + 'fade(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -96,7 +91,7 @@ Blockly.Python['led-set'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LED import *\n');
+	AddToSection('import' , 'from Blocky.LED import * ' + getLibraryVersion('LED') + '\n');
 	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
 	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -126,7 +121,7 @@ Blockly.Python['led-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.LED import *\n');
+	AddToSection('import' , 'from Blocky.LED import * ' + getLibraryVersion('LED') + '\n');
 	AddToSection('declare' , object + " = LED(port='" + port +"')\n");
 	
 	var code = object + '.value()' ;
