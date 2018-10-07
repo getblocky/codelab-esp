@@ -34,7 +34,7 @@ import showSharedProjectTemplate from './show-shared-project.tpl.html';
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log) {
+export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log, $interval) {
     var vm = this;
 
     vm.isUserLoaded = userService.isAuthenticated();
@@ -201,19 +201,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             } else {
                 toast.showError(log);
             }
-        } else if (log.indexOf('[OTA_READY]') >= 0 && vm.otaInProgress) {
-            otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
-            if (otaRequest[0].length == 0) return;
-            vm.partTobeUploaded = vm.partTobeUploaded + 1;
-            //if (vm.partTobeUploaded > vm.splitString.length-1) return ;
-            otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
-            if (otaRequest)
-                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
-            $timeout.cancel(vm.otaTimeout);
-            vm.otaTimeout = $timeout(function () {
-                toast.showError($translate.instant('script.script-upload-failed-error'));
-                vm.otaInProgress = false;
-            }, 10000);
         } else if (log.indexOf('[OTA_DONE]') >= 0) {
             toast.showSuccess($translate.instant('script.script-upload-success'));
             $timeout.cancel(vm.otaTimeout);
@@ -355,7 +342,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 templateUrl: saveProjectMobileTemplate,
                 parent: angular.element($document[0].body),
                 fullscreen: true
-            }).then(function () {}, function () {});
+            }).then(function () { }, function () { });
         } else {
             saveProject();
         }
@@ -369,7 +356,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             templateUrl: saveProjectMobileTemplate,
             parent: angular.element($document[0].body),
             fullscreen: false
-        }).then(function () {}, function () {});
+        }).then(function () { }, function () { });
     }
 
     function addProject() {
@@ -395,7 +382,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         $state.go('home.codelab');
     }
 
-    function updateFirmware() {}
+    function updateFirmware() { }
 
     function uploadScript() {
         prepareProjectDataAndSaveToLocal();
@@ -406,15 +393,28 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         vm.otaInProgress = true;
         var scriptToBeUploaded = vm.script.python;
 
-
-        vm.otaTimeout = $timeout(function () {
-            toast.showError($translate.instant('script.script-upload-failed-error'));
-            vm.otaInProgress = false;
-        }, 10000);
-
-        scriptService.sendOTA(vm.currentDevice.token, ["", "OTA"]);
+        var hash = md5(scriptToBeUploaded);
+        scriptService.sendOTA(vm.currentDevice.token, [hash, "OTA"]);
+        $log.log('sendOTA:', [hash, "OTA"]);
         vm.partTobeUploaded = 0;
         vm.splitedScripts = splitString(scriptToBeUploaded, maxSize);
+        var stopUpload = $interval(function () {
+            if (vm.otaInProgress) {
+                otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
+                vm.partTobeUploaded = vm.partTobeUploaded + 1;
+                otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
+                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
+                $log.log('sendOTA:', otaRequest);
+
+                if (vm.partTobeUploaded == vm.splitedScripts.length) {
+                    $interval.cancel(stopUpload);
+                    vm.otaTimeout = $timeout(function () {
+                        toast.showError($translate.instant('script.script-upload-failed-error'));
+                        vm.otaInProgress = false;
+                    }, 10000);
+                }
+            }
+        }, settings.intervalMiliSecondUpload);
     }
 
     function splitString(str, size) {
@@ -454,7 +454,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 parent: angular.element($document[0].body),
                 fullscreen: true,
                 targetEvent: $event
-            }).then(function () {}, function () {});
+            }).then(function () { }, function () { });
         } else {
             store.set('script', vm.script);
             $rootScope.login();
@@ -473,11 +473,11 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             .cancel($translate.instant('action.cancel'))
             .ok($translate.instant('action.delete'));
         $mdDialog.show(confirm).then(function () {
-                scriptService.deleteScript(vm.script._id).then(function success() {
-                    newProject();
-                });
-            },
-            function () {});
+            scriptService.deleteScript(vm.script._id).then(function success() {
+                newProject();
+            });
+        },
+            function () { });
     }
 
     function shareProject($event) {
@@ -494,13 +494,13 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
                 .cancel($translate.instant('action.cancel'))
                 .ok($translate.instant('action.share'));
             $mdDialog.show(confirm).then(function () {
-                    vm.script.isPublic = 1;
-                    prepareProjectDataAndSaveToLocal();
-                    scriptService.saveScript(vm.script).then(function success() {
-                        shareProject();
-                    });
-                },
-                function () {});
+                vm.script.isPublic = 1;
+                prepareProjectDataAndSaveToLocal();
+                scriptService.saveScript(vm.script).then(function success() {
+                    shareProject();
+                });
+            },
+                function () { });
         } else {
             $mdDialog.cancel();
             showSharedProject();
@@ -515,7 +515,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             templateUrl: showSharedProjectTemplate,
             parent: angular.element($document[0].body),
             fullscreen: true
-        }).then(function () {}, function () {});
+        }).then(function () { }, function () { });
     }
 
     function toggleSidenav() {
@@ -538,7 +538,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             templateUrl: bottomSheetActionsTemplate,
             controller: () => this,
             controllerAs: 'vm',
-        }).then(function () {}).catch(function () {});
+        }).then(function () { }).catch(function () { });
     }
 
     function showDeviceLog() {
@@ -546,7 +546,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
             templateUrl: bottomSheetDeviceLogTemplate,
             controller: () => this,
             controllerAs: 'vm',
-        }).then(function () {}).catch(function () {});
+        }).then(function () { }).catch(function () { });
     }
 
     function downloadProject() {
@@ -593,4 +593,6 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         }
         store.set('script', vm.script);
     }
+
+    function md5(r) { function n(r, n) { return r << n | r >>> 32 - n } function t(r, n) { var t, o, e, u, a; return e = 2147483648 & r, u = 2147483648 & n, a = (1073741823 & r) + (1073741823 & n), (t = 1073741824 & r) & (o = 1073741824 & n) ? 2147483648 ^ a ^ e ^ u : t | o ? 1073741824 & a ? 3221225472 ^ a ^ e ^ u : 1073741824 ^ a ^ e ^ u : a ^ e ^ u } function o(r, o, e, u, a, f, i) { var C; return t(n(r = t(r, t(t((C = o) & e | ~C & u, a), i)), f), o) } function e(r, o, e, u, a, f, i) { var C; return t(n(r = t(r, t(t(o & (C = u) | e & ~C, a), i)), f), o) } function u(r, o, e, u, a, f, i) { return t(n(r = t(r, t(t(o ^ e ^ u, a), i)), f), o) } function a(r, o, e, u, a, f, i) { return t(n(r = t(r, t(t(e ^ (o | ~u), a), i)), f), o) } function f(r) { var n, t = "", o = ""; for (n = 0; n <= 3; n++)t += (o = "0" + (r >>> 8 * n & 255).toString(16)).substr(o.length - 2, 2); return t } var i, C, c, g, h, d, v, m, S, l = Array(); for (l = function (r) { for (var n, t = r.length, o = t + 8, e = 16 * ((o - o % 64) / 64 + 1), u = Array(e - 1), a = 0, f = 0; f < t;)a = f % 4 * 8, u[n = (f - f % 4) / 4] = u[n] | r.charCodeAt(f) << a, f++; return a = f % 4 * 8, u[n = (f - f % 4) / 4] = u[n] | 128 << a, u[e - 2] = t << 3, u[e - 1] = t >>> 29, u }(r = function (r) { r = r.replace(/\r\n/g, "\n"); for (var n = "", t = 0; t < r.length; t++) { var o = r.charCodeAt(t); o < 128 ? n += String.fromCharCode(o) : o > 127 && o < 2048 ? (n += String.fromCharCode(o >> 6 | 192), n += String.fromCharCode(63 & o | 128)) : (n += String.fromCharCode(o >> 12 | 224), n += String.fromCharCode(o >> 6 & 63 | 128), n += String.fromCharCode(63 & o | 128)) } return n }(r)), d = 1732584193, v = 4023233417, m = 2562383102, S = 271733878, i = 0; i < l.length; i += 16)C = d, c = v, g = m, h = S, v = a(v = a(v = a(v = a(v = u(v = u(v = u(v = u(v = e(v = e(v = e(v = e(v = o(v = o(v = o(v = o(v, m = o(m, S = o(S, d = o(d, v, m, S, l[i + 0], 7, 3614090360), v, m, l[i + 1], 12, 3905402710), d, v, l[i + 2], 17, 606105819), S, d, l[i + 3], 22, 3250441966), m = o(m, S = o(S, d = o(d, v, m, S, l[i + 4], 7, 4118548399), v, m, l[i + 5], 12, 1200080426), d, v, l[i + 6], 17, 2821735955), S, d, l[i + 7], 22, 4249261313), m = o(m, S = o(S, d = o(d, v, m, S, l[i + 8], 7, 1770035416), v, m, l[i + 9], 12, 2336552879), d, v, l[i + 10], 17, 4294925233), S, d, l[i + 11], 22, 2304563134), m = o(m, S = o(S, d = o(d, v, m, S, l[i + 12], 7, 1804603682), v, m, l[i + 13], 12, 4254626195), d, v, l[i + 14], 17, 2792965006), S, d, l[i + 15], 22, 1236535329), m = e(m, S = e(S, d = e(d, v, m, S, l[i + 1], 5, 4129170786), v, m, l[i + 6], 9, 3225465664), d, v, l[i + 11], 14, 643717713), S, d, l[i + 0], 20, 3921069994), m = e(m, S = e(S, d = e(d, v, m, S, l[i + 5], 5, 3593408605), v, m, l[i + 10], 9, 38016083), d, v, l[i + 15], 14, 3634488961), S, d, l[i + 4], 20, 3889429448), m = e(m, S = e(S, d = e(d, v, m, S, l[i + 9], 5, 568446438), v, m, l[i + 14], 9, 3275163606), d, v, l[i + 3], 14, 4107603335), S, d, l[i + 8], 20, 1163531501), m = e(m, S = e(S, d = e(d, v, m, S, l[i + 13], 5, 2850285829), v, m, l[i + 2], 9, 4243563512), d, v, l[i + 7], 14, 1735328473), S, d, l[i + 12], 20, 2368359562), m = u(m, S = u(S, d = u(d, v, m, S, l[i + 5], 4, 4294588738), v, m, l[i + 8], 11, 2272392833), d, v, l[i + 11], 16, 1839030562), S, d, l[i + 14], 23, 4259657740), m = u(m, S = u(S, d = u(d, v, m, S, l[i + 1], 4, 2763975236), v, m, l[i + 4], 11, 1272893353), d, v, l[i + 7], 16, 4139469664), S, d, l[i + 10], 23, 3200236656), m = u(m, S = u(S, d = u(d, v, m, S, l[i + 13], 4, 681279174), v, m, l[i + 0], 11, 3936430074), d, v, l[i + 3], 16, 3572445317), S, d, l[i + 6], 23, 76029189), m = u(m, S = u(S, d = u(d, v, m, S, l[i + 9], 4, 3654602809), v, m, l[i + 12], 11, 3873151461), d, v, l[i + 15], 16, 530742520), S, d, l[i + 2], 23, 3299628645), m = a(m, S = a(S, d = a(d, v, m, S, l[i + 0], 6, 4096336452), v, m, l[i + 7], 10, 1126891415), d, v, l[i + 14], 15, 2878612391), S, d, l[i + 5], 21, 4237533241), m = a(m, S = a(S, d = a(d, v, m, S, l[i + 12], 6, 1700485571), v, m, l[i + 3], 10, 2399980690), d, v, l[i + 10], 15, 4293915773), S, d, l[i + 1], 21, 2240044497), m = a(m, S = a(S, d = a(d, v, m, S, l[i + 8], 6, 1873313359), v, m, l[i + 15], 10, 4264355552), d, v, l[i + 6], 15, 2734768916), S, d, l[i + 13], 21, 1309151649), m = a(m, S = a(S, d = a(d, v, m, S, l[i + 4], 6, 4149444226), v, m, l[i + 11], 10, 3174756917), d, v, l[i + 2], 15, 718787259), S, d, l[i + 9], 21, 3951481745), d = t(d, C), v = t(v, c), m = t(m, g), S = t(S, h); return (f(d) + f(v) + f(m) + f(S)).toLowerCase() }
 }
