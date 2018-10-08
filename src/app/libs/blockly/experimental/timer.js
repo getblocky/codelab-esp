@@ -17,37 +17,15 @@ Blockly.Blocks['timer-event-alarm'] = {
     this.appendDummyInput("MAIN")
 		.appendField('Every')
         .appendField(new Blockly.FieldDropdown([ ['Monday','Monday'],['Tuesday','Tuesday'],['Wednesday','Wednesday'],['Thrusday','Thrusday']
-			,['Friday','Friday'],['Saturday','Saturday'],['Sunday','Sunday']]),'MODE')
+			,['Friday','Friday'],['Saturday','Saturday'],['Sunday','Sunday']]),'DAY')
 		.appendField('at')
-        .appendField(new Blockly.FieldNumber(0, 1), "HOUR")
-		.appendField(':')
-        .appendField(new Blockly.FieldNumber(0, 1), "MINUTE")
-        .appendField(new Blockly.FieldDropdown([["AM","AM"], ["PM","PM"]]), "UNIT")
+        .appendField(new Blockly.FieldTextInput("07:00:00"), "TIME")
         .appendField("do");
     this.appendStatementInput("CODE")
         .setCheck(null);
     this.appendDummyInput();
     this.setColour(Colour.Timer);
-	this.setTooltip("");
-	this.setHelpUrl("");
-	this.setOnChange(
-		function(event)
-		{
-			if (event.blockId == this.id &&(event.type == 'create' || event.type ==  'change'))
-			{
-				if (this.getFieldValue('MODE') == 'every')
-				{
-					this.setPreviousStatement(false,null);
-					this.setNextStatement(false,null);
-				}
-				if (this.getFieldValue('MODE') == 'after')
-				{
-					this.setPreviousStatement(true,null);
-					this.setNextStatement(true ,null);
-				}
-			}
-		}
-	);
+
   }
 };
 
@@ -55,15 +33,14 @@ Blockly.Blocks['timer-event-alarm'] = {
 Blockly.Python['timer-event-alarm'] = function(block)
 {
 	
-	var hour = block.getFieldValue('HOUR');
-	var minute = block.getFieldValue('MINUTE');
-	var unit = block.getFieldValue('UNIT');
+	var day = block.getFieldValue('DAY');
+	var TIME = block.getFieldValue('TIME');
 	var statement = Blockly.Python.statementToCode(block,'CODE');
 	
 	if (statement.length)
 	{
 		/*
-		AddToSection('import','from Blocky.Timer import *\n');
+		
 		//----------------------------------------------------------
 		var function_name  = 'Timer_Every_' + time + unit;
 		

@@ -34,7 +34,7 @@ import showSharedProjectTemplate from './show-shared-project.tpl.html';
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log, $interval) {
+export default function CodeLabController($window , $mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log, $interval) {
     var vm = this;
 
     vm.isUserLoaded = userService.isAuthenticated();
@@ -389,6 +389,7 @@ export default function CodeLabController($mdSidenav, toast, scriptService, user
         if (vm.script.python.length === 0) {
             return;
         }
+		$log.log($window.PORT_ASSIGN) ; 
         var maxSize = settings.maxBytesUpload;
         vm.otaInProgress = true;
         var scriptToBeUploaded = vm.script.python;
