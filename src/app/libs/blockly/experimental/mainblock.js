@@ -40,7 +40,7 @@ Blockly.Blocks['MainRunOnce'] = {
 	init: function() {
 		this.appendDummyInput()
 			.appendField("on start                              ")
-		this.blocks = this.appendStatementInput("NAME")
+		this.blocks = this.appendStatementInput("MAIN")
 			.setCheck(null);
 		this.appendDummyInput();
 		this.setColour(Colour.Loops);
@@ -60,8 +60,10 @@ Blockly.Blocks['MainRunOnce'] = {
 				//Blockly['legit-declare'](change,this.workspace);
 				if (true)//change.type != 'ui'&&change.type != 'move')
 				{
-					HandlerGlobal(change) ; 
+					HandlerGlobal(change) ;
 					var blocks = this.workspace.getAllBlocks();
+					
+					
 					//HandlePublicBlock(change,this.workspace,blocks);
 					/*
 					if (false){
@@ -122,18 +124,25 @@ Blockly.Python['MainRunOnce'] = function(block) {
 	Blockly.Python.definitions_['async'] ='';
 	// Generate Global Variable string here 
 	var temp = block.workspace.getAllVariables() ; 
-	GlobalVariable = "global " ;
-	for (var i = 0 ; i < temp.length ; i++)
+	if (temp.length)
 	{
-		GlobalVariable += temp[i].name;
-		GlobalVariable += ",";
-		Blockly.Python.definitions_['variable'] += temp[i].name + "=None\n";
-	}	
-	GlobalVariable = GlobalVariable.slice(0, -1);
-	GlobalVariable += '\n';
-	console.log(GlobalVariable) ; 
+		GlobalVariable = "global " ;
+		for (var i = 0 ; i < temp.length ; i++)
+		{
+			GlobalVariable += temp[i].name;
+			GlobalVariable += ",";
+			Blockly.Python.definitions_['variable'] += temp[i].name + "=None\n";
+		}	
+		GlobalVariable = GlobalVariable.slice(0, -1);
+		GlobalVariable = Blockly.Python.INDENT+ GlobalVariable + '\n';
+		console.log(GlobalVariable) ; 
+	}
+	else 
+	{
+		GlobalVariable = ''  ; 
+	}
 	
-	var statement = Blockly.Python.statementToCode(block, 'NAME');
+	var statement = Blockly.Python.statementToCode(block, 'MAIN');
 	
 	if (statement.length)Blockly.Python.definitions_['once'] += 'if True:\n' + statement;
 	return '';

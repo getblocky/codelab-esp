@@ -233,7 +233,6 @@ function HandlerGlobal(change)
 		Loop Trap :
 		
 	*/
-	console.log(PORT_ASSIGN) ; 
 	if (isEqual(change,prev_change)) return 
 	prev_change = change ; 
 	

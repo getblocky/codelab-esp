@@ -14,8 +14,6 @@
 		<category name='POTENTIALMETER'>
 			<block type='potentiometer-get'></block>
 		</category>
-	</category>
-	<category name = "SENSOR" >
 		<category name='TEMPERATURE'>
 			<block type='weather-get'>
 				<field name = "MODE">temperature</field>
@@ -51,6 +49,7 @@
 		</category>
 	</category>
 	<category name='CONTROL'>
+		
 		<category name='RELAY'>
 			<block type='relay-set'>
 				<value name='MAIN'>
@@ -89,9 +88,6 @@
 		
 		<category name = "MOTOR"></category>
 		<category name = "SERVO"></category>
-	</category>
-	
-	<category name = 'DISPLAY'>
 		<category name='LED' >
 			<block type='led-set'>
 				<value name='MAIN'>
@@ -106,6 +102,10 @@
 				</value>
 			</block>
 		</category>
+	</category>
+	
+	<category name = 'DISPLAY'>
+		
 
 		<category name = 'LCD' >
 			<block type = 'lcd-display'>
@@ -127,6 +127,20 @@
 		</category>
 
 		<category name = "RGB">
+			<block type = "rgb-set-multiple">
+				<value name="COLOUR">
+					<shadow type="rgb_colour">
+					</shadow>
+				</value>
+				<value name="FROM">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+				<value name="TO">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+			</block>
 		</category>
 	</category>
 	<category name='NETWORK'>
@@ -258,87 +272,88 @@
 				</shadow>
 			</value>
 		</block>
-	</category>
-	<category name='TEXT'>
-		<block type="text">
-			<field name="TEXT"></field>
+		<block type = "math_map">
 		</block>
 	</category>
 	
-	<category name='LIST'>
-		<block type="lists_create_with">
-          <mutation items="3"></mutation>
-        </block>
-        <block type="lists_indexOf">
-          <field name="END">FIRST</field>
-          <value name="VALUE">
-            <block type="variables_get">
-              <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
-            </block>
-          </value>
-        </block>
-        <block type="lists_repeat">
-          <value name="NUM">
-            <shadow type="math_number">
-              <field name="NUM">5</field>
-            </shadow>
-          </value>
-        </block>
-        <block type="lists_length"></block>
-        <block type="lists_isEmpty"></block>
-        <block type="lists_create_with">
-          <mutation items="0"></mutation>
-        </block>
-        <block type="lists_getIndex">
-          <mutation statement="false" at="true"></mutation>
-          <field name="MODE">GET</field>
-          <field name="WHERE">FROM_START</field>
-          <value name="VALUE">
-            <block type="variables_get">
-              <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
-            </block>
-          </value>
-        </block>
-        <block type="lists_setIndex">
-          <mutation at="true"></mutation>
-          <field name="MODE">SET</field>
-          <field name="WHERE">FROM_START</field>
-          <value name="LIST">
-            <block type="variables_get">
-              <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
-            </block>
-          </value>
-        </block>
-        <block type="lists_getSublist">
-          <mutation at1="true" at2="true"></mutation>
-          <field name="WHERE1">FROM_START</field>
-          <field name="WHERE2">FROM_START</field>
-          <value name="LIST">
-            <block type="variables_get">
-              <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
-            </block>
-          </value>
-        </block>
-        <block type="lists_split">
-          <mutation mode="SPLIT"></mutation>
-          <field name="MODE">SPLIT</field>
-          <value name="DELIM">
-            <shadow type="text">
-              <field name="TEXT">,</field>
-            </shadow>
-          </value>
-        </block>
-        <block type="lists_sort">
-          <field name="TYPE">NUMERIC</field>
-          <field name="DIRECTION">1</field>
-        </block>
-	</category>
-	
-	<category name = 'FUNCTION' custom="PROCEDURE">
-	</category>
 	<sep></sep>
 	<category name = 'ADVANCED'>
-		<category name = 'PORT'>
+		<category name='TEXT'>
+			<block type="text">
+				<field name="TEXT"></field>
+			</block>
+		</category>
+		
+		<category name='LIST'>
+			<block type="lists_create_with">
+			  <mutation items="3"></mutation>
+			</block>
+			<block type="lists_indexOf">
+			  <field name="END">FIRST</field>
+			  <value name="VALUE">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_repeat">
+			  <value name="NUM">
+				<shadow type="math_number">
+				  <field name="NUM">5</field>
+				</shadow>
+			  </value>
+			</block>
+			<block type="lists_length"></block>
+			<block type="lists_isEmpty"></block>
+			<block type="lists_create_with">
+			  <mutation items="0"></mutation>
+			</block>
+			<block type="lists_getIndex">
+			  <mutation statement="false" at="true"></mutation>
+			  <field name="MODE">GET</field>
+			  <field name="WHERE">FROM_START</field>
+			  <value name="VALUE">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_setIndex">
+			  <mutation at="true"></mutation>
+			  <field name="MODE">SET</field>
+			  <field name="WHERE">FROM_START</field>
+			  <value name="LIST">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_getSublist">
+			  <mutation at1="true" at2="true"></mutation>
+			  <field name="WHERE1">FROM_START</field>
+			  <field name="WHERE2">FROM_START</field>
+			  <value name="LIST">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_split">
+			  <mutation mode="SPLIT"></mutation>
+			  <field name="MODE">SPLIT</field>
+			  <value name="DELIM">
+				<shadow type="text">
+				  <field name="TEXT">,</field>
+				</shadow>
+			  </value>
+			</block>
+			<block type="lists_sort">
+			  <field name="TYPE">NUMERIC</field>
+			  <field name="DIRECTION">1</field>
+			</block>
+		</category>
+		
+		<category name = 'FUNCTION' custom="PROCEDURE">
 		</category>
 	</category>
 

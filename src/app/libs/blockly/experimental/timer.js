@@ -19,7 +19,7 @@ Blockly.Blocks['timer-event-alarm'] = {
         .appendField(new Blockly.FieldDropdown([ ['Monday','Monday'],['Tuesday','Tuesday'],['Wednesday','Wednesday'],['Thrusday','Thrusday']
 			,['Friday','Friday'],['Saturday','Saturday'],['Sunday','Sunday']]),'DAY')
 		.appendField('at')
-        .appendField(new Blockly.FieldTextInput("07:00:00"), "TIME")
+        .appendField(new Blockly.FieldTextInput("07:00"), "TIME")
         .appendField("do");
     this.appendStatementInput("CODE")
         .setCheck(null);
@@ -40,7 +40,7 @@ Blockly.Python['timer-event-alarm'] = function(block)
 	if (statement.length)
 	{
 		/*
-		
+		AddToSection('import','from Blocky.Timer import *\n');
 		//----------------------------------------------------------
 		var function_name  = 'Timer_Every_' + time + unit;
 		
@@ -52,14 +52,13 @@ Blockly.Python['timer-event-alarm'] = function(block)
 		var event_code = "AddTask(mode='repeat',time=" + time + ",function="+function_name +")\n";
 		AddToSection('once' , event_code);
 		*/
-		var function_name  = 'Timer_Every_' + hour + '_' + minute + unit;
-		if (unit == 'seconds')  time += '000';
-		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
-		GlobalFunctionName.push(function_name);
-		var function_code =  async_cancellable+'async def ' + function_name + '():\n'+Blockly.Python.INDENT+GlobalVarialble;
-		function_code +=   statement  + Blockly.Python.INDENT + 'await asyncio.sleep_ms(0)\n';
-		var event_code = "AddTask(name='" + function_name + "',mode='repeat',time='" + hour + ':' + minute  + "',function=" + function_name + ')\n';
-		AddToSection('once',event_code)
+		var function_name  = 'Alarm_' + String(TIME).replace(":","_")  + "_" + day;
+		
+		//var function_code = async_cancellable+'async def ' + function_name + '():\n' + GlobalVariable ;
+		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +GlobalVariable ; 
+		function_code +=     statement + '\n';
+		var event_code = 'core.Timer.alarm(day = "' + day + '",time= "' + TIME + '",function = ' + function_name + ')\n';
+		AddToSection('async',event_code);
 		AddToSection('function',function_code);
 	}
 	
@@ -94,8 +93,9 @@ Blockly.Python['timer-runtime'] = function(block) {
 Blockly.Blocks['timer-ntp'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField(new Blockly.FieldLabel("current time"));
-
+			.appendField(new Blockly.FieldLabel("current"))
+			.appendField(new Blockly.FieldDropdown( [ ["hour" , "hour"] ,["minute" , "minute"] ,["second" , "second"] , ["date" , "date"] ,["month" , "month"] , ["year" , "year"] ,  ["day" , "day"] ] ), "MODE"  )  
+			;
 		this.setOutput(true , null );
 		this.setColour(230);
 		this.setTooltip("");
@@ -108,9 +108,9 @@ Blockly.Blocks['timer-ntp'] = {
 };
 
 Blockly.Python['timer-ntp'] = function(block) {
-	var name = block.getFieldValue('NAME');
+	var mode = block.getFieldValue('MODE');
 
-	var code = 'core.Timer.current_time()' ;
+	var code = "core.Timer.current('" + mode + "')" ;
 	return [code, Blockly.Python.ORDER_NONE];
 };
 
@@ -219,13 +219,13 @@ Blockly.Python['timer-event-repeat'] = function(block)
 		var event_code = "AddTask(mode='repeat',time=" + time + ",function="+function_name +")\n";
 		AddToSection('once' , event_code);
 		*/
-		statement = Blockly.Python.prefixLines(statement, Blockly.Python.INDENT )
+		//statement = Blockly.Python.prefixLines(statement, Blockly.Python.INDENT )
+		statement = Blockly.Python.prefixLines(statement,Blockly.Python.INDENT)
 		var function_name  = 'Timer_Every_' + time + unit;
 		if (unit == 'seconds')  time += '000';
-		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
-		GlobalFunctionName.push(function_name);
+
 		
-		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +Blockly.Python.INDENT+GlobalVariable+ Blockly.Python.INDENT + 'while True:\n' ;
+		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +GlobalVariable+ Blockly.Python.INDENT+'while True:\n' ;
 		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await core.asyncio.sleep_ms(' +  time + ')\n' +  statement + '\n';
 		var event_code = 'core.mainthread.create_task(core.asyn.Cancellable(' + function_name + ')())\n';
 		AddToSection('async',event_code);

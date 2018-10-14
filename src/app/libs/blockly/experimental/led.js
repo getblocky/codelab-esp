@@ -10,7 +10,7 @@ Blockly.Blocks['led_pwm_output'] = {
 		this.module = 'led' ;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Display' ;
+		this.category  = 'Control' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		
@@ -35,7 +35,7 @@ Blockly.Blocks['led-set']=
 			.appendField('turn')
 			;
 		
-		this.category  = 'Display' ;
+		this.category  = 'Control' ;
 		this.role = 'Set';
 		this.module = 'led';
 		this.setColour(Colour[this.category]);
@@ -57,7 +57,7 @@ Blockly.Blocks['led-fade']=
 			.appendField('fade (0-4095)')
 			;
 		
-		this.category  = 'Display' ;
+		this.category  = 'Control' ;
 		this.role = 'Set';
 		this.module = 'led';
 		this.setColour(Colour[this.category]);
@@ -138,7 +138,7 @@ Blockly.Blocks['state_output'] = {
 			;
 		this.setOutput(true , null );
 		this.setColour(230);
-		this.category  = 'Display' ;
+		this.category  = 'Control' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
 		this.setMovable(false);

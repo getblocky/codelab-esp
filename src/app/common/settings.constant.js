@@ -20,7 +20,7 @@ export default angular.module('blocky.settings', [])
         entryPoints: {
             login: '/login'
         },
-        maxBytesUpload: 500,
+        maxBytesUpload: 1000,
         intervalMiliSecondUpload: 1000,
         latestFirmwareVersion: "1.1",
         blynk: {
