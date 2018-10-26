@@ -8,7 +8,7 @@ Blockly.Blocks['rgb-set-multiple']=
 	init : function()
 	{
 		this.inputsInline = true ;
-		this.appendValueInput("FROM")
+		this.appendValueInput("MAIN")
 			.appendField(new Blockly.FieldDropdown( PORT('rgb')) , 'PORT' ) 
 			.appendField('set pixels from')
 			;
@@ -36,8 +36,8 @@ Blockly.Blocks['rgb-set-multiple']=
 Blockly.Python['rgb-set-multiple'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
-	var colour = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_ATOMIC);
-	var from = Blockly.Python.valueToCode(block, 'FROM', Blockly.Python.ORDER_ATOMIC);
+	var colour = Blockly.Python.valueToCode(block, 'COLOUR', Blockly.Python.ORDER_ATOMIC);
+	var from = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_ATOMIC);
 	var to = Blockly.Python.valueToCode(block, 'TO', Blockly.Python.ORDER_ATOMIC);
 	if (port == 'None') return '';
 	var code = '';
@@ -92,7 +92,7 @@ Blockly.Python['rgb_colour'] = function(block) {
 
 Blockly.Blocks['display_number'] = {
 	init: function() {
-		this.appendDummyInput("MAIN")
+		this.appendDummyInput()
 			.appendField(new Blockly.FieldNumber(1 , 0 , 100,1), "NUM")
 			;
 		this.setOutput(true , null );
@@ -107,5 +107,5 @@ Blockly.Blocks['display_number'] = {
 Blockly.Python['display_number'] = function(block) {
 	var color = block.getFieldValue('NUM');
 	
-	return [code, Blockly.Python.ORDER_ATOMIC ];
+	return [color, Blockly.Python.ORDER_ATOMIC ];
 };

@@ -13,6 +13,19 @@ Blockly.Python.addReservedWords('blocky');
 
 //var BlynkColor = '#23c890';
 var BlynkColor = Colour.Network;
+var user_devices = [] ; 
+var user_current_device  ; 
+
+
+function blynk_list_devices(){
+	var list = [[ "APP" , "APP"] ]
+	for (var x = 0 ; x < user_devices.length ; x ++)
+	{
+		//if (user_devices[x].name == user_current_device.name) continue ; 
+		list.push ( [user_devices[x].name , user_devices[x].token] ) ; 
+	}
+	return list ; 
+}
 
 
 Blockly.Blocks['blynk_event_vr'] = {
@@ -20,7 +33,8 @@ Blockly.Blocks['blynk_event_vr'] = {
 	var GeneratedList = [];
 	for (var i = 0 ; i < 21 ; i ++){GeneratedList.push(["V"+String(i) , String(i)]);}
     this.appendDummyInput("MAIN")
-        .appendField("when receive data from channel \n")
+        .appendField("when receive data from")
+		
 		.appendField(new Blockly.FieldDropdown(GeneratedList) , "CHANNEL")
 		;
     this.appendStatementInput("CODE")
@@ -38,6 +52,7 @@ Blockly.Blocks['blynk_event_vr'] = {
  
 Blockly.Python['blynk_event_vr'] = function(block) {
   var channel = block.getFieldValue('CHANNEL');
+  var device = block.getFieldValue('DEVICE');
   var code = Blockly.Python.statementToCode(block, 'CODE');
   // TODO: Assemble Python into code variable.
   if (code.length){
@@ -65,7 +80,9 @@ Blockly.Blocks['blynk_write_vw'] = {
 	this.appendValueInput("DATA")
         .appendField("write to channel")
         .appendField(new Blockly.FieldDropdown(GeneratedList), "VP")
-		.appendField("=");
+		.appendField("of")
+		.appendField(new Blockly.FieldDropdown(blynk_list_devices()) , "DEVICE")
+		;
 	this.appendDummyInput('NAME');
 
     this.setPreviousStatement(true, null);
@@ -78,12 +95,17 @@ Blockly.Blocks['blynk_write_vw'] = {
 };
 Blockly.Python['blynk_write_vw'] = function(block) {
   var topic = this.getFieldValue('VP');
+  var device = this.getFieldValue('DEVICE');
   var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
   if (!data.length)data = 'None' ;
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.virtual_write(pin=" + String(topic) + ",val=" + String(data) + ")\n";
+  var code = "core.blynk.virtual_write(" ;
+  
+  if (device != "APP") code += "device='" + device + "'," ;
+  
+  code += "pin=" + String(topic) + ",val=" + String(data) + ")\n";
   return code;
 };
 

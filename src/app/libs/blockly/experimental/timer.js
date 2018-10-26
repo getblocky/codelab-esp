@@ -226,7 +226,8 @@ Blockly.Python['timer-event-repeat'] = function(block)
 
 		
 		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +GlobalVariable+ Blockly.Python.INDENT+'while True:\n' ;
-		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await core.asyncio.sleep_ms(' +  time + ')\n' +  statement + '\n';
+		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+'start_time=core.Timer.runtime()\n' +  statement  ;
+		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await core.asyncio.sleep_ms(max(1,' +  time + '-(core.Timer.runtime()-start_time)))\n' ;
 		var event_code = 'core.mainthread.create_task(core.asyn.Cancellable(' + function_name + ')())\n';
 		AddToSection('async',event_code);
 		AddToSection('function',function_code);

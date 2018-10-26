@@ -30,10 +30,10 @@
 		</category>
 		<category name='MOTION'>
 			<block type='motion-event'>
-				<field name = "MODE">detected</field>
+				<field name = "MODE">detect</field>
 			</block>
 			<block type='motion-event'>
-				<field name = "MODE">not detected</field>
+				<field name = "MODE">not_detect</field>
 			</block>
 			
 			<block type='motion-get'>
@@ -46,6 +46,9 @@
 		</category>
 		<category name='WATER'>
 			<block type='moisture-get'></block>
+		</category>
+		<category name='TOUCH'>
+			<block type='mpr121-event'></block>
 		</category>
 	</category>
 	<category name='CONTROL'>
@@ -132,7 +135,7 @@
 					<shadow type="rgb_colour">
 					</shadow>
 				</value>
-				<value name="FROM">
+				<value name="MAIN">
 					<shadow type="display_number">
 					</shadow>
 				</value>
@@ -156,6 +159,8 @@
 		<block type='timer-wait'></block>
 		<block type='timer-runtime'></block>
 		<block type='timer-ntp'></block>
+		<label text = "Advanced" ></label>
+		<block type='rtc-sync'></block>
 	</category>
 	<category name='LOOPS'>
 		<block type="controls_repeat_ext">2

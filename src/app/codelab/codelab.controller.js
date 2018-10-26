@@ -172,6 +172,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         deviceService.getAllDevices().then(function success(devices) {
             if (devices.length) {
                 vm.devices = devices;
+				$window.user_devices = devices  ; 
                 for (var i = 0; i < vm.devices.length; i++) {
                     initBlynk(vm.devices[i].id, vm.devices[i].token);
                 }
@@ -186,10 +187,12 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             for (var i = 0; i < vm.devices.length; i++) {
                 if (selectedDeviceId === vm.devices[i].id) {
                     vm.currentDevice = vm.devices[i];
+					$window.user_current_device = vm.currentDevice ; 
                 }
             }
         } else {
             vm.currentDevice = vm.devices[0];
+			$window.user_current_device = vm.currentDevice ;
             store.set('selectedDeviceId', vm.currentDevice.id);
         }
     }
