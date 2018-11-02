@@ -64,7 +64,7 @@ Blockly.Python['lcd-display'] = function(block) {
 	var line = block.getFieldValue('LINE');
 	var left = Blockly.Python.valueToCode(block, 'LEFT', Blockly.Python.ORDER_NONE);
 	var right = Blockly.Python.valueToCode(block, 'RIGHT', Blockly.Python.ORDER_NONE);
-	if(right==='"VALUE"') right = '""';
+	if(right==='"        "') right = '""';
 	
 	if (port == 'None') return '';
 	var code = '';

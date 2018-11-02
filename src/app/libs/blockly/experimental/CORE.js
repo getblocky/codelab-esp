@@ -236,6 +236,7 @@ function HandlerGlobal(change)
 	if (isEqual(change,prev_change)) return 
 	prev_change = change ; 
 	
+	Blockly.Events.disable();
 	
 	updatePort() ; 
 	list = PORT_ASSIGN; 
@@ -284,8 +285,9 @@ function HandlerGlobal(change)
 	
 	/*
 		Section 3 : Hightlight relevant block 
+		Disabled due to laggy performances
 	*/
-	
+	/*
 	if (change != previous_change)
 	{
 		previous_change = change ;
@@ -311,7 +313,7 @@ function HandlerGlobal(change)
 			block.addSelect() ; // select what user have select !
 		}
 	}
-	
+	*/ 
 	
 	/*
 		Section 4 : 
@@ -371,6 +373,8 @@ function HandlerGlobal(change)
 			}
 		}
 	}
+	
+	Blockly.Events.enable();
 	
 }
 

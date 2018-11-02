@@ -80,7 +80,7 @@ Blockly.Blocks['blynk_write_vw'] = {
 	this.appendValueInput("DATA")
         .appendField("write to channel")
         .appendField(new Blockly.FieldDropdown(GeneratedList), "VP")
-		.appendField("of")
+		.appendField("to")
 		.appendField(new Blockly.FieldDropdown(blynk_list_devices()) , "DEVICE")
 		;
 	this.appendDummyInput('NAME');
