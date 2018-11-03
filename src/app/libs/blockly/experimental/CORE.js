@@ -10,6 +10,8 @@ goog.require('Blockly.BlockSvg');
 var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
 var PORT_ASSIGN = [] ; 
 var previous_change = null ; 
+var GlobalVariable = '' ;
+
 //var  GlobalWorkspace =  Blockly.getMainWorkspace();
 
 /*
@@ -234,6 +236,7 @@ function HandlerGlobal(change)
 	if (isEqual(change,prev_change)) return 
 	prev_change = change ; 
 	
+	Blockly.Events.disable();
 	
 	updatePort() ; 
 	list = PORT_ASSIGN; 
@@ -282,8 +285,9 @@ function HandlerGlobal(change)
 	
 	/*
 		Section 3 : Hightlight relevant block 
+		Disabled due to laggy performances
 	*/
-	
+	/*
 	if (change != previous_change)
 	{
 		previous_change = change ;
@@ -309,7 +313,7 @@ function HandlerGlobal(change)
 			block.addSelect() ; // select what user have select !
 		}
 	}
-	
+	*/ 
 	
 	/*
 		Section 4 : 
@@ -369,6 +373,8 @@ function HandlerGlobal(change)
 			}
 		}
 	}
+	
+	Blockly.Events.enable();
 	
 }
 

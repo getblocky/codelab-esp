@@ -34,7 +34,7 @@ Blockly.Python['servo-set'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Servo import *\n');
+	AddToSection('import' , 'from Blocky.Servo import * ' + getLibraryVersion('Servo') + '\n');
 	AddToSection('declare' , object + " = Servo(port='" + port +"')\n");
 	code = object + '.' + 'angle(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.

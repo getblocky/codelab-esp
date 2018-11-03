@@ -33,7 +33,7 @@ Blockly.Python['music-set-play'] = function(block) {
 	var object = block.getFieldValue('PORT');
 	var song = block.getFieldValue('SONG');
 	if (object=='None') return '';
-	AddToSection('import' , 'from Blocky.Music import *\n');
+	AddToSection('import' , 'from Blocky.Music import * ' + getLibraryVersion('Music') + '\n');
 	AddToSection('declare' , object + " = Music(port='" + object +"')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -71,7 +71,7 @@ Blockly.Python['music-set-volume'] = function(block) {
 	var object = block.getFieldValue('PORT');
 	var song = block.getFieldValue('VOL');
 	if (object=='None') return '';
-	AddToSection('import' , 'from Blocky.Music import *\n');
+	AddToSection('import' , 'from Blocky.Music import * ' + getLibraryVersion('Music') + '\n');
 	AddToSection('declare' , object + " = Music(port='" + object +"')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -107,7 +107,7 @@ Blockly.Blocks['music-set-stop'] =
 Blockly.Python['music-set-stop'] = function(block) {
 	var object = block.getFieldValue('PORT');
 	if (object=='None') return '';
-	AddToSection('import' , 'from Blocky.Music import *\n');
+	AddToSection('import' , 'from Blocky.Music import * ' + getLibraryVersion('Music') + '\n');
 	AddToSection('declare' , object + " = Music(port='" + object +"')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -143,7 +143,7 @@ Blockly.Blocks['music-set-pause'] =
 Blockly.Python['music-set-pause'] = function(block) {
 	var object = block.getFieldValue('PORT');
 	if (object=='None') return '';
-	AddToSection('import' , 'from Blocky.Music import *\n');
+	AddToSection('import' , 'from Blocky.Music import * ' + getLibraryVersion('Music') + '\n');
 	AddToSection('declare' , object + " = Music(port='" + object +"')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;

@@ -145,7 +145,7 @@ Blockly.defineBlocksWithJsonArray([{
     }],
     previousStatement: null,
     nextStatement: null,
-    colour: "%{BKY_VARIABLES_HUE}",
+    colour: Colour.Variables,
     helpUrl: "%{BKY_MATH_CHANGE_HELPURL}",
     extensions: ["math_change_tooltip"]
 }, {
@@ -286,3 +286,30 @@ Blockly.Python['math_convert'] = function(block) {
 	var code = mode + '(' + obj + ')';
 	return [code, Blockly.Python.ORDER_NONE];
 };
+
+
+Blockly.Blocks['math_map'] = {
+	init: function() {
+		this.appendValueInput('MAIN')
+			.appendField('convert')
+			;
+		this.appendDummyInput()
+			.appendField('to')
+			.appendField(new Blockly.FieldDropdown( [['number','int'] , ['string' , 'str'],['float','float']] ), 'MODE' )
+			;
+		this.setOutput(true , null );
+		this.setColour(230);
+		this.category  = 'Math' ;
+		this.role = 'Get';
+		this.setColour(Colour[this.category]);
+		
+	}
+};
+
+Blockly.Python['math_map'] = function(block) {
+	var mode = block.getFieldValue('MODE');
+	var obj = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
+	var code = mode + '(' + obj + ')';
+	return [code, Blockly.Python.ORDER_NONE];
+};
+

@@ -31,7 +31,7 @@ Blockly.Python['rfid-set'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.RFID import *\n');
+	AddToSection('import' , 'from Blocky.RFID import * ' + getLibraryVersion('RFID') + '\n');
 	AddToSection('declare' , object + " = RFID(port='" + port +"')\n");
 	code = object + '.' + 'set()' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -62,7 +62,7 @@ Blockly.Python['rfid-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.RFID import *\n');
+	AddToSection('import' , 'from Blocky.RFID import * ' + getLibraryVersion('RFID') + '\n');
 	AddToSection('declare' , object + " = RFID(port='" + port +"')\n");
 	
 	var code = object + '.value()' ;
@@ -99,9 +99,9 @@ Blockly.Python['rfid-event'] = function(block) {
 	var object = port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' + port + '_' + type   ;
-	AddToSection('import' , 'from Blocky.RFID import *\n');
+	AddToSection('import' , 'from Blocky.RFID import * ' + getLibraryVersion('RFID') + '\n');
 	AddToSection('declare' ,object + " = RFID(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type='" + type + "',function="+function_name+")\n");
 
-	AddToSection('function', async_cancellable+'async def '+function_name+'():\n' + code + '\n');
+	AddToSection('function', async_cancellable+'async def '+function_name+'():\n' +Blockly.Python.INDENT+GlobalVariable+ code + '\n');
 };

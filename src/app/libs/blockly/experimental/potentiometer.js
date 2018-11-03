@@ -32,7 +32,7 @@ Blockly.Python['potentionmeter-declare'] = function(block) {
 	var type = block.getFieldValue('TYPE');
 
 
-	AddToSection('import' , 'from Blocky.Potentionmeter import *\n');
+	AddToSection('import' , 'from Blocky.Potentionmeter import * ' + getLibraryVersion('Potentionmeter') + '\n');
 	AddToSection('declare' , name + " = Potentionmeter(port='" + port +"',sensitive='" + type + "')\n");
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -64,7 +64,7 @@ Blockly.Python['potentionmeter-get'] = function(block) {
 	var name = block.getFieldValue('NAME');
 	var mode = block.getFieldValue('MODE');
 
-	AddToSection('import' , 'from Blocky.Potentionmeter import *\n');
+	AddToSection('import' , 'from Blocky.Potentionmeter import * ' + getLibraryVersion('Potentionmeter') + '\n');
 	
 	var code = name + '.read()' ;
 	return [code, Blockly.Python.ORDER_NONE];

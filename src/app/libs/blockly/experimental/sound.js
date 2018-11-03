@@ -31,7 +31,7 @@ Blockly.Python['sound-set'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = name+'_'+port ; 
-	AddToSection('import' , 'from Blocky.Sound import *\n');
+	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' , object + " = Sound(port='" + port +"')\n");
 	var name = block.module + '_' + port ;
 	code = name + '.' + 'set()' + '\n' ; 
@@ -63,7 +63,7 @@ Blockly.Python['sound-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = block.module +'_'+port ;
-	AddToSection('import' , 'from Blocky.Sound import *\n');
+	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' , object + " = Sound(port='" + port +"')\n");
 	
 	var code = block.module + '.value()' ;
@@ -100,7 +100,7 @@ Blockly.Python['sound-event'] = function(block) {
 	var object = name+'_'+port ; 
 	//if (name == 'None'||!code.length) return ;
 	var function_name = 'Event_' + name+'_'+port + '_' + type + '_' +  time   ;
-	AddToSection('import' , 'from Blocky.Sound import *\n');
+	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' ,object + " = Sound(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type='" + type + "',time=" + time + ",function="+function_name+")\n");
 
