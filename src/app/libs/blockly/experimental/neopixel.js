@@ -33,7 +33,7 @@ Blockly.Python['NeoPixelSet'] = function(block) {
 	var name = block.getFieldValue('NAME');
 	var port = block.getFieldValue('PORT');
 	
-	AddToSection('import' , 'from RGB import *\n'); // do not use NeoPixel class because of port define 
+	AddToSection('import' , 'from Blocky.RGB import * ' + getLibraryVersion('RGB') + '\n'); // do not use NeoPixel class because of port define 
 	var code = name + " = RGB(port='" + port + "',amount=" + numb + ")\n"
 	
 	return code;
@@ -66,7 +66,7 @@ Blockly.Python['NeoPixelSetColorSingle'] = function(block) {
 	var color = block.getFieldValue('COLOR');
 
 	
-	AddToSection('import' , 'from RGB import *\n'); // do not use NeoPixel class because of port define 
+	AddToSection('import' , 'from Blocky.RGB import * ' + getLibraryVersion('RGB') + '\n'); // do not use NeoPixel class because of port define 
 	var code = name + ".setColor(target=" + targ + ",colour=" + color + ")\n"
 	
 	return code;
@@ -103,7 +103,7 @@ Blockly.Python['NeoPixelSetColorMulti'] = function(block) {
 	var color = block.getFieldValue('COLOR');
 
 	
-	AddToSection('import' , 'from RGB import *\n'); // do not use NeoPixel class because of port define 
+	AddToSection('import' , 'from Blocky.RGB import * ' + getLibraryVersion('RGB') + '\n'); // do not use NeoPixel class because of port define 
 	var code = name + ".setColor(target=[x for x in range(" + targ1 + "," + targ2 + ")]" + ",colour=" + color + ")\n"
 	
 	return code;
@@ -133,7 +133,7 @@ Blockly.Python['NeoPixelSetColorAll'] = function(block) {
 	var color = block.getFieldValue('COLOR');
 
 	
-	AddToSection('import' , 'from RGB import *\n'); // do not use NeoPixel class because of port define 
+	AddToSection('import' , 'from Blocky.RGB import * ' + getLibraryVersion('RGB') + '\n'); // do not use NeoPixel class because of port define 
 	var code = name + ".setColor(colour=" + color + ")\n"
 	
 	return code;

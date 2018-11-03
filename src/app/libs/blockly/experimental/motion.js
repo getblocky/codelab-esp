@@ -61,7 +61,7 @@ Blockly.Python['motion-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Motion import *\n');
+	AddToSection('import' , 'from Blocky.Motion import * ' + getLibraryVersion('Motion') + '\n');
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
 	
 	var code = object + '.motion.value()' ;
@@ -72,7 +72,7 @@ Blockly.Blocks['motion-event'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
 			.appendField("when motion is")
-			.appendField(new Blockly.FieldDropdown([['detected','detect'],['not detected','notdetect']]) , "MODE")
+			.appendField(new Blockly.FieldDropdown([['detect','detect'],['not_detect','not_detect']]) , "MODE")
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('motion') ) , 'PORT' )
 			;
@@ -93,10 +93,10 @@ Blockly.Python['motion-event'] = function(block) {
 	if (!code.length||port == 'None') return '';
 	var object =  port ; 
 	//if (name == 'None'||!code.length) return ;
-	var function_name = 'Event_' +port   ;
-	AddToSection('import' , 'from Blocky.Motion import *\n');
+	var function_name = 'Event_' +port+'_'+mode   ;
+	AddToSection('import' , 'from Blocky.Motion import * ' + getLibraryVersion('Motion') + '\n');
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type = '" + mode + "' ,function="+function_name+")\n");
 
-	AddToSection('function',async_cancellable+'async def '+function_name+'():\n' + code + '\n');
+	AddToSection('function',async_cancellable+'async def '+function_name+'():\n'+Blockly.Python.INDENT+GlobalVariable + code + '\n');
 };

@@ -32,7 +32,7 @@ Blockly.Python['relay-set'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.Relay import *\n');
+	AddToSection('import' , 'from Blocky.Relay import * ' + getLibraryVersion('Relay') + '\n');
 	AddToSection('declare' , object + " = Relay(port='" + port +"')\n");
 	code = object + '.' + 'turn(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -65,7 +65,7 @@ Blockly.Python['relay-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var object = port ;
-	AddToSection('import' , 'from Blocky.Relay import *\n');
+	AddToSection('import' , 'from Blocky.Relay import * ' + getLibraryVersion('Relay') + '\n');
 	AddToSection('declare' , object + " = Relay(port='" + port +"')\n");
 	
 	var code = object + '.value()' ;

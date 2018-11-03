@@ -241,7 +241,6 @@ md-bottom-sheet {
 
   /* --- Input --- */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow {
-
     .blocklyTreeIconClosedLtr,
     .blocklyTreeIconOpen {
       &:before {
@@ -249,107 +248,253 @@ md-bottom-sheet {
       }
     }
   }
-
   /* --- Input --- */
-  /* Button */
+  /* BUTTON */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0a6";
-    color: rgb(255, 255, 255);
+    content: "\f0a7";
+    color: #d65cd6;
   }
-
   /* --- Input --- */
-  /* Weather */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0c2";
-    color: rgb(255, 255, 255);
+  /* SOUND */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f2a7";
+    color: #d65cd6;
   }
-
-  /* --- Input --- */
-  /* Light */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f185";
-    color: rgb(255, 255, 255);
-  }
-
-  /* --- Input --- */
-  /* Smoke */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f071";
-    color: rgb(255, 255, 255);
-  }
-
-  /* --- Input --- */
-  /* Trimpot */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0e4";
-    color: rgb(255, 255, 255);
-  }
-
   /* --- Input --- */
   /* RFID */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
     content: "\f09d";
-    color: rgb(255, 255, 255);
+    color: #d65cd6;
+  }
+  /* --- Input --- */
+  /* POTENTIALMETER */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f01e";
+    color: #d65cd6;
   }
 
-  /* Output */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f062";
-    color: rgb(255, 255, 255);
+  
+  /* Temperature */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f2ca";
+    color: #d65cd6;
   }
+  /* --- Sensor --- */
+  /* Humidity */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f043";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Light */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f185";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Motion */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f21d";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Distance */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f07e";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Water */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f043";
+    color: #d65cd6;
+  }
+  
+  /* Temperature */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(7)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f2ca";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Humidity */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(8)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f043";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Light */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(9)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f185";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Motion */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(10)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f21d";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Distance */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(11)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f07e";
+    color: #d65cd6;
+  }
+  /* --- Sensor --- */
+  /* Water */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(12)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f043";
+    color: #d65cd6;
+  }
+  
+  
+  
+  
+  /* --- Control --- */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
+    .blocklyTreeIconClosedLtr,
+    .blocklyTreeIconOpen {
+      &:before {
+        content: "\f085";
+      }
+    }
+  }
+  /* --- Control --- */
+  /* Relay */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f1e6";
+    color: #f55d3e;
+  }
+  /* --- Control --- */
+  /* Buzzer */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f028";
+    color: #f55d3e;
+  }
+  /* --- Control --- */
+  /* MP3 */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f001";
+    color: #f55d3e;
+  }
+  /* --- Control --- */
+  /* Remote */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f1ec";
+    color: #f55d3e;
+  }
+  /* --- Control --- */
+  /* Motor */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f1b9";
+    color: #f55d3e;
+  }
+  /* --- Control --- */
+  /* Servo */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f1b6";
+    color: #f55d3e;
+  }
+   /* --- Display --- */
+  /* LED */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div:nth-child(2)>div:nth-child(7)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f0eb";
+    color: #f55d3e;
+  }
+  
+  
+  
+  
+  /* --- Display --- */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow {
+    .blocklyTreeIconClosedLtr,
+    .blocklyTreeIconOpen {
+      &:before {
+        content: "\f26c";
+      }
+    }
+  }
+ 
+  /* --- Display --- */
+  /* LCD */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f26c";
+    color: #4c97ff;
+  }
+  /* --- Display --- */
+  /* RGB */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f110";
+    color: #4c97ff;
+  }
+
+  
+  
+
+  
 
   /* Network */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f09e";
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(4)>.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f086";
     color: rgb(255, 255, 255);
   }
 
   /* Timer */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(4)>.blocklyTreeRow>.blocklyTreeIcon:before {
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(5)>.blocklyTreeRow>.blocklyTreeIcon:before {
     content: "\f017";
     color: rgb(255, 255, 255);
   }
 
   /* Loops */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(5)>.blocklyTreeRow>.blocklyTreeIcon:before {
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(6)>.blocklyTreeRow>.blocklyTreeIcon:before {
     content: "\f01e";
     color: rgb(255, 255, 255);
   }
 
   /* Logic */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(6)>.blocklyTreeRow>.blocklyTreeIcon:before {
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(7)>.blocklyTreeRow>.blocklyTreeIcon:before {
     content: "\f126";
     color: rgb(255, 255, 255);
   }
 
   /* Variables */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(7)>.blocklyTreeRow>.blocklyTreeIcon:before {
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(8)>.blocklyTreeRow>.blocklyTreeIcon:before {
     content: "\f0c9";
     color: rgb(255, 255, 255);
   }
 
   /* Math */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(8)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f196";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Advanced */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(9)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "";
+    content: "\f1ec";
+    color: rgb(255, 255, 255);
+  }
+  
+
+  	/* --- Advanced --- */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div.blocklyTreeRow {
+    .blocklyTreeIconClosedLtr,
+    .blocklyTreeIconOpen {
+      &:before {
+        content: "\f0dd";
+		 background-color : "#000000" ;
+      }
+    }
+  }
+  /* --- Advanced --- TEXT */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(1)>.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f031";
+    color: rgb(255, 255, 255);
+  }
+  /* --- Advanced --- LIST */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(2)>.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f00b";
+    color: rgb(255, 255, 255);
+  }
+  /* --- Advanced --- FUNCTION */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(3)>.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f39e";
     color: rgb(255, 255, 255);
   }
 
-  /* Functions */
-  /* Functions */
-  /* Functions */
-  /* Functions */
-  /* Functions */
-  /* Functions */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(10)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f09a";
-    color: rgb(255, 255, 255);
-  }
 
   /* Category */
   .blocklyTreeIcon.undefined.undefined {
@@ -366,228 +511,7 @@ md-bottom-sheet {
     padding-left: 0 !important;
   }
 
-  /* Pins */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(12)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f276";
-    color: rgb(255, 255, 255);
-  }
 
-  /* --- Input --- */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div.blocklyTreeRow {
-
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-      &:before {
-        content: "\f192";
-      }
-    }
-  }
-
-  /* Button */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f111";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Light */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0eb";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Temperature */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f2c9";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Soil Moisture */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f043";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Sound Sensor */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f027";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Rotary Angle */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f170";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Ultrasonic Sensor */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(7)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f09e";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Motion Sensor */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(8)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0ec";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Touch Sensor */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2)>div:nth-child(9)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f25a";
-    color: rgb(255, 255, 255);
-  }
-
-  /* --- Control --- */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div.blocklyTreeRow {
-
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-      &:before {
-        content: "\f11b";
-      }
-    }
-  }
-
-  /* LED */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0eb";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Buzzer */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0f3";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Relay */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f1e0";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Mosfet */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f136";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Servo */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f085";
-    color: rgb(255, 255, 255);
-  }
-
-  /* PWM */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f21e";
-    color: rgb(255, 255, 255);
-  }
-
-  /* MP3Player */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(14)>div:nth-child(2)>div:nth-child(7)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f001";
-    color: rgb(255, 255, 255);
-  }
-
-  /* --- Dislay --- */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(15)>div.blocklyTreeRow {
-
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-      &:before {
-        content: "\f26c";
-      }
-    }
-  }
-
-  /* NeoPixel */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(15)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f00a";
-    color: rgb(255, 255, 255);
-  }
-
-  /* OLED LCD */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(15)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f26c";
-    color: rgb(255, 255, 255);
-  }
-
-  /* LED Bar */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(15)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0ae";
-    color: rgb(255, 255, 255);
-  }
-
-  /* --- Communication --- */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(16)>div.blocklyTreeRow {
-
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-      &:before {
-        content: "\f0c1";
-      }
-    }
-  }
-
-  /* Bluetooth */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(16)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f293";
-    color: rgb(255, 255, 255);
-  }
-
-  /* LORA */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(16)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f1eb";
-    color: rgb(255, 255, 255);
-  }
-
-  /* --- Services --- */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div.blocklyTreeRow {
-
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-      &:before {
-        content: "\f1e0";
-      }
-    }
-  }
-
-  /* Email */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f0e0";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Facebook */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f082";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Twitter */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f081";
-    color: rgb(255, 255, 255);
-  }
-
-  /* IFTTT */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f1d8";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Youtube */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f167";
-    color: rgb(255, 255, 255);
-  }
-
-  /* Database */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow>.blocklyTreeIcon:before {
-    content: "\f1c0";
-    color: rgb(255, 255, 255);
-  }
 
   /* Indent child categories */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2) {
@@ -613,71 +537,66 @@ md-bottom-sheet {
 
 /* Input Device */
 #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow {
-  background-color: #b4009e;
-  color: #ffffff;
-}
-/* Sensor Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
-  background-color: #17c7d1;
+  background-color: #d65cd6;
   color: #ffffff;
 }
 /* Control Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow {
-  background-color: #ea7b29;
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
+  background-color: #f55d3e;
   color: #ffffff;
 }
 /* Display Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow {
-  background-color: #0078d7;
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow {
+  background-color: #4c97ff;
   color: #ffffff;
 }
 /* Network Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow {
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow {
   background-color: #e3008c;
   color: #ffffff;
 }
 /* Timer Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow {
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(5)>div.blocklyTreeRow {
   background-color: #107c10;
   color: #ffffff;
 }
 /* Loops Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(7)>div.blocklyTreeRow {
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(6)>div.blocklyTreeRow {
   background-color: #40bf4a;
   color: #ffffff;
 }
 /* Logic Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(8)>div.blocklyTreeRow {
-  background-color: #006970;
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(7)>div.blocklyTreeRow {
+  background-color: #4cbfe6;
   color: #ffffff;
 }
 /* Variables Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(9)>div.blocklyTreeRow {
-  background-color: #a80000;
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(8)>div.blocklyTreeRow {
+  background-color: #ff6680;
   color: #ffffff;
 }
 /* Math Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(10)>div.blocklyTreeRow {
-  background-color: #712672;
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(9)>div.blocklyTreeRow {
+  background-color: #9966ff;
   color: #ffffff;
 }
-/* Text Device */
+/* Advanced Device */
 #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div.blocklyTreeRow {
-  background-color: #996600;
+  background-color: #00272b;
   color: #ffffff;
 }
-/* List Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(12)>div.blocklyTreeRow {
-  background-color: #a94400;
+/* Advanced Device TEXT */
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow {
+  background-color: #ffab19;
   color: #ffffff;
 }
-/* Function Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div.blocklyTreeRow {
+/* Advanced Device LIST */
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
+  background-color: #8a1c7c;
+  color: #ffffff;
+}
+/* Advanced Device FUNCTION */
+#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow {
   background-color: #005a9e;
-  color: #ffffff;
-}
-/* Adcance Device */
-#blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(15)>div.blocklyTreeRow {
-  background-color: #333333;
   color: #ffffff;
 }

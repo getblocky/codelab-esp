@@ -64,12 +64,12 @@ Blockly.Python['lcd-display'] = function(block) {
 	var line = block.getFieldValue('LINE');
 	var left = Blockly.Python.valueToCode(block, 'LEFT', Blockly.Python.ORDER_NONE);
 	var right = Blockly.Python.valueToCode(block, 'RIGHT', Blockly.Python.ORDER_NONE);
-	if(right==='"VALUE"') right = '""';
+	if(right==='"        "') right = '""';
 	
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LCD import *\n');
+	AddToSection('import' , 'from Blocky.LCD import * ' + getLibraryVersion('LCD') + '\n');
 	AddToSection('declare' , object + " = LCD(port='" + port +"')\n");
 	code = object + '.' + 'display(line=' + line + ',left=' + left + ',right=' + right + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -108,7 +108,7 @@ Blockly.Python['lcd-clear'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LCD import *\n');
+	AddToSection('import' , 'from Blocky.LCD import * ' + getLibraryVersion('LCD') + '\n');
 	AddToSection('declare' , object + " = LCD(port='" + port +"')\n");
 	code = object + '.' + 'clear(' + state + ')' + '\n' ; 
 	// TODO: Assemble Python into code variable.
@@ -147,7 +147,7 @@ Blockly.Python['lcd-backlight'] = function(block) {
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	AddToSection('import' , 'from Blocky.LCD import *\n');
+	AddToSection('import' , 'from Blocky.LCD import * ' + getLibraryVersion('LCD') + '\n');
 	AddToSection('declare' , object + " = LCD(port='" + port +"')\n");
 	code = object + '.' + 'backlight("' + state + '")' + '\n' ; 
 	// TODO: Assemble Python into code variable.
