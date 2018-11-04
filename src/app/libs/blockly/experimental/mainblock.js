@@ -131,7 +131,7 @@ Blockly.Python['MainRunOnce'] = function(block) {
 		{
 			GlobalVariable += temp[i].name;
 			GlobalVariable += ",";
-			Blockly.Python.definitions_['variable'] += temp[i].name + "=None\n";
+			Blockly.Python.definitions_['variable'] += temp[i].name + "= 0\n";
 		}	
 		GlobalVariable = GlobalVariable.slice(0, -1);
 		GlobalVariable = Blockly.Python.INDENT+ GlobalVariable + '\n';
