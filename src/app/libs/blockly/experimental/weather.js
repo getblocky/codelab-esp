@@ -8,9 +8,9 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['weather-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('get')
+			.appendField('read')
 			.appendField(new Blockly.FieldDropdown([['temperature','temperature'],['humidity','humidity']]),'MODE')
-			.appendField("'s value on")
+			.appendField("on")
 			.appendField(new Blockly.FieldDropdown( PORT('weather') ) , 'PORT' )
 			;
 		this.module = 'weather' ;

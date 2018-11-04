@@ -8,8 +8,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['moisture-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('get')
-			.appendField("Water Sensor's value")
+			.appendField('read moisture')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('moisture') ) , 'PORT' )
 			;
