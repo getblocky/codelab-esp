@@ -487,7 +487,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     function shareProject($event) {
         $mdBottomSheet.hide();
 
-        if (angular.isUndefined(vm.script.isPublic) || vm.script.isPublic !== 1) {
+        if (angular.isUndefined(vm.script.isPublic) || !vm.script.isPublic) {
             var confirm = $mdDialog.confirm()
                 .targetEvent($event)
                 .title($translate.instant('project.share-project-title', {
