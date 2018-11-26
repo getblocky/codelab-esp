@@ -8,8 +8,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['distance-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('get')
-			.appendField("distance value")
+			.appendField('read distance')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('distance') ) , 'PORT' )
 			;

@@ -149,6 +149,30 @@
 	<category name='NETWORK'>
 		<block type='blynk_event_vr'></block>
 		<block type='blynk_write_vw'></block>
+		<block type="blynk_notify">
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
+		<block type="blynk_email">
+			<value name="MAIL">
+				<shadow type="network_text">
+					<field name="TEXT">yourmail@gmail.com</field>
+				</shadow>
+			</value>
+			<value name="SUBJECT">
+				<shadow type="network_text">
+					<field name="TEXT">Your Subject</field>
+				</shadow>
+			</value>
+			<value name="CONTENT">
+				<shadow type="network_text">
+					<field name="TEXT">Hello World</field>
+				</shadow>
+			</value>
+		</block>
 		<block type='blynk_log'></block>
 		<block type='blynk_message'></block>
 		<block type='blynk_message_iter'></block>
