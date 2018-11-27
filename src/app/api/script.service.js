@@ -31,7 +31,8 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
         deleteScript: deleteScript,
         saveScript: saveScript,
         addScript: addScript,
-        sendOTA: sendOTA
+        sendOTA: sendOTA,
+        sendSocket: sendSocket
     }
 
     return service;
@@ -119,10 +120,14 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
     }
 
     function sendOTA(token, dataArray) {
+        sendSocket(token, dataArray, settings.blynk.otaPin);
+    }
+
+    function sendSocket(token, dataArray, pin) {
         var deferred = $q.defer();
         var url = settings.baseApiUrl + '/script/ota';
         var otaRequest = {
-            url: 'https://' + settings.blynk.addr + ':' + settings.blynk.port + '/' + token + '/update/' + settings.blynk.otaPin,
+            url: 'https://' + settings.blynk.addr + ':' + settings.blynk.port + '/' + token + '/update/' + pin,
             data: dataArray
         }
 
