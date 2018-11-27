@@ -32,7 +32,8 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
         saveScript: saveScript,
         addScript: addScript,
         sendOTA: sendOTA,
-        sendSocket: sendSocket
+        sendSocket: sendSocket,
+        sendCommand: sendCommand
     }
 
     return service;
@@ -121,6 +122,10 @@ function ScriptService($http, $q, $rootScope, $filter, settings) {
 
     function sendOTA(token, dataArray) {
         sendSocket(token, dataArray, settings.blynk.otaPin);
+    }
+	
+	function sendCommand(token, dataArray) {
+        sendSocket(token, dataArray, settings.blynk.controllerPin);
     }
 
     function sendSocket(token, dataArray, pin) {

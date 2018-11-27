@@ -425,7 +425,8 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     function sendControllerBoard() {
         var message = [];
         message[0] = "core.mainthread.call_soon(core.indicator.pulse(0,0,50))";
-        scriptService.sendSocket(vm.currentDevice.token, message, settings.blynk.controllerPin);
+		scriptService.sendCommand(vm.currentDevice.token,message);
+        //scriptService.sendSocket(vm.currentDevice.token, message, settings.blynk.controllerPin);
     }
 
     function splitString(str, size) {
