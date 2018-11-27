@@ -9,7 +9,7 @@ Blockly.Blocks['rgb-set-multiple']=
 	{
 		this.inputsInline = true ;
 		this.appendValueInput("MAIN")
-			.appendField(new Blockly.FieldDropdown( PORT('rgb')) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('rgb') ) , 'PORT' ) 
 			.appendField('set pixels from')
 			;
 			
@@ -50,6 +50,51 @@ Blockly.Python['rgb-set-multiple'] = function(block) {
 	return code ;
 };
 
+Blockly.Blocks['indicator_set_multiple']=
+{
+	init : function()
+	{
+		this.inputsInline = true ;
+		this.appendValueInput("MAIN")
+			.appendField('Onboard RGB') 
+			.appendField('set pixels from')
+			;
+			
+		this.appendDummyInput();
+		
+		this.appendDummyInput();
+		this.appendValueInput("TO")
+			.appendField('to')
+			;
+		this.appendValueInput("COLOUR")
+			.appendField("with")
+			;
+		this.category  = 'Display' ;
+		this.role = 'Set';
+		this.module = 'rgb';
+		this.setColour(Colour[this.category]);
+		this.setPreviousStatement(true , null);
+		this.setNextStatement(true , null);
+		
+	}
+	
+};
+
+Blockly.Python['indicator_set_multiple'] = function(block) {
+	var name = block.module;
+	var port = 'LED_RING';
+	var colour = Blockly.Python.valueToCode(block, 'COLOUR', Blockly.Python.ORDER_ATOMIC);
+	var from = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_ATOMIC);
+	var to = Blockly.Python.valueToCode(block, 'TO', Blockly.Python.ORDER_ATOMIC);
+	if (port == 'None') return '';
+	var code = '';
+	var object = port ; 
+	AddToSection('declare' , object + " = core.indicator\n");
+	code = object + '.' + 'colour(' + String(from) + "," + String(to) + "," +  colour + ')' + '\n' ; 
+	// TODO: Assemble Python into code variable.
+	// Do not let user put this anyywhere except from setup block;
+	return code ;
+};
 
 Blockly.Blocks['rgb_colour'] = {
 	init: function() {
