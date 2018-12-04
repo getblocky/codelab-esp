@@ -30,7 +30,7 @@ Blockly.Python['sound-set'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
-	var object = name+'_'+port ; 
+	var object = port ; 
 	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' , object + " = Sound(port='" + port +"')\n");
 	var name = block.module + '_' + port ;
@@ -62,7 +62,7 @@ Blockly.Blocks['sound-get'] = {
 Blockly.Python['sound-get'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
-	var object = block.module +'_'+port ;
+	var object = port ;
 	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' , object + " = Sound(port='" + port +"')\n");
 	
@@ -97,9 +97,9 @@ Blockly.Python['sound-event'] = function(block) {
 	var code = Blockly.Python.statementToCode(block, 'CODE');
 	var type = 'clap' ; // Not implemented other method , is there any ???
 	if (!code.length||port == 'None') return '';
-	var object = name+'_'+port ; 
+	var object = port ; 
 	//if (name == 'None'||!code.length) return ;
-	var function_name = 'Event_' + name+'_'+port + '_' + type + '_' +  time   ;
+	var function_name = 'Event_' +port + '_' + type + '_' +  time   ;
 	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' ,object + " = Sound(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type='" + type + "',time=" + time + ",function="+function_name+")\n");

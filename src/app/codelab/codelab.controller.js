@@ -174,9 +174,11 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             if (devices.length) {
                 vm.devices = devices;
 				$window.user_devices = devices  ; 
+				/*
                 for (var i = 0; i < vm.devices.length; i++) {
                     initBlynk(vm.devices[i].id, vm.devices[i].token);
                 }
+				*/
                 loadSelectedDevice();
             }
         });
@@ -423,8 +425,9 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     }
 
     function sendControllerBoard() {
+		initBlynk(vm.currentDevice.id, vm.currentDevice.token);
         var message = [];
-        message[0] = "core.mainthread.call_soon(core.indicator.pulse(0,0,50))";
+        message[0] = "core.mainthread.call_soon(core.indicator.pulse(color=(0,0,50)))";
 		scriptService.sendCommand(vm.currentDevice.token,message);
         //scriptService.sendSocket(vm.currentDevice.token, message, settings.blynk.controllerPin);
     }

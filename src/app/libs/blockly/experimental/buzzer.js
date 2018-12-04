@@ -103,6 +103,31 @@ Blockly.Python['buzzer-set'] = function(block) {
 };
 
 var note_list =  { "c":1915, "d":1700, "e":1519, "f":1432, "g":1275, "a":1136, "b":1014, "C":956, "D":850, "E":759, "F":716, "G":637, "A":568 };
+var NOTE = [ ["DO",  "523"],["RE",  "587"],["MI","659"],["FA","698"],["SON","783"],["LA","880"],["SI","987"] ];
+
+Blockly.Blocks['note_frequency']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField(new Blockly.FieldDropdown(NOTE) , 'NUM')
+			;
+		this.category  = 'Output' ;
+		this.role = 'Get';
+		this.setColour(Colour[this.category]);
+		this.setOutput(true , null );
+		this.setMovable(false);
+	},
+};
+
+Blockly.Python['note_frequency']=function(block)
+{
+	var code = block.getFieldValue('NUM');
+	console.log(String(code))
+	return String(code);
+	
+};
+
 Blockly.Blocks['buzzer-playnote'] =
 {
 	init:function(){
@@ -110,10 +135,8 @@ Blockly.Blocks['buzzer-playnote'] =
 			.appendField('Buzzer')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
-			.appendField('beeps')
-		this.appendDummyInput()
-			.appendField('times')
-			.appendField(new Blockly.FieldDropdown([['fast','50'],['medium','150'],['slow','350']]),'MODE');
+			.appendField('play note')
+			;
 			//.appendField(this.id);
 		
 		this.category  = 'Output' ;
@@ -128,17 +151,19 @@ Blockly.Blocks['buzzer-playnote'] =
 
 
 Blockly.Python['buzzer-playnote'] = function(block) {
+	var note = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
+	
 	var object = port ; 
 	var notename = block.getFieldValue('NOTE');
-	var note = noteToFreq (notename);
+	console.log(note);
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
 	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
-	var code = object + ".playnote(note = "+String(note)+",)\t#" + notename + "\n";
+	var code = object + ".playnote(note = "+note+")\n";
 	return code;
 };

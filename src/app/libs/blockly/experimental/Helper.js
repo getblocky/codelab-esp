@@ -214,7 +214,7 @@ function HandlePublicBlock(  change , workspace , blocks )
 
 
 */
-var supported_module = ['Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','Remote','RFID','RGB','Servo','Smoke','Sound','Stepper','Switch','WaterSensor','Weather','MPR121'];
+var supported_module = ['Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Switch','WaterSensor','Weather','MPR121'];
 var module_version = {};
 for (var i = 0 ; i < supported_module.length ; i++)
 {
@@ -224,7 +224,7 @@ for (var i = 0 ; i < supported_module.length ; i++)
 function update_module_version( module )
 {
 	const Http = new XMLHttpRequest();
-	const url='https://raw.githubusercontent.com/getblocky/blocky_firmware/master/ESP32/Firmware/lib/' + module + '.py';
+	const url='https://raw.githubusercontent.com/getblocky/dot_firmware/master/src/' + module + '.py';
 	module_version[module] = '';
 	Http.open("GET", url);
 	Http.send();
