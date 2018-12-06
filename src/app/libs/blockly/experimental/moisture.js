@@ -28,7 +28,7 @@ Blockly.Python['moisture-get'] = function(block) {
 	if (port == 'None') return '';
 	var object = port ;
 	AddToSection('import' , 'from Blocky.Moisture import *\n');
-	AddToSection('declare' , object + " = Moisture(port='" + port +"')\n");
+	AddToSection('declare' , object + " = WaterSensor(port='" + port +"')\n");
 	
 	var code = object + '.' + 'value()'  ;
 	return [code, Blockly.Python.ORDER_NONE];
