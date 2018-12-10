@@ -135,7 +135,7 @@ Blockly.Python['blynk_log'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.log(" +  String(data) + ",http=True)\n";
+  var code = "core.blynk.log(" +  String(data) + ")\n";
   return code;
 };
 Blockly.Blocks['blynk_notify'] = {
