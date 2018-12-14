@@ -97,5 +97,5 @@ Blockly.Python['motion-event'] = function(block) {
 	AddToSection('declare' , object + " = Motion(port='" + port +"')\n");
 	AddToSection('event' , object  + ".event(type = '" + mode + "' ,function="+function_name+")\n");
 
-	AddToSection('function',async_cancellable+'async def '+function_name+'():\n'+Blockly.Python.INDENT+GlobalVariable + code + '\n');
+	AddToSection('function',async_cancellable + 'async def '+function_name+'():\n'+GlobalVariable+ code + '\n');
 };

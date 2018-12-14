@@ -94,7 +94,7 @@ Blockly.Blocks['timer-ntp'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
 			.appendField(new Blockly.FieldLabel("current"))
-			.appendField(new Blockly.FieldDropdown( [ ["hour" , "hour"] ,["minute" , "minute"] ,["second" , "second"] , ["date" , "date"] ,["month" , "month"] , ["year" , "year"] ,  ["day" , "day"] ] ), "MODE"  )  
+			.appendField(new Blockly.FieldDropdown( [ ["clock" , "clock"] ,["dd/mm/yyyy" , "dd/mm/yyyy"] ,["hour" , "hour"] ,["minute" , "minute"] ,["second" , "second"] , ["date" , "date"] ,["month" , "month"] , ["year" , "year"] ,  ["day" , "day"] ] ), "MODE"  )  
 			;
 		this.setOutput(true , null );
 		this.setColour(230);
