@@ -8,8 +8,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['potentiometer-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('get')
-			.appendField("Potentiometer 's value")
+			.appendField('read potentiometer')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('potentiometer') ) , 'PORT' )
 			;

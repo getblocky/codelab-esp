@@ -214,6 +214,7 @@ function updatePort()
 		if (!block.isInFlyout && !block.disabled&&block.module != null )
 		{
 			var port = block.getFieldValue('PORT');
+			if (port==null) continue;
 			if (list[port] == null||list[port]==block.module)
 			{
 				list[port] = block.module ;
@@ -347,8 +348,12 @@ function HandlerGlobal(change)
 						temp_list_input.push( temp_fieldRow[x].text_ ) ; 
 					}
 					Blockly.Events.disable() ; 
-					if (isEqual(temp_list_input , list_input )) temp.setDisabled(true) ;
-					else temp.setDisabled(false) ; 
+					if (isEqual(temp_list_input , list_input )) {
+						temp.setDisabled(true) ;
+					}
+					else {
+						temp.setDisabled(false) ; 
+					}
 					Blockly.Events.enable() ; 
 				}
 			}

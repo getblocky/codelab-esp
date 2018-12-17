@@ -135,7 +135,61 @@ Blockly.Python['blynk_log'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.log(" +  String(data) + ",http=True)\n";
+  var code = "core.blynk.log(" +  String(data) + ")\n";
+  return code;
+};
+Blockly.Blocks['blynk_notify'] = {
+  init: function() {
+	this.appendValueInput("DATA")
+        .appendField("notify")
+		;
+	this.appendDummyInput('NAME');
+
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(BlynkColor);
+	this.setTooltip("");
+	this.setHelpUrl("");
+	
+  }
+};
+Blockly.Python['blynk_notify'] = function(block) {
+  var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
+  if (!data.length)data = 'None' ;
+  // TODO: Assemble Python into code variable.
+  
+  
+  var code = "core.blynk.notify(" +  String(data) + ")\n";
+  return code;
+};
+Blockly.Blocks['blynk_email'] = {
+  init: function() {
+	this.appendValueInput("MAIL")
+        .appendField("email to")
+		;
+	this.appendValueInput("SUBJECT")
+        .appendField("subject")
+		;
+	this.appendValueInput("CONTENT")
+        .appendField("content")
+		;
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(BlynkColor);
+	this.setTooltip("");
+	this.setHelpUrl("");
+	this.inputsInline = false ;
+  }
+};
+Blockly.Python['blynk_email'] = function(block) {
+  var content = Blockly.Python.valueToCode(block, 'CONTENT', Blockly.Python.ORDER_NONE);
+  var subject = Blockly.Python.valueToCode(block, 'SUBJECT', Blockly.Python.ORDER_NONE);
+  var mail = Blockly.Python.valueToCode(block, 'MAIL', Blockly.Python.ORDER_NONE);
+  if (!content.length) return '' ;
+  // TODO: Assemble Python into code variable.
+  
+  
+  var code = "core.blynk.email(mail=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
   return code;
 };
 
@@ -255,5 +309,27 @@ Blockly.Blocks['blynk_message_iter']=
 
 Blockly.Python['blynk_message_iter'] = function(block) {
 	var code = "message[" + String(parseInt(block.getFieldValue('ITER'))-1) + ']'; // 1 based
+	return [code, Blockly.Python.ORDER_ATOMIC ];
+};
+
+Blockly.Blocks['network_text']=
+{
+	init : function()
+	{
+		this.appendDummyInput('MAIN')
+			.appendField('"')
+			.appendField(new Blockly.FieldTextInput(""), 'TEXT')
+			.appendField('"')
+			;
+		
+		this.category  = 'Network' ;
+		this.setColour(Colour[this.category]);
+		this.setOutput(true , null);
+	}
+} ;
+
+Blockly.Python['network_text'] = function(block) {
+	var text = block.getFieldValue('TEXT');
+	var code = '"' + text + '"';
 	return [code, Blockly.Python.ORDER_ATOMIC ];
 };

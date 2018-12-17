@@ -11,7 +11,7 @@
 		<category name='RFID'>
 			<block type='rfid-event'></block>
 		</category>
-		<category name='POTENTIALMETER'>
+		<category name='POTENTIOMETER'>
 			<block type='potentiometer-get'></block>
 		</category>
 		<category name='TEMPERATURE'>
@@ -73,6 +73,13 @@
 			<block type='buzzer-beep'>
 				<value name="MAIN">
 					<shadow type="number_output">
+					</shadow>
+				</value>
+
+			</block>
+			<block type='buzzer-playnote'>
+				<value name="MAIN">
+					<shadow type="note_frequency">
 					</shadow>
 				</value>
 
@@ -144,11 +151,59 @@
 					</shadow>
 				</value>
 			</block>
+			<block type = "indicator_set_multiple">
+				<value name="COLOUR">
+					<shadow type="rgb_colour">
+					</shadow>
+				</value>
+				<value name="MAIN">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+				<value name="TO">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+			</block>
+			<block type = "indicator_set_single">
+				<value name="COLOUR">
+					<shadow type="rgb_colour">
+					</shadow>
+				</value>
+				<value name="MAIN">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+			</block>
 		</category>
 	</category>
 	<category name='NETWORK'>
 		<block type='blynk_event_vr'></block>
 		<block type='blynk_write_vw'></block>
+		<block type="blynk_notify">
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
+		<block type="blynk_email">
+			<value name="MAIL">
+				<shadow type="network_text">
+					<field name="TEXT">yourmail@gmail.com</field>
+				</shadow>
+			</value>
+			<value name="SUBJECT">
+				<shadow type="network_text">
+					<field name="TEXT">Your Subject</field>
+				</shadow>
+			</value>
+			<value name="CONTENT">
+				<shadow type="network_text">
+					<field name="TEXT">Hello World</field>
+				</shadow>
+			</value>
+		</block>
 		<block type='blynk_log'></block>
 		<block type='blynk_message'></block>
 		<block type='blynk_message_iter'></block>

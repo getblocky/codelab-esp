@@ -43,10 +43,9 @@ Blockly.Python['motion-set'] = function(block) {
 Blockly.Blocks['motion-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('Motion')
+			.appendField('detecting motion')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('motion') ) , 'PORT' )
-			.appendField("see motion")
 			;
 		this.module = 'motion' ;
 		this.setOutput(true , null );

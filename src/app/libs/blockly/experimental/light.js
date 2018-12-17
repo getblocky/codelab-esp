@@ -8,8 +8,7 @@ goog.require('Blockly.Blocks');
 Blockly.Blocks['light-get'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
-			.appendField('get')
-			.appendField("Light's value")
+			.appendField('read light')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('light') ) , 'PORT' )
 			;
