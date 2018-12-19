@@ -1857,7 +1857,8 @@ Blynk.prototype.onReceive = function(data) {
     }
     var values = self.buff_in.substr(5, msg_len).split('\0');
     self.buff_in = self.buff_in.substr(msg_len+5);
-
+    
+    console.log('MsgType:', msg_type, 'Values:', values);
     /*if (msg_len) {
       console.log('> ', string_of_enum(MsgType, msg_type), msg_id, msg_len, values.join('|'));
     } else {

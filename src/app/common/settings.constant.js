@@ -21,7 +21,6 @@ export default angular.module('blocky.settings', [])
             login: '/login'
         },
         maxBytesUpload: 1000,
-        intervalMiliSecondUpload: 1000,
         latestFirmwareVersion: "1.1",
         blynk: {
             addr: 'blynk.getblocky.com',

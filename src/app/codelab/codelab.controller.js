@@ -34,7 +34,7 @@ import showSharedProjectTemplate from './show-shared-project.tpl.html';
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($window , $mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log, $interval) {
+export default function CodeLabController($window , $mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log) {
     var vm = this;
 
     vm.isUserLoaded = userService.isAuthenticated();
@@ -44,7 +44,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.otaTimeout = null;
     vm.splitedScripts = [];
     vm.partTobeUploaded = 0;
-    vm.otaInProgress = false;
+    vm.otaInProgress = null;
     vm.pythonEditorOptions = {
         useWrapMode: true,
         showGutter: true,
@@ -207,7 +207,23 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             } else {
                 toast.showError(log);
             }
+        } else if (log.indexOf('[OTA_READY]') >= 0 && vm.otaInProgress) {
+            otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
+            if (otaRequest[0].length == 0) return;
+            vm.partTobeUploaded = vm.partTobeUploaded + 1;
+            //if (vm.partTobeUploaded > vm.splitString.length-1) return ;
+            otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
+            if (otaRequest)
+                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
+            $timeout.cancel(vm.otaTimeout);
+            vm.otaTimeout = $timeout(function () {
+                toast.showError($translate.instant('script.script-upload-failed-error'));
+                vm.otaInProgress = false;
+            }, 10000);
         } else if (log.indexOf('[OTA_DONE]') >= 0) {
+            if (vm.otaInProgress === null) { // Fix issue getting [OTA_DONE] message when reloading
+                return;
+            }
             toast.showSuccess($translate.instant('script.script-upload-success'));
             $timeout.cancel(vm.otaTimeout);
             vm.otaInProgress = false;
@@ -400,28 +416,16 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         vm.otaInProgress = true;
         var scriptToBeUploaded = vm.script.python;
 
+        vm.otaTimeout = $timeout(function () {
+            toast.showError($translate.instant('script.script-upload-failed-error'));
+            vm.otaInProgress = false;
+        }, 10000);
+
         var hash = md5(scriptToBeUploaded);
         scriptService.sendOTA(vm.currentDevice.token, [hash, "OTA"]);
         $log.log('sendOTA:', [hash, "OTA"]);
         vm.partTobeUploaded = 0;
         vm.splitedScripts = splitString(scriptToBeUploaded, maxSize);
-        var stopUpload = $interval(function () {
-            if (vm.otaInProgress) {
-                otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
-                vm.partTobeUploaded = vm.partTobeUploaded + 1;
-                otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
-                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
-                $log.log('sendOTA:', otaRequest);
-
-                if (vm.partTobeUploaded == vm.splitedScripts.length) {
-                    $interval.cancel(stopUpload);
-                    vm.otaTimeout = $timeout(function () {
-                        toast.showError($translate.instant('script.script-upload-failed-error'));
-                        vm.otaInProgress = false;
-                    }, 10000);
-                }
-            }
-        }, settings.intervalMiliSecondUpload);
     }
 
     function sendControllerBoard() {
