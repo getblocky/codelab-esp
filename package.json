@@ -45,7 +45,8 @@
     "jquery": "^3.2.1",
     "ngclipboard": "^1.1.2",
     "sass-material-colors": "0.0.5",
-    "typeface-roboto": "0.0.29"
+    "typeface-roboto": "0.0.29",
+    "sha1": "1.1.1"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",

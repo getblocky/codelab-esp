@@ -264,7 +264,59 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   return code;
 };
 
+function fff (){
+	console.log('run')
+}
+
+Blockly.Blocks['doubleclick_to_run'] = {
+  init: function() {
+    this.appendDummyInput("MAIN")
+		.appendField('Double clink this block to run')
+        .appendField("these code");
+    this.appendStatementInput("CODE")
+        .setCheck(null);
+    this.appendDummyInput();
+    this.setColour(Colour.Timer);
+
+  }
+};
 
 
+Blockly.Python['doubleclick_to_run'] = function(block)
+{
+	
+	var day = block.getFieldValue('DAY');
+	var TIME = block.getFieldValue('TIME');
+	var statement = Blockly.Python.statementToCode(block,'CODE');
+	
+	if (statement.length)
+	{
+		/*
+		AddToSection('import','from Blocky.Timer import *\n');
+		//----------------------------------------------------------
+		var function_name  = 'Timer_Every_' + time + unit;
+		
+		if (isFunctionNameExist(function_name)) { function_name += '_' ; function_name += String(getRandomNumber()) ;}
+		GlobalFunctionName.push(function_name);
+		var function_code = 'def '+ function_name + '():\n' + statement;
+		AddToSection('function' , function_code);
+		if (unit === 'seconds') time *= 1000 ;
+		var event_code = "AddTask(mode='repeat',time=" + time + ",function="+function_name +")\n";
+		AddToSection('once' , event_code);
+		*/
+		var function_name  = 'Alarm_' + String(TIME).replace(":","_")  + "_" + day;
+		
+		//var function_code = async_cancellable+'async def ' + function_name + '():\n' + GlobalVariable ;
+		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +GlobalVariable ; 
+		function_code +=     statement + '\n';
+		var event_code = 'core.Timer.alarm(day = "' + day + '",time= "' + TIME + '",function = ' + function_name + ')\n';
+		AddToSection('async',event_code);
+		AddToSection('function',function_code);
+	}
+	
+	var code = '';
+	return code ;
+	
+}
 
 

@@ -135,7 +135,7 @@ Blockly.Python['blynk_log'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.log(" +  String(data) + ",http=True)\n";
+  var code = "core.blynk.log(" +  String(data) + ")\n";
   return code;
 };
 Blockly.Blocks['blynk_notify'] = {
@@ -189,7 +189,7 @@ Blockly.Python['blynk_email'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.email(mail=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
+  var code = "core.blynk.email(email=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
   return code;
 };
 
