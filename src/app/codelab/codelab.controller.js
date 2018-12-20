@@ -207,13 +207,15 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             } else {
                 toast.showError(log);
             }
-        } else if (log.indexOf('[OTA_READY]') >= 0 && vm.otaInProgress) {
+        } else if ((log.indexOf('[OTA_ACK]') >= 0||log.indexOf('[OTA_READY]') >= 0) && vm.otaInProgress) {
             otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
             if (otaRequest[0].length == 0) return;
             vm.partTobeUploaded = vm.partTobeUploaded + 1;
+			var sha1 =  require('sha1');
             //if (vm.partTobeUploaded > vm.splitString.length-1) return ;
             otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
             if (otaRequest)
+				$log.warn(otaRequest[1] , sha1(otaRequest[0]));
                 scriptService.sendOTA(vm.currentDevice.token, otaRequest);
             $timeout.cancel(vm.otaTimeout);
             vm.otaTimeout = $timeout(function () {
@@ -420,7 +422,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             toast.showError($translate.instant('script.script-upload-failed-error'));
             vm.otaInProgress = false;
         }, 10000);
-
+		
         var hash = md5(scriptToBeUploaded);
         scriptService.sendOTA(vm.currentDevice.token, [hash, "OTA"]);
         $log.log('sendOTA:', [hash, "OTA"]);
