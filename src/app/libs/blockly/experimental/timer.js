@@ -94,7 +94,7 @@ Blockly.Blocks['timer-ntp'] = {
 	init: function() {
 		this.appendDummyInput('MAIN')
 			.appendField(new Blockly.FieldLabel("current"))
-			.appendField(new Blockly.FieldDropdown( [ ["hour" , "hour"] ,["minute" , "minute"] ,["second" , "second"] , ["date" , "date"] ,["month" , "month"] , ["year" , "year"] ,  ["day" , "day"] ] ), "MODE"  )  
+			.appendField(new Blockly.FieldDropdown( [ ["clock" , "clock"] ,["dd/mm/yyyy" , "dd/mm/yyyy"] ,["hour" , "hour"] ,["minute" , "minute"] ,["second" , "second"] , ["date" , "date"] ,["month" , "month"] , ["year" , "year"] ,  ["day" , "day"] ] ), "MODE"  )  
 			;
 		this.setOutput(true , null );
 		this.setColour(230);
@@ -156,7 +156,7 @@ Blockly.Python['timer-wait'] = function(block) {
 	var time = block.getFieldValue('TIME');
 	var unit = block.getFieldValue('UNIT');
 	if ( unit == 'seconds' ) time += '000';
-	var code = 'await core.asyncio.sleep_ms('+  time + ')\n' ;
+	var code = 'await core.wait('+  time + ')\n' ;
 	return code;
 };
 
@@ -227,7 +227,7 @@ Blockly.Python['timer-event-repeat'] = function(block)
 		
 		var function_code =  async_cancellable+'async def ' + function_name + '():\n' +GlobalVariable+ Blockly.Python.INDENT+'while True:\n' ;
 		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+'start_time=core.Timer.runtime()\n' +  statement  ;
-		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await core.asyncio.sleep_ms(max(1,' +  time + '-(core.Timer.runtime()-start_time)))\n' ;
+		function_code += Blockly.Python.INDENT+Blockly.Python.INDENT+ 'await core.wait(max(1,' +  time + '-(core.Timer.runtime()-start_time)))\n' ;
 		var event_code = 'core.mainthread.create_task(core.asyn.Cancellable(' + function_name + ')())\n';
 		AddToSection('async',event_code);
 		AddToSection('function',function_code);
