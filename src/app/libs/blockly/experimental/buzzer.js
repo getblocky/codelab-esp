@@ -19,10 +19,7 @@ Blockly.Python['number_output']=function(block)
 {
 	var code = block.getFieldValue('NUM');
 	return code;
-	
 };
-
-
 
 Blockly.Blocks['buzzer-beep'] =
 {
@@ -47,14 +44,18 @@ Blockly.Blocks['buzzer-beep'] =
 	},
 };
 
-
 Blockly.Python['buzzer-beep'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 
-	var time =  Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
+	//TODO var time =  Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
+	/*
+		Unknown bug , it only receive the first character of a number ?? (for example  10 -> "1" )
+		Dirty hacks appplied , please clean up later
+	*/
+	var time = block.childBlocks_[0].inputList[0].fieldRow[0].text_ ;
 	var mode = block.getFieldValue('MODE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
 	AddToSection('import' , 'from Blocky.Buzzer import * ' + getLibraryVersion('Buzzer') + '\n');
