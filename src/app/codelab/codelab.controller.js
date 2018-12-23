@@ -72,7 +72,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.homeUrl = window.location.origin;
     vm.blynk = {};
 
-    initScriptData();
     if (vm.isUserLoaded) {
         loadUserDevices();
     }
@@ -94,9 +93,11 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         window.removeEventListener('resize', onResize, false);
     });
 
-    $timeout(function () {
-        injectBlockly();
-    }, 100);
+    angular.element(document).ready(function () {
+        $timeout(function () {
+            injectBlockly();
+        }, 500);
+    });
 
     vm.changeMode = changeMode;
     vm.saveProject = saveProject;
@@ -153,15 +154,21 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                     vm.script.mode = script.mode || 'block';
                     vm.script.isPublic = script.isPublic || 0;
                     if (vm.script.mode === 'block') {
-                        onResize();
+                        loadBlocks(vm.script.xml);
                     }
                 },
                 function fail() {
                     toast.showError($translate.instant('script.script-load-failed-error'));
+                    loadBlocks();
                 }
             );
         } else if (vm.localScript) {
             vm.script = vm.localScript;
+            if (vm.script.mode === 'block') {
+                loadBlocks(vm.script.xml);
+            }
+        } else {
+            loadBlocks();
         }
     }
 
@@ -262,22 +269,25 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 }
             });
 
-            Blockly.Xml.domToWorkspace(document.getElementById('workspaceBlocks'),
-                vm.workspace);
-
-            var blocklyArea = document.getElementById('main-content');
-            if (blocklyArea.offsetHeight) {
-                onResize();
-            } else {
-                $timeout(function () {
-                    onResize();
-                }, 500);
-            }
+            initScriptData();
         }
     }
 
+    function loadBlocks(xmlText) {
+        vm.workspace.clear();
+        var xml = '';
+        if (xmlText) {
+            xml = Blockly.Xml.textToDom(vm.script.xml);
+        } else {
+            xml = document.getElementById('workspaceBlocks');
+        }
+        Blockly.Xml.domToWorkspace(xml, vm.workspace);
+
+        onResize();
+    }
+
     function onResize() {
-        if (vm.script.mode !== 'block') {
+        if (vm.script.mode !== 'block' || !vm.workspace) {
             return;
         }
         var blocklyArea = document.getElementById('main-content');
@@ -294,17 +304,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         blocklyDiv.style.top = y + 'px';
         blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
         blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-        if (vm.workspace) {
-            var xml = Blockly.Xml.workspaceToDom(vm.workspace);
-            if (vm.script.xml.length > (new XMLSerializer()).serializeToString(xml).length) {
-                xml = Blockly.Xml.textToDom(vm.script.xml);
-            }
-            if (angular.isDefined(Blockly.mainWorkspace)) {
-                Blockly.mainWorkspace.clear();
-            }
-            Blockly.Xml.domToWorkspace(xml, vm.workspace);
-            Blockly.svgResize(vm.workspace);
-        }
+        Blockly.svgResize(vm.workspace);
     }
 
     function changeMode($event) {
@@ -327,18 +327,13 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             vm.workspace.gl = 'some';
 
             vm.script.python = Blockly.Python.workspaceToCode(vm.workspace);
-            store.set('script', vm.script);
+            prepareProjectDataAndSaveToLocal();
         }
     }
 
     function restoreBlockMode() {
         vm.script.mode = 'block';
-        $timeout(function () {
-            if (document.getElementById('blocklyDiv').clientHeight === 0) {
-                onResize();
-            }
-        });
-        store.set('script', vm.script);
+        prepareProjectDataAndSaveToLocal();
     }
 
     function saveProject() {
@@ -351,7 +346,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 scriptService.saveScript(vm.script);
             }
         } else {
-            store.set('script', vm.script);
+            prepareProjectDataAndSaveToLocal();
             $rootScope.login();
         }
     }
@@ -399,7 +394,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         vm.script.name = vm.script.name + ' (Duplicated)';
         delete vm.script._id;
         vm.script.isPublic = 0;
-        store.set('script', vm.script);
+        prepareProjectDataAndSaveToLocal();
         $mdBottomSheet.hide();
         $state.go('home.codelab');
     }
@@ -475,7 +470,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 targetEvent: $event
             }).then(function () { }, function () { });
         } else {
-            store.set('script', vm.script);
             $rootScope.login();
         }
     }
