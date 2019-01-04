@@ -16,7 +16,7 @@ Blockly.BlockSvg.START_HAT = false;
 Blockly.Python.addReservedWords('machine');
 Blockly.Python.addReservedWords('blocky');
 
-var async_cancellable = '@core.asyn.cancellable\n' ;
+var async_cancellable = '\n@core.asyn.cancellable\n' ;
 
 Blockly.Extensions.register('setup', function() {
   // Example validation upon block change:
@@ -144,7 +144,8 @@ Blockly.Python['MainRunOnce'] = function(block) {
 	
 	var statement = Blockly.Python.statementToCode(block, 'MAIN');
 	
-	if (statement.length)Blockly.Python.definitions_['once'] += 'if True:\n' + statement;
+	Blockly.Python.definitions_['once'] =  async_cancellable + "async def main():\r\n" + GlobalVariable + statement;
+	
 	return '';
 };
 
@@ -211,6 +212,23 @@ function list (blocks){
 	return l;
 }
 
+/*
+	This is where the real generator lie.
+	Note that the mainblock onstart must always be generated first to create code section , AKA _definition
+	Statement inside this block is save as _definition['once']
+	After that , we need to put _definition['async'] inside _definition['once'] so that the on start block can have
+	the following behaviour , which is typical sense.
+	
+	On start :
+		Do these things
+		After That 
+			Start other task
+			
+*/
+String.prototype.replaceAll = function(search, replacement) {
+    var target = this;
+    return target.replace(new RegExp(search, 'g'), replacement);
+};
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   if (!workspace) {
     // Backwards compatibility from before there could be multiple workspaces.
@@ -254,6 +272,33 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
       }
       code.push(line);
     }
+	
+	// Modified here
+	if (x == blocks.length-1){
+		var a = Blockly.Python.definitions_['event'].replaceAll('\n' , '#').replace('  ','$');
+		var b = Blockly.Python.definitions_['async'].replaceAll('\n' , '#').replace('  ','$');
+		console.log([a,b]);
+	}
+	if (x == blocks.length-1){
+		if (Blockly.Python.definitions_['event'].length){
+			Blockly.Python.definitions_['event'] = Blockly.Python.INDENT + Blockly.Python.definitions_['event'] ;
+			Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].replaceAll('\n' , '\n' + Blockly.Python.INDENT);
+			Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].slice(0,-1);
+			Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['event'];
+		}
+		if (Blockly.Python.definitions_['async'].length){
+			Blockly.Python.definitions_['async'] = Blockly.Python.INDENT + Blockly.Python.definitions_['async'] ;
+			Blockly.Python.definitions_['async'] = Blockly.Python.definitions_['async'].replaceAll('\n' , '\n' + Blockly.Python.INDENT);
+			Blockly.Python.definitions_['async'] = Blockly.Python.definitions_['async'].slice(0,-1);
+			Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['async'];
+		}
+		Blockly.Python.definitions_['once'] += '\ncore.mainthread.create_task(core.asyn.Cancellable(main)())\n' ; 
+		Blockly.Python.definitions_['async'] = '';
+		Blockly.Python.definitions_['event'] = '';
+		
+	}
+	
+	
   }
   code = code.join('\n');  // Blank line between each section.
   code = this.finish(code);

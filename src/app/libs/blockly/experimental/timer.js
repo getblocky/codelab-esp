@@ -130,6 +130,7 @@ Blockly.Blocks['timer-wait'] = {
 		this.setColour(Colour.Timer);
 		this.self_disabled = true;
 		this.self_enabled = true ;
+		/*
 		this.setOnChange(
 			function(event)
 			{
@@ -149,6 +150,7 @@ Blockly.Blocks['timer-wait'] = {
 				}
 			}
 		);
+		*/
 	}
 };
 
@@ -175,6 +177,7 @@ Blockly.Blocks['timer-event-repeat'] = {
     this.setColour(Colour.Timer);
 	this.setTooltip("");
 	this.setHelpUrl("");
+	/*
 	this.setOnChange(
 		function(event)
 		{
@@ -193,6 +196,7 @@ Blockly.Blocks['timer-event-repeat'] = {
 			}
 		}
 	);
+	*/
   }
 };
 

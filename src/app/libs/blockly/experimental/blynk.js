@@ -65,7 +65,7 @@ Blockly.Python['blynk_event_vr'] = function(block) {
   //AddToSection('once' ,"blynk.listen(channel=" + topic + ",function=" + function_name + ')\n' );
   //AddToSection('function' , async_cancellable+'async def '+function_name +"(topic,message):\n" + code );
 	AddToSection('function',async_cancellable + 'async def '+ function_name + "():\n"+GlobalVariable+Blockly.Python.INDENT + "message = core.blynk.message\n" + code);
-	AddToSection('once',"core.blynk.add_virtual_pin(pin=" + String(channel) + ",write=" + function_name + ")\n" );
+	AddToSection('event',"core.blynk.add_virtual_pin(pin=" + String(channel) + ",write=" + function_name + ")\n" );
   }
   return '';
 };
@@ -125,11 +125,9 @@ Blockly.Blocks['blynk_log'] = {
     this.setColour(BlynkColor);
 	this.setTooltip("");
 	this.setHelpUrl("");
-	
   }
 };
 Blockly.Python['blynk_log'] = function(block) {
-  var topic = this.getFieldValue('VP');
   var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
   if (!data.length)data = 'None' ;
   // TODO: Assemble Python into code variable.

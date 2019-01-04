@@ -1,9 +1,8 @@
 goog.require('Blockly');
 
 var song_list = {
-		"HAPPY_BIRTHDAY":
+		"HAPPY BIRTHDAY":
 			"[392, 600, 392, 100, 440, 800, 392, 800, 523, 800, 493, 1600, 392, 600, 392, 100, 440, 800, 392, 800, 587, 800, 523, 1600, 392, 600, 392, 100, 783, 800, 659, 800, 523, 800, 493, 800, 440, 1600, 698, 600, 698, 100, 659, 800, 523, 800, 587, 800, 523, 1600]"
-			
 }
 
 
@@ -120,6 +119,7 @@ Blockly.Blocks['buzzer-play'] =
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
+		/*
 		this.setOnChange(
 			function(event)
 			{
@@ -139,6 +139,7 @@ Blockly.Blocks['buzzer-play'] =
 				}
 			}
 		);
+		*/
 	},
 };
 
@@ -153,7 +154,7 @@ Blockly.Python['buzzer-play'] = function(block) {
 	var object = port ; 
 	var notename = block.getFieldValue('NOTE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
-	AddToSection('declare' , String(note) + " = " + song_list[note] + "\n");
+	AddToSection('declare' , String(note) + " = " + song_list[note].replace(' ','_') + "\n");
 	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
@@ -266,6 +267,7 @@ Blockly.Blocks['buzzer-beep'] =
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
+		/*
 		this.setOnChange(
 			function(event)
 			{
@@ -285,6 +287,7 @@ Blockly.Blocks['buzzer-beep'] =
 				}
 			}
 		);
+		*/
 	},
 };
 
