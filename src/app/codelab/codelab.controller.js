@@ -34,7 +34,7 @@ import showSharedProjectTemplate from './show-shared-project.tpl.html';
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
-export default function CodeLabController($window , $mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log, $interval) {
+export default function CodeLabController($window , $mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log) {
     var vm = this;
 
     vm.isUserLoaded = userService.isAuthenticated();
@@ -72,7 +72,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.homeUrl = window.location.origin;
     vm.blynk = {};
 
-    initScriptData();
     if (vm.isUserLoaded) {
         loadUserDevices();
     }
@@ -94,9 +93,11 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         window.removeEventListener('resize', onResize, false);
     });
 
-    $timeout(function () {
-        injectBlockly();
-    }, 100);
+    angular.element(document).ready(function () {
+        $timeout(function () {
+            injectBlockly();
+        }, 500);
+    });
 
     vm.changeMode = changeMode;
     vm.saveProject = saveProject;
@@ -153,15 +154,21 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                     vm.script.mode = script.mode || 'block';
                     vm.script.isPublic = script.isPublic || 0;
                     if (vm.script.mode === 'block') {
-                        onResize();
+                        loadBlocks(vm.script.xml);
                     }
                 },
                 function fail() {
                     toast.showError($translate.instant('script.script-load-failed-error'));
+                    loadBlocks();
                 }
             );
         } else if (vm.localScript) {
             vm.script = vm.localScript;
+            if (vm.script.mode === 'block') {
+                loadBlocks(vm.script.xml);
+            }
+        } else {
+            loadBlocks();
         }
     }
 
@@ -207,6 +214,19 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             } else {
                 toast.showError(log);
             }
+        } else if (log.indexOf('[OTA_READY]') >= 0 && vm.otaInProgress) {
+            otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
+            if (otaRequest[0].length == 0) return;
+            vm.partTobeUploaded = vm.partTobeUploaded + 1;
+            //if (vm.partTobeUploaded > vm.splitString.length-1) return ;
+            otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
+            if (otaRequest)
+                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
+            $timeout.cancel(vm.otaTimeout);
+            vm.otaTimeout = $timeout(function () {
+                toast.showError($translate.instant('script.script-upload-failed-error'));
+                vm.otaInProgress = false;
+            }, 10000);
         } else if (log.indexOf('[OTA_DONE]') >= 0) {
             if (vm.otaInProgress === null) { // Fix issue getting [OTA_DONE] message when reloading
                 return;
@@ -249,22 +269,25 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 }
             });
 
-            Blockly.Xml.domToWorkspace(document.getElementById('workspaceBlocks'),
-                vm.workspace);
-
-            var blocklyArea = document.getElementById('main-content');
-            if (blocklyArea.offsetHeight) {
-                onResize();
-            } else {
-                $timeout(function () {
-                    onResize();
-                }, 500);
-            }
+            initScriptData();
         }
     }
 
+    function loadBlocks(xmlText) {
+        vm.workspace.clear();
+        var xml = '';
+        if (xmlText) {
+            xml = Blockly.Xml.textToDom(vm.script.xml);
+        } else {
+            xml = document.getElementById('workspaceBlocks');
+        }
+        Blockly.Xml.domToWorkspace(xml, vm.workspace);
+
+        onResize();
+    }
+
     function onResize() {
-        if (vm.script.mode !== 'block') {
+        if (vm.script.mode !== 'block' || !vm.workspace) {
             return;
         }
         var blocklyArea = document.getElementById('main-content');
@@ -281,17 +304,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         blocklyDiv.style.top = y + 'px';
         blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
         blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-        if (vm.workspace) {
-            var xml = Blockly.Xml.workspaceToDom(vm.workspace);
-            if (vm.script.xml.length > (new XMLSerializer()).serializeToString(xml).length) {
-                xml = Blockly.Xml.textToDom(vm.script.xml);
-            }
-            if (angular.isDefined(Blockly.mainWorkspace)) {
-                Blockly.mainWorkspace.clear();
-            }
-            Blockly.Xml.domToWorkspace(xml, vm.workspace);
-            Blockly.svgResize(vm.workspace);
-        }
+        Blockly.svgResize(vm.workspace);
     }
 
     function changeMode($event) {
@@ -314,18 +327,13 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             vm.workspace.gl = 'some';
 
             vm.script.python = Blockly.Python.workspaceToCode(vm.workspace);
-            store.set('script', vm.script);
+            prepareProjectDataAndSaveToLocal();
         }
     }
 
     function restoreBlockMode() {
         vm.script.mode = 'block';
-        $timeout(function () {
-            if (document.getElementById('blocklyDiv').clientHeight === 0) {
-                onResize();
-            }
-        });
-        store.set('script', vm.script);
+        prepareProjectDataAndSaveToLocal();
     }
 
     function saveProject() {
@@ -338,7 +346,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 scriptService.saveScript(vm.script);
             }
         } else {
-            store.set('script', vm.script);
+            prepareProjectDataAndSaveToLocal();
             $rootScope.login();
         }
     }
@@ -386,7 +394,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         vm.script.name = vm.script.name + ' (Duplicated)';
         delete vm.script._id;
         vm.script.isPublic = 0;
-        store.set('script', vm.script);
+        prepareProjectDataAndSaveToLocal();
         $mdBottomSheet.hide();
         $state.go('home.codelab');
     }
@@ -403,28 +411,16 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         vm.otaInProgress = true;
         var scriptToBeUploaded = vm.script.python;
 
+        vm.otaTimeout = $timeout(function () {
+            toast.showError($translate.instant('script.script-upload-failed-error'));
+            vm.otaInProgress = false;
+        }, 10000);
+
         var hash = md5(scriptToBeUploaded);
         scriptService.sendOTA(vm.currentDevice.token, [hash, "OTA"]);
         $log.log('sendOTA:', [hash, "OTA"]);
         vm.partTobeUploaded = 0;
         vm.splitedScripts = splitString(scriptToBeUploaded, maxSize);
-        vm.stopUpload = $interval(function () {
-            if (vm.otaInProgress) {
-                otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
-                vm.partTobeUploaded = vm.partTobeUploaded + 1;
-                otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
-                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
-                $log.log('sendOTA:', otaRequest);
-
-                if (vm.partTobeUploaded == vm.splitedScripts.length) {
-                    $interval.cancel(vm.stopUpload);
-                    vm.otaInProgress = false;
-                    vm.otaTimeout = $timeout(function () {
-                        toast.showError($translate.instant('script.script-upload-failed-error'));
-                    }, 10000);
-                }
-            }
-        }, settings.intervalMiliSecondUpload);
     }
 
     function sendControllerBoard() {
@@ -474,7 +470,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 targetEvent: $event
             }).then(function () { }, function () { });
         } else {
-            store.set('script', vm.script);
             $rootScope.login();
         }
     }
