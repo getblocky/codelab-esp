@@ -170,7 +170,10 @@ Blockly.Blocks['buzzer-playnote'] =
 			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
 			.appendField('play')
 			.appendField(new Blockly.FieldDropdown([["C","C"],["D","D"],["E","E"],["F","F"],["G","G"],["A","A"],["B","B"] ]) , "NOTE")
-			.appendField(new Blockly.FieldDropdown([["#","#"],["b","b"]] ) , "#")
+			.appendField('(#')
+			.appendField(new Blockly.FieldCheckbox([["#","#"],["b","b"]] ) , "#")
+			
+			.appendField('),octave')
 			.appendField(new Blockly.FieldDropdown([["4","4"],["5","5"]] ) , "OCTAVE")
 			;
 			//.appendField(this.id);
@@ -211,7 +214,7 @@ Blockly.Blocks['buzzer-playfreq'] =
 			.appendField('Buzzer')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
-			.appendField('set frequency (Hz)')
+			.appendField('play frequency (Hz)')
 			;
 			//.appendField(this.id);
 		
