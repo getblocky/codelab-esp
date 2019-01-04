@@ -162,6 +162,32 @@ Blockly.Python['buzzer-play'] = function(block) {
 	return code;
 };
 
+var note_freq_map = {
+	"C4" : "261",
+	"C4#" : "277",
+	"D4" : "293",
+	"D4#" : "311",
+	"E4" : "329",
+	"F4" : "349",
+	"F4#" : "369",
+	"G4" : "392",
+	"G4#" : "415",
+	"A4" : "440",
+	"A4#" : "466",
+	"B4" : "493",
+	"C5" : "523",
+	"C5#" : "554",
+	"D5" : "587",
+	"D5#" : "622",
+	"E5" : "659",
+	"F5" : "698",
+	"F5#" : "739",
+	"G5" : "783",
+	"G5#" : "830",
+	"A5" : "880",
+	"A5#" : "932",
+	"B5" : "987"
+};
 Blockly.Blocks['buzzer-playnote'] =
 {
 	init:function(){
@@ -172,8 +198,7 @@ Blockly.Blocks['buzzer-playnote'] =
 			.appendField('play')
 			.appendField(new Blockly.FieldDropdown([["C","C"],["D","D"],["E","E"],["F","F"],["G","G"],["A","A"],["B","B"] ]) , "NOTE")
 			.appendField('(#')
-			.appendField(new Blockly.FieldCheckbox([["#","#"],["b","b"]] ) , "#")
-			
+			.appendField(new Blockly.FieldCheckbox() , "#")
 			.appendField('),octave')
 			.appendField(new Blockly.FieldDropdown([["4","4"],["5","5"]] ) , "OCTAVE")
 			;
@@ -191,7 +216,12 @@ Blockly.Blocks['buzzer-playnote'] =
 
 
 Blockly.Python['buzzer-playnote'] = function(block) {
-	var note = block.childBlocks_[0].inputList[0].fieldRow[0].text_ ;
+	var note = '';
+	note += block.getFieldValue('NOTE');
+	note += block.getFieldValue('OCTAVE');
+	if (block.getFieldValue('#') == "TRUE") note += '#';
+	console.log("NOTE" , note);
+	note = note_freq_map[note];
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
