@@ -77,12 +77,16 @@
 				</value>
 
 			</block>
+			<block type='buzzer-play'>
+			</block>
 			<block type='buzzer-playnote'>
+			</block>
+			<block type='buzzer-playfreq'>
 				<value name="MAIN">
-					<shadow type="note_frequency">
+					<shadow type="number_output">
+						<field name= "NUM">3000</field>
 					</shadow>
 				</value>
-
 			</block>
 		</category>
 		<category name='MP3'>
@@ -94,6 +98,7 @@
 		<category name='REMOTE'>
 			<block type='remote-learn'></block>
 			<block type='remote-send'></block>
+			<block type='remote-event'></block>
 		</category>
 		
 		<category name = "MOTOR"></category>

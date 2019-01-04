@@ -400,7 +400,7 @@ function HandlerGlobal(change)
 	Get the current version of all the module's library.
 	Currently this is pulling from github , this is bad , but good for lazy people.
 */
-var supported_module = ['Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Switch','WaterSensor','Weather','MPR121'];
+var supported_module = ['Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Weather','MPR121'];
 var module_version = {};
 for (var i = 0 ; i < supported_module.length ; i++)
 {
@@ -418,7 +418,6 @@ function update_module_version( module )
 		if (version.startsWith('#version'))
 		{
 			module_version[module] = version ;
-			console.log(module , version);
 		}
 		else 
 		{
