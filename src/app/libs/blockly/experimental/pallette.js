@@ -17,7 +17,6 @@ Colour.Function= 	'#005a9e';
 
 Colour.Advanced= 	'#00272b';
 Colour.Warning= 	'#000000';
-console.log(Colour);
 
 Blockly.Blocks.lists.HUE = Colour.List ;
 BKY_LISTS_HUE = Colour.List ;

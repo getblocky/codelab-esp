@@ -101,7 +101,7 @@ Blockly.Blocks['MainRunOnce'] = {
 				if (change.type == 'move') Blockly.Events.disableOrphans(change);
 				if (change.type == "ui")
 				{
-					console.log(this.workspace.getBlockById(change.blockId));
+					//console.log(this.workspace.getBlockById(change.blockId));
 				}
 			}
 		);
@@ -135,7 +135,7 @@ Blockly.Python['MainRunOnce'] = function(block) {
 		}	
 		GlobalVariable = GlobalVariable.slice(0, -1);
 		GlobalVariable = Blockly.Python.INDENT+ GlobalVariable + '\n';
-		console.log(GlobalVariable) ; 
+		//console.log(GlobalVariable) ; 
 	}
 	else 
 	{
@@ -264,9 +264,6 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
   return code;
 };
 
-function fff (){
-	console.log('run')
-}
 
 Blockly.Blocks['doubleclick_to_run'] = {
   init: function() {

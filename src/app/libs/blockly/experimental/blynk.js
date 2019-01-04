@@ -101,7 +101,7 @@ Blockly.Python['blynk_write_vw'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.virtual_write(" ;
+  var code = "await core.blynk.virtual_write(" ;
   
   if (device != "APP") code += "device='" + device + "'," ;
   
@@ -135,7 +135,7 @@ Blockly.Python['blynk_log'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.log(" +  String(data) + ")\n";
+  var code = "await core.blynk.log(" +  String(data) + ")\n";
   return code;
 };
 Blockly.Blocks['blynk_notify'] = {
@@ -159,7 +159,7 @@ Blockly.Python['blynk_notify'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.notify(" +  String(data) + ")\n";
+  var code = "await core.blynk.notify(" +  String(data) + ")\n";
   return code;
 };
 Blockly.Blocks['blynk_email'] = {
@@ -189,7 +189,7 @@ Blockly.Python['blynk_email'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.email(email=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
+  var code = "await core.blynk.email(email=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
   return code;
 };
 

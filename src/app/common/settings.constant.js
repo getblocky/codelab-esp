@@ -28,7 +28,7 @@ export default angular.module('blocky.settings', [])
             path: '/websockets',
             otaPin: 'V126',
             logPin: 127,
-            controllerPin: 'V125'
+            controllerPin: 'V127'
         },
         facebook: {
             clientId: '2045602205749965'
