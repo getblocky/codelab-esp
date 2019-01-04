@@ -154,11 +154,11 @@ Blockly.Python['buzzer-play'] = function(block) {
 	var object = port ; 
 	var notename = block.getFieldValue('NOTE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
-	AddToSection('declare' , String(note) + " = " + song_list[note].replace(' ','_') + "\n");
+	AddToSection('declare' , note.replace(' ','_') + " = " + song_list[note] + "\n");
 	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
-	var code = "await " + object + ".play("+note+")\n";
+	var code = "await " + object + ".play("+note.replace(' ','_')+")\n";
 	return code;
 };
 
