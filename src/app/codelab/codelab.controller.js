@@ -56,7 +56,8 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             enableSnippets: true,
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
-        }
+        },
+        showPrintMargin: false
     };
     vm.script = {
         name: '',
