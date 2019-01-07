@@ -30,6 +30,8 @@ import bottomSheetDeviceLogTemplate from './bottom-sheet-device-log.tpl.html';
 import blocklyToolbox from './blockly-toolbox.tpl.html';
 import blocklyWorkspace from './blockly-workspace.tpl.html';
 import showSharedProjectTemplate from './show-shared-project.tpl.html';
+import showBuzzerKeyboardTemplate from './dialog1.tpl.html';
+
 
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
@@ -39,7 +41,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 	vm.scriptService = scriptService;
 	$window.command = vm;
     vm.isUserLoaded = userService.isAuthenticated();
-
     vm.currentDevice = null;
     vm.currentLog = '';
     vm.otaTimeout = null;
@@ -56,7 +57,8 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             enableSnippets: true,
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
-        }
+        },
+        showPrintMargin: false
     };
     vm.script = {
         name: '',
@@ -118,7 +120,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
     vm.reloadLoadUserDevices = reloadLoadUserDevices;
-
+	vm.showBuzzerKeyboard = showBuzzerKeyboard;
     var otaRequest = [];
 	var internalToken = [
 		"[NOTI]", 		// Use to notify codelab  , deprecated
@@ -591,7 +593,18 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         }
 
     }
-
+	
+	function showBuzzerKeyboard(){
+		$log.log('SHOW BUZZER KEYBOARD');
+		$mdDialog.show({
+            controller: () => vm,
+            controllerAs: 'vm',
+            templateUrl: showBuzzerKeyboardTemplate,
+            parent: angular.element($document[0].body),
+            fullscreen: true
+        }).then(function () { }, function () { });
+	}
+	
     function showSharedProject() {
         $mdDialog.show({
             controller: () => vm,
