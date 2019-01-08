@@ -6,6 +6,16 @@ goog.require('Blockly');
 var song_list = {
 		"HAPPY BIRTHDAY":
 			"[392, 600, 392, 100, 440, 800, 392, 800, 523, 800, 493, 1600, 392, 600, 392, 100, 440, 800, 392, 800, 587, 800, 523, 1600, 392, 600, 392, 100, 783, 800, 659, 800, 523, 800, 493, 800, 440, 1600, 698, 600, 698, 100, 659, 800, 523, 800, 587, 800, 523, 1600]"
+		,
+		"SUPER MARIO" : "NotImplementedError",
+		"MARIO" : "NotImplementedError",
+		"STAR WAR" : "NotImplementedError",
+		"SIREN" : "NotImplementedError",
+		"PIRATE OF THE CARIBEAN" : "NotImplementedError",
+		"HAPPY NEW YEAR" : "NotImplementedError",
+		"CON BUOM XINH" : "Dummy",
+		"KIA CON BUOM VANG" : "Dummy"
+		,
 }
 
 /*
@@ -179,72 +189,76 @@ Blockly.Python['buzzer-play'] = function(block) {
 	return code;
 };
 var note_freq_map = {
-	"1C" : "261",
-	"1Cs" : "277",
-	"1D" : "293",
-	"1Ds" : "311",
-	"1E" : "329",
-	"1F" : "349",
-	"1Fs" : "369",
-	"1G" : "392",
-	"1Gs" : "415",
-	"1A" : "440",
-	"1As" : "466",
-	"1B" : "493",
-	"2C" : "523",
-	"2Cs" : "554",
-	"2D" : "587",
-	"2Ds" : "622",
-	"2E" : "659",
-	"2F" : "698",
-	"2Fs" : "739",
-	"2G" : "783",
-	"2Gs" : "830",
-	"2A" : "880",
-	"2As" : "932",
-	"2B" : "987"
+	/*
+	"Low C" : "131",
+	"Low C#" : "139",
+	"Low D" : "147",
+	"Low D#" : "156",
+	"Low E" : "165",
+	"Low F" : "175",
+	"Low F#" : "185",
+	"Low G" : "196",
+	"Low G#" : "208",
+	"Low A" : "220",
+	"Low A#" : "233",
+	"Low B" : "247",
+	*/
+	"Middle C" : "261",
+	"Middle C#" : "277",
+	"Middle D" : "293",
+	"Middle D#" : "311",
+	"Middle E" : "329",
+	"Middle F" : "349",
+	"Middle F#" : "369",
+	"Middle G" : "392",
+	"Middle G#" : "415",
+	"Middle A" : "440",
+	"Middle A#" : "466",
+	"Middle B" : "493",
+	"High C" : "523",
+	"High C#" : "554",
+	"High D" : "587",
+	"High D#" : "622",
+	"High E" : "659",
+	"High F" : "698",
+	"High F#" : "739",
+	"High G" : "783",
+	"High G#" : "830",
+	"High A" : "880",
+	"High A#" : "932",
+	"High B" : "987",
+	"Silent" : "0"
 };
-var note_freq_map = {
-	"CFIRST" : "261",
-	"CFIRST#" : "277",
-	"DFIRST" : "293",
-	"DFIRST#" : "311",
-	"EFIRST" : "329",
-	"FFIRST" : "349",
-	"FFIRST#" : "369",
-	"GFIRST" : "392",
-	"GFIRST#" : "415",
-	"AFIRST" : "440",
-	"AFIRST#" : "466",
-	"BFIRST" : "493",
-	"CSECOND" : "523",
-	"CSECOND#" : "554",
-	"DSECOND" : "587",
-	"DSECOND#" : "622",
-	"ESECOND" : "659",
-	"FSECOND" : "698",
-	"FSECOND#" : "739",
-	"GSECOND" : "783",
-	"GSECOND#" : "830",
-	"ASECOND" : "880",
-	"ASECOND#" : "932",
-	"BSECOND" : "987"
-};
+var beat_time_map = {
+	"4"	:	"3200",
+	"2"	:	"1600",
+	"1"	:	"800",
+	"1/2"	:	"400",
+	"1/4"	:	"200",
+	"1/8"	:	"100",
+	"1/16"	:	"50",
+}
+function generateListKeys(dict){
+	var list = [];
+	var keys = Object.keys(dict);
+	for (var i = 0 ; i < keys.length ; i++)
+	{
+		list.push( [keys[i] , keys[i] ] );
+	}
+	return list;
+}
 Blockly.Blocks['buzzer-playnote'] =
 {
 	init:function(){
-		this.workspace.registerButtonCallback('buzzerKeyboardTrigger' , buzzerKeyboardAction);
 		this.appendDummyInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
-			.appendField('play')
-			.appendField(new Blockly.FieldDropdown([["C","C"],["D","D"],["E","E"],["F","F"],["G","G"],["A","A"],["B","B"] ]) , "NOTE")
-			.appendField('(#')
-			.appendField(new Blockly.FieldCheckbox() , "#")
-			.appendField('),octave')
-			.appendField(new Blockly.FieldDropdown([["FIRST","FIRST"],["SECOND","SECOND"]] ) , "OCTAVE")
-			//.appendField(new Blockly.FieldClickImage() , 'PIANO')
+			.appendField('play tone')
+			.appendField(new Blockly.FieldDropdown( generateListKeys(note_freq_map)) , 'TONE')
+			.appendField('for')
+			.appendField(new Blockly.FieldDropdown( generateListKeys(beat_time_map)) , 'TIME')
+			.appendField('beat')
 			;
 			//.appendField(this.id);
 		
@@ -254,26 +268,15 @@ Blockly.Blocks['buzzer-playnote'] =
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
-		this.setOnChange(
-			function(change){
-				if (change.type == 'ui' && change.blockId == this.id)
-				{
-					console.log("This is VM" , command);
-					command.showBuzzerKeyboard();
-				}
-			}
-		);
+		
 	},
 };
 
 
 Blockly.Python['buzzer-playnote'] = function(block) {
-	var note = '';
-	note += block.getFieldValue('NOTE');
-	note += block.getFieldValue('OCTAVE');
-	if (block.getFieldValue('#') == "TRUE") note += '#';
-	console.log("NOTE" , note);
-	note = note_freq_map[note];
+	var note =  note_freq_map[block.getFieldValue('TONE')];
+	var time =  beat_time_map[block.getFieldValue('TIME')];
+	
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
@@ -286,7 +289,7 @@ Blockly.Python['buzzer-playnote'] = function(block) {
 	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
-	var code = object + ".play("+note+")\n";
+	var code = object + ".play(["+note + ',' + time +"])\n";
 	return code;
 };
 

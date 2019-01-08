@@ -280,10 +280,12 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 		console.log([a,b]);
 	}
 	if (x == blocks.length-1){
+		var event = false;
 		if (Blockly.Python.definitions_['event'].length){
+			event = true;
 			Blockly.Python.definitions_['event'] = Blockly.Python.INDENT + Blockly.Python.definitions_['event'] ;
 			Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].replaceAll('\n' , '\n' + Blockly.Python.INDENT);
-			Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].slice(0,-1);
+			Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].slice(0,-2);
 			Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['event'];
 		}
 		if (Blockly.Python.definitions_['async'].length){
