@@ -48,7 +48,7 @@ Blockly.Blocks['button-get'] = {
 			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('button') ) , 'PORT' )
 			.appendField("is being")
-			.appendField(new Blockly.FieldDropdown( [['pressed','pressed'],['released','released'] ],'MODE'))
+			.appendField(new Blockly.FieldDropdown( [['pressed','pressed'],['released','released'] ]),'MODE')
 			;
 		this.module = 'button' ;
 		this.setOutput(true , null );
