@@ -289,7 +289,7 @@ Blockly.Python['buzzer-playnote'] = function(block) {
 	AddToSection('import' , 'from Blocky.Buzzer import *\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
-	var code = object + ".play(["+note + ',' + time +"])\n";
+	var code = 'await ' + object + ".play(["+note + ',' + time +"])\n";
 	return code;
 };
 
