@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
@@ -38,12 +39,14 @@
     <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/touch.js"></script>
     <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/generators/python.js"></script>
     <script src="https://s3-ap-southeast-1.amazonaws.com/download.getblocky.com/blockly/messages/en/messages.js"></script>
-
+    <script src="/blockly/experimental/blocky.js"></script>
     <script src="/blockly/experimental/pallette.js"></script>
     <script src="/blockly/patch/variables.js"></script>
     <script src="/blockly/patch/field.js"></script>
     <script src="/blockly/patch/field_variable.js"></script>
     <script src="/blockly/patch/field_colour.js"></script>
+    <script src="/blockly/patch/field_clickimage.js"></script>
+    <script src="/blockly/patch/field_notepicker.js"></script>
 
     <script src="/blockly/experimental/blocky_core.js"></script>
     <script src="/blockly/experimental/mainblock.js"></script>
@@ -73,9 +76,7 @@
     <script src="/blockly/experimental/math.js"></script>
     <script src="/blockly/experimental/mosfet.js"></script>
     <script src="/blockly/experimental/relay.js"></script>
-    <script src="/blockly/experimental/speech_list.js"></script>
 
-    <script src="/blockly/experimental/task.js"></script>
     <script src="/blockly/experimental/network.js"></script>
     <script src="/blockly/experimental/distance.js"></script>
     <script src="/blockly/experimental/variables.js"></script>
@@ -96,51 +97,37 @@
     <script src="/blockly/experimental/mpr121.js"></script>
     <script src="/blockly/experimental/procedures.js"></script>
 
-    <script src="/blockly/experimental/Helper.js"></script>
-    <script src="/blockly/experimental/CORE.js"></script>
-
     <link rel="icon" type="image/x-icon" href="/static/blocky.ico" />
     <script src="../lib/highlightjs/highlight.pack.js"></script>
     <script src="../lib/highlightjs/highlightjs-line-numbers.min.js"></script>
     <link href="../lib/highlightjs/default.css" rel="stylesheet" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="style.css" rel="stylesheet" />
-  </head>
+</head>
 
-  <body>
+<body>
     <div id="topnav">
-      <div id="logo" style="display: flex;">
-        <div>
-          <img src="../lib/logo.png" width="40" style="display: flex;" />
+        <div id="logo" style="display: flex;">
+            <div>
+                <img src="../lib/logo.png" width="40" style="display: flex;" />
+            </div>
+            <div style="margin-left: 5px;" class="hidden-xs">
+                <div style="font-size: 24px; margin: 0;">Blocky</div>
+                <div style="font-size: 11px; margin: 0;">Anyone can make</div>
+            </div>
         </div>
-        <div style="margin-left: 5px;" class="hidden-xs">
-          <div style="font-size: 24px; margin: 0;">Blocky</div>
-          <div style="font-size: 11px; margin: 0;">Anyone can make</div>
+        <h3 id="project-name"></h3>
+        <div id="edit-project">
+            <img src="../lib/fa-edit.png" width="22" />
+            <span class="hidden-xs"> Try it</span>
         </div>
-      </div>
-      <h3 id="project-name"></h3>
-      <div id="edit-project">
-        <img src="../lib/fa-edit.png" width="22" />
-        <span class="hidden-xs"> Try it</span>
-      </div>
     </div>
 
     <div id="message"></div>
 
-    <div
-      id="blocklyArea"
-      class="content"
-      style="height: 100%; display: none"
-    ></div>
-    <div
-      id="codeArea"
-      class="content"
-      style="height: 100%; background: #F0F0F0; display: none"
-    >
-      <pre><code class="python"></code>></pre>
+    <div id="blocklyArea" class="content" style="height: 100%; display: none"></div>
+    <div id="codeArea" class="content" style="height: 100%; background: #F0F0F0; display: none">
+        <pre><code class="python"></code>></pre>
     </div>
     <div id="blocklyDiv" class="content" style="position: absolute"></div>
 
@@ -212,6 +199,7 @@
             
     
             <category name='BUZZER'>
+                <button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button>
                 <block type='buzzer-set'>
                     <value name='MAIN'>
                         <shadow type='state_output'>
@@ -225,12 +213,16 @@
                     </value>
     
                 </block>
+                <block type='buzzer-play'>
+                </block>
                 <block type='buzzer-playnote'>
+                </block>
+                <block type='buzzer-playfreq'>
                     <value name="MAIN">
-                        <shadow type="note_frequency">
+                        <shadow type="number_output">
+                            <field name= "NUM">3000</field>
                         </shadow>
                     </value>
-    
                 </block>
             </category>
             <category name='MP3'>
@@ -242,6 +234,7 @@
             <category name='REMOTE'>
                 <block type='remote-learn'></block>
                 <block type='remote-send'></block>
+                <block type='remote-event'></block>
             </category>
             
             <category name = "MOTOR"></category>
@@ -327,7 +320,13 @@
         </category>
         <category name='NETWORK'>
             <block type='blynk_event_vr'></block>
-            <block type='blynk_write_vw'></block>
+            <block type='blynk_write_vw'>
+                <value name="DATA">
+                    <shadow type="network_text">
+                        <field name="TEXT">        </field>
+                    </shadow>
+                </value>
+            </block>
             <block type="blynk_notify">
                 <value name="DATA">
                     <shadow type="network_text">
@@ -348,11 +347,17 @@
                 </value>
                 <value name="CONTENT">
                     <shadow type="network_text">
-                        <field name="TEXT">Hello World</field>
+                        <field name="TEXT">        </field>
                     </shadow>
                 </value>
             </block>
-            <block type='blynk_log'></block>
+            <block type='blynk_log'>
+                <value name="DATA">
+                    <shadow type="network_text">
+                        <field name="TEXT">        </field>
+                    </shadow>
+                </value>
+            </block>
             <block type='blynk_message'></block>
             <block type='blynk_message_iter'></block>
         </category>
@@ -573,5 +578,5 @@
             fill: green;
         }
     </style>
-  </body>
+</body>
 </html>
