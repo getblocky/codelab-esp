@@ -8,8 +8,8 @@ goog.require('Blockly.BlockSvg');
 
 //var PortList = ['A1','A2','A3','A4','D1','D2','D3','D4'];
 var PortList = ['PORT1','PORT2','PORT3','PORT4','PORT5','PORT6','PORT7','PORT8'];
-var PORT_ASSIGN = [] ; 
-var previous_change = null ; 
+var PORT_ASSIGN = [] ;
+var previous_change = null ;
 var GlobalVariable = '' ;
 
 //var  GlobalWorkspace =  Blockly.getMainWorkspace();
@@ -92,9 +92,9 @@ var isEqual = function (value, other) {
 
 
 /*
-	Interfere the way we generate code 
-	1 :: Code is divided into section at birth 
-	2 :: Code maintain its part orderly 
+	Interfere the way we generate code
+	1 :: Code is divided into section at birth
+	2 :: Code maintain its part orderly
 */
 
 
@@ -104,7 +104,7 @@ function AddToSection(section , code)
 	{
 		Blockly.Python.definitions_[section]+=code;
 	}
-		
+
 }
 
 Blockly.Generator.prototype.workspaceToCode = function(workspace) {
@@ -114,14 +114,14 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
     workspace = Blockly.getMainWorkspace();// Blockly.getMainWorkspace();
   }
   var code = [];
-  
+
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
-  //:: Swap the top block , the top block must always be the MainRunOnce 
+  //:: Swap the top block , the top block must always be the MainRunOnce
  if (!blocks.length) return ;
   if (blocks[0].type != 'MainRunOnce')
   {
-	  
+
 	  var temp = null ;
 	  for (var i = 0 ; i < blocks.length ; i++)
 	  {
@@ -161,32 +161,32 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 };
 /*
 	Scan through all block and return a list of
-	not used port + port that is own by that module type 
+	not used port + port that is own by that module type
 */
 function PORT(module,condition = null)
 {
-	var port = PortList.clone() ; 
+	var port = PortList.clone() ;
 	var blocks = GlobalWorkspace.getAllBlocks();
 	var list = [];
-	
+
 	for (var i = 0 ; i < PortList.length ; i++)
 	{
 		if (PORT_ASSIGN[PortList[i]] == module)
 		{
-			list.push([port[i] , port[i]]) ; 
+			list.push([port[i] , port[i]]) ;
 		}
 	}
 	for (var i = 0 ; i < PortList.length ; i++)
 	{
 		if (PORT_ASSIGN[PortList[i]] == null)
 		{
-			list.push([port[i] , port[i]]) ; 
+			list.push([port[i] , port[i]]) ;
 		}
 	}
-	
+
 	if (list.length)
 		return list ;
-	else 
+	else
 		return ['None','None'] ;
 }
 
@@ -194,10 +194,10 @@ function PORT(module,condition = null)
 /*
 	Need a better name for this shit .
 	This function will :
-		1 :: Update Port List of all blocks 
+		1 :: Update Port List of all blocks
 		2 :: When newly created block , it port value reference
-			Create a referecnce for PORT() , that's all 
-		3 :: Highlight block that share that port 
+			Create a referecnce for PORT() , that's all
+		3 :: Highlight block that share that port
 */
 
 function updatePort()
@@ -210,7 +210,7 @@ function updatePort()
 	var blocks = GlobalWorkspace.getAllBlocks();
 	for (var i = 0 ; i < blocks.length ; i++)
 	{
-		var block = blocks[i] ; 
+		var block = blocks[i] ;
 		if (!block.isInFlyout && !block.disabled&&block.module != null )
 		{
 			var port = block.getFieldValue('PORT');
@@ -219,32 +219,32 @@ function updatePort()
 			{
 				list[port] = block.module ;
 			}
-			else 
+			else
 			{
 				block.setDisabled(true);
 			}
 		}
 	}
-	PORT_ASSIGN = list ; 
+	PORT_ASSIGN = list ;
 }
-var prev_change = null ; 
+var prev_change = null ;
 function HandlerGlobal(change)
 {
 	/*
 		Loop Trap :
-		
+
 	*/
-	if (isEqual(change,prev_change)) return 
-	prev_change = change ; 
-	
+	if (isEqual(change,prev_change)) return
+	prev_change = change ;
+
 	Blockly.Events.disable();
-	
-	updatePort() ; 
-	list = PORT_ASSIGN; 
-	// Now we get a list of which module use which block 
+
+	updatePort() ;
+	list = PORT_ASSIGN;
+	// Now we get a list of which module use which block
 	var blocks = GlobalWorkspace.getAllBlocks();
 	/*
-		Section 1 : update port list 
+		Section 1 : update port list
 	*/
 	for (var i = 0 ; i < blocks.length ; i++)
 	{
@@ -266,95 +266,95 @@ function HandlerGlobal(change)
 			}
 		}
 		//Blockly.Events.disable() ;
-		var cur = block.getFieldValue('PORT') ; 
-		var pos = block.getInput('MAIN').fieldRow.indexOf(block.getField('PORT')) ; 
-		if (pos>0) 
+		var cur = block.getFieldValue('PORT') ;
+		var pos = block.getInput('MAIN').fieldRow.indexOf(block.getField('PORT')) ;
+		if (pos>0)
 		{
-			block.getInput('MAIN').removeField('PORT') ; 
-			block.getInput('MAIN').insertFieldAt(pos,new Blockly.FieldDropdown(dropdown),'PORT') ; 
-		
-			Blockly.Events.disable() ; 
-			if (true)	
+			block.getInput('MAIN').removeField('PORT') ;
+			block.getInput('MAIN').insertFieldAt(pos,new Blockly.FieldDropdown(dropdown),'PORT') ;
+
+			Blockly.Events.disable() ;
+			if (true)
 			{
 				block.getField('PORT').setValue(cur) ;
-				
+
 			}
-			Blockly.Events.enable() ; 
+			Blockly.Events.enable() ;
 		}
-		//Blockly.Events.enable() ; 
+		//Blockly.Events.enable() ;
 	}
-	
+
 	/*
-		Section 3 : Hightlight relevant block 
+		Section 3 : Hightlight relevant block
 		Disabled due to laggy performances
 	*/
 	/*
 	if (change != previous_change)
 	{
 		previous_change = change ;
-		// Somehow , there are duplocation call ! Damn it 
+		// Somehow , there are duplocation call ! Damn it
 		if (change.type == 'ui' && change.element == 'click')
 		{
-			// unselect all block 
-			for (var i = 0 ; i < blocks.length ; i++) blocks[i].removeSelect() ; 
+			// unselect all block
+			for (var i = 0 ; i < blocks.length ; i++) blocks[i].removeSelect() ;
 			var block = GlobalWorkspace.getBlockById(change.blockId) ;
 			if (block!=null&&block.module)
 			{
-				var port = block.getFieldValue('PORT') ; 
+				var port = block.getFieldValue('PORT') ;
 				for (var u = 0 ; u < blocks.length ; u++)
 				{
-					var temp = blocks[u] ; 
-					if (temp==block||!temp.module) continue ; 
+					var temp = blocks[u] ;
+					if (temp==block||!temp.module) continue ;
 					if (temp.getFieldValue('PORT') == port )
 					{
-						temp.addSelect() ; 
+						temp.addSelect() ;
 					}
 				}
 			}
 			block.addSelect() ; // select what user have select !
 		}
 	}
-	*/ 
-	
+	*/
+
 	/*
-		Section 4 : 
-		No event block has the same property , because event function only allow 1 function to pass through 
+		Section 4 :
+		No event block has the same property , because event function only allow 1 function to pass through
 		For example , 2 'button_when_pres_1_time' block , only one will be consider .
-		We dont want this , block that duplicate will be disabled 
+		We dont want this , block that duplicate will be disabled
 	*/
 	for (var i = 0 ; i < blocks.length ; i++)
 	{
-		var block = blocks[i] ; 
+		var block = blocks[i] ;
 		if (block.role != 'Event') continue ;
-		var fieldRow = block.getInput('MAIN').fieldRow ; 
-		var list_input = [] ; 
+		var fieldRow = block.getInput('MAIN').fieldRow ;
+		var list_input = [] ;
 		for (var u = 0 ; u < fieldRow.length ; u++)
 		{
-			list_input.push( fieldRow[u].text_ ) ; 
+			list_input.push( fieldRow[u].text_ ) ;
 		}
 		if (block.role == 'Event')
 		{
 			if (!block.disabled)
 			{
-				
+
 				for (var u = 0 ; u < blocks.length ; u++)
 				{
-					var temp = blocks[u] ; 
+					var temp = blocks[u] ;
 					if (temp == block || temp.module != block.module || temp.role != 'Event' || temp.disabled) continue ;
-					var temp_fieldRow = temp.getInput('MAIN').fieldRow ; 
-					var temp_list_input = [] ; 
+					var temp_fieldRow = temp.getInput('MAIN').fieldRow ;
+					var temp_list_input = [] ;
 					for (var x = 0 ; x < temp_fieldRow.length ; x++)
 					{
-						temp_list_input.push( temp_fieldRow[x].text_ ) ; 
+						temp_list_input.push( temp_fieldRow[x].text_ ) ;
 					}
-					Blockly.Events.disable() ; 
+					Blockly.Events.disable() ;
 					if (isEqual(temp_list_input , list_input )) {
 						temp.setDisabled(true) ;
 					}
 					else {
-						temp.setDisabled(false) ; 
+						temp.setDisabled(false) ;
 					}
-					Blockly.Events.enable() ; 
+					Blockly.Events.enable() ;
 				}
 			}
 			if (block.disabled)
@@ -362,25 +362,25 @@ function HandlerGlobal(change)
 				var enable = true ;
 				for (var u = 0 ; u < blocks.length ; u++)
 				{
-					var temp = blocks[u] ; 
+					var temp = blocks[u] ;
 					if (temp == block || temp.module != block.module || temp.role != 'Event' || temp.disabled) continue ;
-					var temp_fieldRow = temp.getInput('MAIN').fieldRow ; 
-					var temp_list_input = [] ; 
+					var temp_fieldRow = temp.getInput('MAIN').fieldRow ;
+					var temp_list_input = [] ;
 					for (var x = 0 ; x < temp_fieldRow.length ; x++)
 					{
-						temp_list_input.push( temp_fieldRow[x].text_ ) ; 
+						temp_list_input.push( temp_fieldRow[x].text_ ) ;
 					}
 					if (isEqual(temp_list_input , list_input )) {enable = false ; break ;}
 				}
-				Blockly.Events.disable() ; 
-				if (enable) block.setDisabled(false) ; 
-				Blockly.Events.enable() ; 
+				Blockly.Events.disable() ;
+				if (enable) block.setDisabled(false) ;
+				Blockly.Events.enable() ;
 			}
 		}
 	}
-	
+
 	Blockly.Events.enable();
-	
+
 }
 
 
@@ -400,7 +400,7 @@ function HandlerGlobal(change)
 	Get the current version of all the module's library.
 	Currently this is pulling from github , this is bad , but good for lazy people.
 */
-var supported_module = ['Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Weather','MPR121'];
+var supported_module = ['Core','Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Weather','MPR121'];
 var module_version = {};
 for (var i = 0 ; i < supported_module.length ; i++)
 {
@@ -414,12 +414,13 @@ function update_module_version( module )
 	Http.open("GET", url);
 	Http.send();
 	Http.onreadystatechange=(e)=>{
-		var version = Http.responseText.split('\n')[0] ; 
+		var version = Http.responseText.split('\n')[0] ;
 		if (version.startsWith('#version'))
 		{
 			module_version[module] = version ;
+
 		}
-		else 
+		else
 		{
 			module_version[module] = '';
 		}
@@ -428,5 +429,6 @@ function update_module_version( module )
 
 function getLibraryVersion(module)
 {
+	console.log(module_version);
 	return module_version[module];
 }

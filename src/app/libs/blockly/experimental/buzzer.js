@@ -19,7 +19,7 @@ var song_list = {
 }
 
 /*
-	Create your song Button Callback 
+	Create your song Button Callback
 	Docs :
 		yourWorkspace.registerButtonCallback(yourCallbackKey, yourFunction)
 		button name :	buzzerKeyboardTrigger
@@ -63,10 +63,10 @@ Blockly.Blocks['buzzer-set'] =
 		this.appendValueInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' )
 			.appendField('turn')
 			;
-		
+
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.module = 'buzzer';
@@ -84,7 +84,7 @@ Blockly.Python['buzzer-set'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
-	var object = port ; 
+	var object = port ;
 	var time = block.getFieldValue('TIME');
 	var mode = block.getFieldValue('MODE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
@@ -117,7 +117,7 @@ Blockly.Python['note_frequency']=function(block)
 {
 	var code = block.getFieldValue('NUM');
 	return String(code);
-	
+
 };
 function get_song_list(){
 	var keys = [];
@@ -134,12 +134,12 @@ Blockly.Blocks['buzzer-play'] =
 		this.appendDummyInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' )
 			.appendField('play')
-			.appendField(new Blockly.FieldDropdown( get_song_list() ) , 'SONG' ) 
+			.appendField(new Blockly.FieldDropdown( get_song_list() ) , 'SONG' )
 			;
 			//.appendField(this.id);
-		
+
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.module = 'buzzer';
@@ -151,7 +151,7 @@ Blockly.Blocks['buzzer-play'] =
 			function(event)
 			{
 				if (this.isInFlyout ||!this.getRootBlock()) return ;
-				
+
 				if (event.type == 'create' || event.type == 'move')
 				{
 					var type = this.getRootBlock().type;
@@ -177,12 +177,12 @@ Blockly.Python['buzzer-play'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
-	
-	var object = port ; 
+
+	var object = port ;
 	var notename = block.getFieldValue('NOTE');
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
 	AddToSection('declare' , note.replace(' ','_') + " = " + song_list[note] + "\n");
-	AddToSection('import' , 'from Blocky.Buzzer import *\n');
+	AddToSection('import' , 'from Blocky.Buzzer import * ' + getLibraryVersion('Buzzer') + '\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	var code = "await " + object + ".play("+note.replace(' ','_')+")\n";
@@ -253,7 +253,7 @@ Blockly.Blocks['buzzer-playnote'] =
 		this.appendDummyInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' )
 			.appendField('play tone')
 			.appendField(new Blockly.FieldDropdown( generateListKeys(note_freq_map)) , 'TONE')
 			.appendField('for')
@@ -261,14 +261,14 @@ Blockly.Blocks['buzzer-playnote'] =
 			.appendField('beat')
 			;
 			//.appendField(this.id);
-		
+
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.module = 'buzzer';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
-		
+
 	},
 };
 
@@ -276,17 +276,17 @@ Blockly.Blocks['buzzer-playnote'] =
 Blockly.Python['buzzer-playnote'] = function(block) {
 	var note =  note_freq_map[block.getFieldValue('TONE')];
 	var time =  beat_time_map[block.getFieldValue('TIME')];
-	
+
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
-	
-	var object = port ; 
+
+	var object = port ;
 	var notename = block.getFieldValue('NOTE');
 	console.log(note);
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
-	AddToSection('import' , 'from Blocky.Buzzer import *\n');
+	AddToSection('import' , 'from Blocky.Buzzer import * ' + getLibraryVersion('Buzzer') + '\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	var code = 'await ' + object + ".play(["+note + ',' + time +"])\n";
@@ -299,18 +299,18 @@ Blockly.Blocks['buzzer-playfreq'] =
 		this.appendValueInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' )
 			.appendField('play frequency (Hz)')
 			;
 			//.appendField(this.id);
-		
+
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.module = 'buzzer';
 		this.setColour(Colour[this.category]);
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
-		
+
 	},
 };
 
@@ -321,12 +321,12 @@ Blockly.Python['buzzer-playfreq'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
-	
-	var object = port ; 
+
+	var object = port ;
 	var notename = block.getFieldValue('NOTE');
 	console.log(note);
 	AddToSection('declare' , object + " = Buzzer(port='" + port +"')\n");
-	AddToSection('import' , 'from Blocky.Buzzer import *\n');
+	AddToSection('import' , 'from Blocky.Buzzer import * ' + getLibraryVersion('Buzzer') + '\n');
 	// TODO: Assemble Python into code variable.
 	// Do not let user put this anyywhere except from setup block;
 	var code = object + ".play("+note+")\n";
@@ -339,13 +339,13 @@ Blockly.Blocks['buzzer-beep'] =
 		this.appendValueInput('MAIN')
 			.appendField('Buzzer')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' ) 
+			.appendField(new Blockly.FieldDropdown( PORT('buzzer') ) , 'PORT' )
 			.appendField('beeps')
 		this.appendDummyInput()
 			.appendField('times')
 			.appendField(new Blockly.FieldDropdown([['fast','50'],['medium','150'],['slow','350']]),'MODE');
 			//.appendField(this.id);
-		
+
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.module = 'buzzer';
@@ -357,7 +357,7 @@ Blockly.Blocks['buzzer-beep'] =
 			function(event)
 			{
 				if (this.isInFlyout ||!this.getRootBlock()) return ;
-				
+
 				if (event.type == 'create' || event.type == 'change' || event.type == 'move')
 				{
 					var type = this.getRootBlock().type;
@@ -381,7 +381,7 @@ Blockly.Python['buzzer-beep'] = function(block) {
 	var port = block.getFieldValue('PORT');
 	if (port == 'None') return '';
 	var code = '';
-	var object = port ; 
+	var object = port ;
 	//TODO var time =  Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	/*
 		Unknown bug , it only receive the first character of a number ?? (for example  10 -> "1" )
