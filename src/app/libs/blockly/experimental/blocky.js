@@ -429,6 +429,7 @@ function update_module_version( module )
 
 function getLibraryVersion(module)
 {
-	console.log(module_version);
-	return module_version[module];
+	if (module_version[module] != undefined)
+		return module_version[module];
+	return '';
 }
