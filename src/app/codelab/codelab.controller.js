@@ -250,6 +250,8 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         if (deviceLog.length) {
             log = log + '<br>' + deviceLog;
         }
+        log = log.slice(0, 1000);
+        log = log.slice(0, log.lastIndexOf('<br>'));
         store.set('deviceLog_' + deviceId, log);
         $timeout(function () {
             vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
