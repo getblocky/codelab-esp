@@ -18,7 +18,7 @@
 			<block type='weather-get'>
 				<field name = "MODE">temperature</field>
 			</block>
-			
+
 		</category>
 		<category name = "HUMIDITY">
 			<block type='weather-get'>
@@ -35,11 +35,11 @@
 			<block type='motion-event'>
 				<field name = "MODE">not_detect</field>
 			</block>
-			
+
 			<block type='motion-get'>
-			
+
 			</block>
-			
+
 		</category>
 		<category name='DISTANCE'>
 			<block type='distance-get'></block>
@@ -52,7 +52,7 @@
 		</category>
 	</category>
 	<category name='CONTROL'>
-		
+
 		<category name='RELAY'>
 			<block type='relay-set'>
 				<value name='MAIN'>
@@ -61,7 +61,7 @@
 				</value>
 			</block>
 		</category>
-		
+
 
 		<category name='BUZZER'>
 			<button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button>
@@ -101,12 +101,14 @@
 			<block type='remote-send'></block>
 			<block type='remote-event'></block>
 		</category>
-		
+
 		<category name = "MOTOR"></category>
 		<category name = "SERVO">
 			<block type = 'servo-set'>
 				<value name="MAIN">
-					<shadow type="number_output"></shadow>
+					<shadow type="number_output">
+						
+					</shadow>
 				</value>
 			</block>
 			
@@ -126,9 +128,9 @@
 			</block>
 		</category>
 	</category>
-	
+
 	<category name = 'DISPLAY'>
-		
+
 
 		<category name = 'LCD' >
 			<block type = 'lcd-display'>
@@ -187,6 +189,8 @@
 					<shadow type="display_number">
 					</shadow>
 				</value>
+			</block>
+			<block type = "rgb_brightness">
 			</block>
 		</category>
 	</category>
@@ -360,7 +364,7 @@
 		<block type = "math_map">
 		</block>
 	</category>
-	
+
 	<sep></sep>
 	<category name = 'ADVANCED'>
 		<category name='TEXT'>
@@ -368,7 +372,7 @@
 				<field name="TEXT"></field>
 			</block>
 		</category>
-		
+
 		<category name='LIST'>
 			<block type="lists_create_with">
 			  <mutation items="3"></mutation>
@@ -437,7 +441,7 @@
 			  <field name="DIRECTION">1</field>
 			</block>
 		</category>
-		
+
 		<category name = 'FUNCTION' custom="PROCEDURE">
 		</category>
 	</category>
