@@ -315,6 +315,13 @@ md-bottom-sheet {
     color: #d65cd6;
   }
 
+  /* --- Input --- */
+  /* Radio */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div:nth-child(2)>div:nth-child(12)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f7c0";
+    color: #d65cd6;
+  }
+
   /* --- Control --- */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
     .blocklyTreeIconClosedLtr,
@@ -450,6 +457,16 @@ md-bottom-sheet {
     content: "\f09a";
     color: rgb(255, 255, 255);
     }
+		/* --- Advanced --- COMMUNICATION */
+    #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(4)>.blocklyTreeRow>.blocklyTreeIcon:before {
+    content: "\f0ec";
+    color: rgb(255, 255, 255);
+    }
+			/* --- Advanced --- COMMUNICATION GPRS/GSM*/
+	  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow>.blocklyTreeIcon:before {
+	    content: "\f0eb";
+	    color: rgb(255, 255, 255);
+	  }
 
   /* --- Common --- */
   /* Category */
@@ -466,7 +483,7 @@ md-bottom-sheet {
   .blocklyTreeRow {
     padding-left: 0 !important;
   }
-  
+
   /* Indent child categories */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(13)>div:nth-child(2) {
     margin-left: 20px;
@@ -487,7 +504,7 @@ md-bottom-sheet {
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(18)>div:nth-child(2) {
     margin-left: 20px;
   }
-  
+
   /* Input Device */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow {
     background-color: #d65cd6;
@@ -550,6 +567,21 @@ md-bottom-sheet {
   }
   /* Advanced Device FUNCTION */
   #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow {
+    background-color: #005a9e;
+    color: #ffffff;
+  }
+	/* Advanced Device COMMUNICATION */
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(4)>div.blocklyTreeRow {
+    background-color: #c4a01a;
+    color: #ffffff;
+  }
+	/* Advanced Device COMMUNICATION GPRS/GSM*/
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow {
+    background-color: #005a9e;
+    color: #ffffff;
+  }
+	/* Advanced Device COMMUNICATION IR Remote*/
+  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(11)>div:nth-child(2)>div:nth-child(4)>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
     background-color: #005a9e;
     color: #ffffff;
   }

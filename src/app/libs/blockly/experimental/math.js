@@ -1,3 +1,4 @@
+/*
 Blockly.defineBlocksWithJsonArray([{
     type: "math_number",
     message0: "%1",
@@ -276,7 +277,7 @@ Blockly.Blocks['math_convert'] = {
 		this.category  = 'Math' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
-		
+
 	}
 };
 
@@ -302,7 +303,7 @@ Blockly.Blocks['math_map'] = {
 		this.category  = 'Math' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
-		
+
 	}
 };
 
@@ -312,4 +313,4 @@ Blockly.Python['math_map'] = function(block) {
 	var code = mode + '(' + obj + ')';
 	return [code, Blockly.Python.ORDER_NONE];
 };
-
+*/
