@@ -441,3 +441,16 @@ if(typeof(String.prototype.trim) === "undefined")
         return String(this).replace(/^\s+|\s+$/g, '');
     };
 }
+
+
+function sendCommand(string) {
+	if (command.currentDevice.id == null) 
+	{
+		console.warn("User hasn't logged in");
+		return;
+	}
+	command.initBlynk(command.currentDevice.id, command.currentDevice.token);
+	var message = [];
+	message[0] = string;
+	command.scriptService.sendCommand(command.currentDevice.token,message);
+}

@@ -17,7 +17,6 @@ Blockly.Blocks['rfreceiver-event'] = {
 		this.role = 'Event';
         this.setColour(Colour[this.category]);
         this.setOnChange(function(change) {
-            console.log(change);
             if (change.blockId == this.id && (change.element == "field"||change.element == "create"))
             {
                 
