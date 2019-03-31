@@ -400,7 +400,7 @@ function HandlerGlobal(change)
 	Get the current version of all the module's library.
 	Currently this is pulling from github , this is bad , but good for lazy people.
 */
-var supported_module = ['Servo','Core','Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Weather','MPR121'];
+var supported_module = ['RadioReceiver','InfraredRemote','Servo','Core','Button','Buzzer','Digits','LCD','LED','Light','Moisture','Motion','Motor','Music','Potentiometer','Relay','RGB','Smoke','Sound','Stepper','Weather','MPR121'];
 var module_version = {};
 for (var i = 0 ; i < supported_module.length ; i++)
 {
@@ -418,7 +418,7 @@ function update_module_version( module )
 		if (version.startsWith('#version'))
 		{
 			module_version[module] = version ;
-
+			console.log(module , version);
 		}
 		else
 		{
@@ -444,6 +444,11 @@ if(typeof(String.prototype.trim) === "undefined")
 
 
 function sendCommand(string) {
+	if (command.currentDevice == null)
+	{
+		console.log("User has'nt logged in yet");
+		return;
+	}
 	if (command.currentDevice.id == null) 
 	{
 		console.warn("User hasn't logged in");
@@ -453,4 +458,5 @@ function sendCommand(string) {
 	var message = [];
 	message[0] = string;
 	command.scriptService.sendCommand(command.currentDevice.token,message);
+	command.echoDeviceLog.push(message);
 }

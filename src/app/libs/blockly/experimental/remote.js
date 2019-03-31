@@ -67,6 +67,7 @@ Blockly.Blocks['remote-learn'] =
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.setColour(Colour[this.category]);
+		/*
 		this.setOnChange(
 			function(change)
 			{
@@ -79,6 +80,27 @@ Blockly.Blocks['remote-learn'] =
 					console.log("SEND" , command);
 					command.scriptService.sendCommand(command.currentDevice.token,message);
 				}
+			}
+		);
+		*/
+		this.setOnChange(
+			function (event)
+			{
+				if (this.isInFlyout||!this.getRootBlock()) return ;
+				if (event.type=='create'||event.type=='change'||event.type=='move')
+				{
+					if (this.getRootBlock().type.indexOf('button-event')==-1)
+					{
+						this.setDisabled(true);
+						this.setWarningText('This block should only be inside a Button block')
+					}
+					else 
+					{
+						this.setDisabled(false);
+						this.setWarningText();
+					}
+				}
+				
 			}
 		);
 	},

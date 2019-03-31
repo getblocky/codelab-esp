@@ -46,6 +46,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.splitedScripts = [];
     vm.partTobeUploaded = 0;
     vm.otaInProgress = null;
+    vm.echoDeviceLog = [];
     vm.pythonEditorOptions = {
         useWrapMode: true,
         showGutter: true,
@@ -149,12 +150,19 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 			if (isInternalMsg(log))
 			{
 				handlerInternalMsg(deviceId,log);
-			}
+            }
+            
+            else if (vm.echoDeviceLog.includes(log))
+            {
+                vm.echoDeviceLog.pop(log);
+            }
+
 			else 
 			{
 				updateDevicesLogs(deviceId, log);
 				
-			}
+            }
+            $log.log("This" , log , vm.echoDeviceLog ,vm.echoDeviceLog.includes(log));
         });
 
         vm.blynk['"' + deviceId + '"'].on('connect', function () {
@@ -555,6 +563,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 		initBlynk(vm.currentDevice.id, vm.currentDevice.token);
         var message = [];
         message[0] = "core.mainthread.call_soon(core.indicator.pulse(color=(0,0,50)))";
+        vm.echoDeviceLog.push(message[0]);
 		scriptService.sendCommand(vm.currentDevice.token,message);
         //scriptService.sendSocket(vm.currentDevice.token, message, settings.blynk.controllerPin);
     }
