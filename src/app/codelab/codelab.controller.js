@@ -30,7 +30,6 @@ import bottomSheetDeviceLogTemplate from './bottom-sheet-device-log.tpl.html';
 import blocklyToolbox from './blockly-toolbox.tpl.html';
 import blocklyWorkspace from './blockly-workspace.tpl.html';
 import showSharedProjectTemplate from './show-shared-project.tpl.html';
-import showBuzzerKeyboardTemplate from './dialog1.tpl.html';
 
 
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
@@ -47,6 +46,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.splitedScripts = [];
     vm.partTobeUploaded = 0;
     vm.otaInProgress = null;
+    vm.echoDeviceLog = [];
     vm.pythonEditorOptions = {
         useWrapMode: true,
         showGutter: true,
@@ -120,7 +120,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
     vm.reloadLoadUserDevices = reloadLoadUserDevices;
-	vm.showBuzzerKeyboard = showBuzzerKeyboard;
+    vm.initBlynk = initBlynk;
     var otaRequest = [];
 	var internalToken = [
 		"[NOTI]", 		// Use to notify codelab  , deprecated
@@ -133,6 +133,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 		"[EXCEPTION]",	// REPR Exception 
 		"[REQUEST]",	// Dot requests a file , codelab get the file , chop it and send piece by piece using repr (V127)
 		"[HEAP]",		// Dot return Heap available after executing the user code
+		"[REMOTE]",		// Dot IR Remote module return list of learned code
 		];
 	
     function initBlynk(deviceId, token) {
@@ -149,12 +150,19 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 			if (isInternalMsg(log))
 			{
 				handlerInternalMsg(deviceId,log);
-			}
+            }
+            
+            else if (vm.echoDeviceLog.includes(log))
+            {
+                vm.echoDeviceLog.pop(log);
+            }
+
 			else 
 			{
 				updateDevicesLogs(deviceId, log);
 				
-			}
+            }
+            $log.log("This" , log , vm.echoDeviceLog ,vm.echoDeviceLog.includes(log));
         });
 
         vm.blynk['"' + deviceId + '"'].on('connect', function () {
@@ -219,7 +227,60 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 				sendPackage(http.responseText);
 				$log.log("Response" , e);
 			}
-		}
+        }
+        else if (log.startsWith('[REMOTE] '))
+        {
+            /*  
+                When the irremote-send block is created . Codelab will yield the controller listdir of IR folder
+                The controller send back with format "[REPR] [REMOTE] ["TUrnOn.bin","Ru.bin"]"
+                This section will parse the list of file into the dropdown of the irremote-send block
+                Since the dropdown is not dynamic , we need to do :
+                    1 . Saved the user chosen value , if any
+                    2 . Get that dropdown field position
+                    3 . Delete that field
+                    4 . Create a new dropdown
+                    5 . Insert at that position
+                    6 . Select the user chosen value , if any
+            */
+            var targetBlocks = [];
+            var listAllBlock = vm.workspace.getAllBlocks();
+            for(var i = 0 ; i < listAllBlock.length ; i++)
+            {
+                var block = listAllBlock[i];
+                if (block.type == "irremote-send")
+                {
+                    targetBlocks.push(block);
+                }
+            }
+            var dropdown = []; 
+            var data = log.split("'")
+            for (var item = 0 ; item < data.length ; item ++)
+            {
+                if (data[item].includes('.'))
+                {
+                    dropdown.push([data[item].split('.')[0],data[item].split('.')[0]])
+                }
+            }
+
+            for (var u = 0 ; u < targetBlocks.length ; u ++)
+            {
+                var targetBlock = targetBlocks[u];
+                var currentValue = targetBlock.getFieldValue("CMD");
+                if (currentValue == "Syncing...") {
+                    currentValue = null;
+                }
+                var pos = targetBlock.getInput("MAIN").fieldRow.indexOf(targetBlock.getField("CMD"));
+                if (pos>0)
+                {
+                    targetBlock.getInput("MAIN").removeField("CMD");
+                    targetBlock.getInput("MAIN").insertFieldAt(pos , new Blockly.FieldDropdown(dropdown) , "CMD");
+                    
+                    if (currentValue != null){
+                        targetBlock.getField("CMD").setValue(currentValue);
+                    }
+                }
+            }
+        }
 	}
 	function hexdump(buffer, blockSize) {
 		blockSize = blockSize || 16;
@@ -502,6 +563,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 		initBlynk(vm.currentDevice.id, vm.currentDevice.token);
         var message = [];
         message[0] = "core.mainthread.call_soon(core.indicator.pulse(color=(0,0,50)))";
+        vm.echoDeviceLog.push(message[0]);
 		scriptService.sendCommand(vm.currentDevice.token,message);
         //scriptService.sendSocket(vm.currentDevice.token, message, settings.blynk.controllerPin);
     }
@@ -595,17 +657,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         }
 
     }
-	
-	function showBuzzerKeyboard(){
-		$log.log('SHOW BUZZER KEYBOARD');
-		$mdDialog.show({
-            controller: () => vm,
-            controllerAs: 'vm',
-            templateUrl: showBuzzerKeyboardTemplate,
-            parent: angular.element($document[0].body),
-            fullscreen: true
-        }).then(function () { }, function () { });
-	}
 	
     function showSharedProject() {
         $mdDialog.show({

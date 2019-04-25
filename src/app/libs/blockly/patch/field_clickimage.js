@@ -43,7 +43,7 @@ Blockly.FieldClickImage = function(src, width, height, opt_alt, handler) {
   Blockly.FieldClickImage.superClass_.constructor.call(this,
                                                    src, width, height, '');
 
-  this.setChangeHandler(handler);
+  this.setOnChange(handler);
 };
 
 goog.inherits(Blockly.FieldClickImage, Blockly.FieldImage);

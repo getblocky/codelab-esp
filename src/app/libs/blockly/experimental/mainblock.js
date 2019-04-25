@@ -57,7 +57,7 @@ Blockly.Blocks['MainRunOnce'] = {
 		this.setOnChange(
 			function(change)
 			{
-				//
+
 				//this.workspace.addChangeListener();
 				//Blockly['legit-declare'](change,this.workspace);
 				if (true)//change.type != 'ui'&&change.type != 'move')
@@ -105,6 +105,8 @@ Blockly.Blocks['MainRunOnce'] = {
 				{
 					//console.log(this.workspace.getBlockById(change.blockId));
 				}
+				
+				
 			}
 		);
 	},

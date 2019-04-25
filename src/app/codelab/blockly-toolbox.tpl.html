@@ -50,6 +50,27 @@
 		<category name='TOUCH'>
 			<block type='mpr121-event'></block>
 		</category>
+		<category name='RADIO'>
+			<block type='rfreceiver-event'></block>
+			<block type='rfreceiver_message'></block>
+			<label text = ''></label>
+			<label text = "Example Application"></label>
+			<block type = "controls_if">
+				<value name = "IF0">
+
+					<block type = "logic_compare">
+						<field name = "OP">EQ</field>
+						<value name = "A">
+							<block type = "rfreceiver_message"></block>
+						</value>
+						<value name = "B">
+							<block type = "rfreceiver_message_dropdown"></block>
+						</value>
+					</block>
+
+				</value>
+			</block>
+		</category>
 	</category>
 	<category name='CONTROL'>
 
@@ -97,9 +118,8 @@
 			<block type='music-set-pause'></block>
 		</category>
 		<category name='REMOTE'>
-			<block type='remote-learn'></block>
-			<block type='remote-send'></block>
-			<block type='remote-event'></block>
+			<block type='irremote-learn'></block>
+			<block type='irremote-sendDirect'></block>
 		</category>
 
 		<category name = "MOTOR"></category>
