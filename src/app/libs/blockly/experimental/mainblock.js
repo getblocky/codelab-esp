@@ -239,7 +239,12 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
     console.warn('No workspace specified in workspaceToCode call.  Guessing.');
     workspace = Blockly.getMainWorkspace();
   }
-  var code = [];
+	var code = [];
+	
+	// Adding GMT time
+	var currentTime = new Date();
+	var timezone = Math.abs(currentTime.getTimezoneOffset()/60);
+	var timezoneStr = "eeprom.set('GMT' , " + String(timezone) + ")\n" 
 
   this.init(workspace);
   var blocks = workspace.getTopBlocks(true);
@@ -284,6 +289,7 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 	}
 	if (x == blocks.length-1){
 		Blockly.Python.definitions_['import'] = "from Blocky.Core import * " + getLibraryVersion('Core') + "\n" + Blockly.Python.definitions_['import'] ;
+		Blockly.Python.definitions_['import'] += timezoneStr ; 
 		var event = false;
 		if (Blockly.Python.definitions_['event'].length){
 			event = true;
@@ -308,7 +314,8 @@ Blockly.Generator.prototype.workspaceToCode = function(workspace) {
 
   }
   code = code.join('\n');  // Blank line between each section.
-  code = this.finish(code);
+	code = this.finish(code);
+	
   // Final scrubbing of whitespace.
   code = code.replace(/^\s+\n/, '');
   code = code.replace(/\n\s+$/, '\n');
