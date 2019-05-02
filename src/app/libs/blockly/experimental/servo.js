@@ -7,13 +7,10 @@ Blockly.Blocks['servo-set']=
 {
 	init : function()
 	{
-		this.appendDummyInput('MAIN')
+		this.appendValueInput('MAIN')
 			.appendField('Servo')
-			.appendField('on')
 			.appendField(new Blockly.FieldDropdown( PORT('servo') ) , 'PORT' ) 
-			.appendField('turn to angle')
-			.appendField(new Blockly.FieldNumber(180,0,180) , 'ANGLE')
-			
+			.appendField('turn to angle (0-180)')			
 			;
 		
 		this.category  = 'Output' ;
@@ -30,7 +27,8 @@ Blockly.Blocks['servo-set']=
 Blockly.Python['servo-set'] = function(block) {
 	var name = block.module;
 	var port = block.getFieldValue('PORT');
-	var state = block.getFieldValue('ANGLE') ; 
+	//var state = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE); //angle
+	var state = block.childBlocks_[0].inputList[0].fieldRow[0].text_; //angle
 	if (port == 'None') return '';
 	var code = '';
 	var object = port ; 

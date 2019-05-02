@@ -276,7 +276,7 @@ Blockly.Blocks['math_convert'] = {
 		this.category  = 'Math' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
-		
+
 	}
 };
 
@@ -302,7 +302,7 @@ Blockly.Blocks['math_map'] = {
 		this.category  = 'Math' ;
 		this.role = 'Get';
 		this.setColour(Colour[this.category]);
-		
+
 	}
 };
 
@@ -311,5 +311,21 @@ Blockly.Python['math_map'] = function(block) {
 	var obj = Blockly.Python.valueToCode(block, 'MAIN', Blockly.Python.ORDER_NONE);
 	var code = mode + '(' + obj + ')';
 	return [code, Blockly.Python.ORDER_NONE];
+};
+
+
+// Patch for unsupported syntax in MicroPython
+// https://github.com/getblocky/codelab-esp/issues/25
+Blockly.Python['math_change'] = function(block) {
+  // Add to a variable in place.
+  var argument0 = Blockly.Python.valueToCode(block, 'DELTA',
+      Blockly.Python.ORDER_ADDITIVE) || '0';
+  var varName = Blockly.Python.variableDB_.getName(block.getFieldValue('VAR'),
+      Blockly.Variables.NAME_TYPE);
+  /*
+  return varName + ' = (' + varName + ' if isinstance(' + varName +
+      ', Number) else 0) + ' + argument0 + '\n';
+  */
+  return varName + ' += ' + argument0 + '\n';
 };
 

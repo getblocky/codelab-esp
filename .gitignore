@@ -3,3 +3,7 @@ node_modules
 dist
 *.log
 package-lock.json
+*.1278226639
+*.2941673697
+*.3641332265
+src/app/codelab/.DS_Store

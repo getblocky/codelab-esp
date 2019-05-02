@@ -30,6 +30,7 @@ Blockly.Python['distance-get'] = function(block) {
 	AddToSection('import' , 'from Blocky.Distance import * ' + getLibraryVersion('Distance') + '\n');
 	AddToSection('declare' , object + " = Distance(port='" + port +"')\n");
 	
-	var code = object + '.' + 'value()'  ;
+	var code = object + '.' + 'getDistance()';
+	
 	return [code, Blockly.Python.ORDER_NONE];
 };

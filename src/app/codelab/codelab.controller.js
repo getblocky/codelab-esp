@@ -31,20 +31,22 @@ import blocklyToolbox from './blockly-toolbox.tpl.html';
 import blocklyWorkspace from './blockly-workspace.tpl.html';
 import showSharedProjectTemplate from './show-shared-project.tpl.html';
 
+
 /* eslint-disable no-undef, angular/window-service, angular/document-service */
 
 /*@ngInject*/
 export default function CodeLabController($window , $mdSidenav, toast, scriptService, userService, deviceService, $translate, $mdDialog, $document, $rootScope, $scope, $stateParams, $state, store, $mdBottomSheet, $timeout, settings, $log) {
     var vm = this;
-
+	vm.scriptService = scriptService;
+	$window.command = vm;
     vm.isUserLoaded = userService.isAuthenticated();
-
     vm.currentDevice = null;
     vm.currentLog = '';
     vm.otaTimeout = null;
     vm.splitedScripts = [];
     vm.partTobeUploaded = 0;
     vm.otaInProgress = null;
+    vm.echoDeviceLog = [];
     vm.pythonEditorOptions = {
         useWrapMode: true,
         showGutter: true,
@@ -55,7 +57,8 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             enableSnippets: true,
             enableBasicAutocompletion: true,
             enableLiveAutocompletion: true
-        }
+        },
+        showPrintMargin: false
     };
     vm.script = {
         name: '',
@@ -72,7 +75,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.homeUrl = window.location.origin;
     vm.blynk = {};
 
-    initScriptData();
     if (vm.isUserLoaded) {
         loadUserDevices();
     }
@@ -94,9 +96,11 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         window.removeEventListener('resize', onResize, false);
     });
 
-    $timeout(function () {
-        injectBlockly();
-    }, 100);
+    angular.element(document).ready(function () {
+        $timeout(function () {
+            injectBlockly();
+        }, 500);
+    });
 
     vm.changeMode = changeMode;
     vm.saveProject = saveProject;
@@ -116,9 +120,22 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
     vm.clearDeviceLog = clearDeviceLog;
     vm.duplicateProject = duplicateProject;
     vm.reloadLoadUserDevices = reloadLoadUserDevices;
-
+    vm.initBlynk = initBlynk;
     var otaRequest = [];
-
+	var internalToken = [
+		"[NOTI]", 		// Use to notify codelab  , deprecated
+		"[OTA_READY]", 	// Dot is ready for OTA (all previous code has been cancelled)
+		"[OTA_ACK]", 	// Dot has received a package and send back its SHA-1
+		"[OTA_DONE]", 	// OTA Process is done
+		"[DOT_ERROR]",	// Dot send when it catch an error  , also with its exception type
+		"[DOT_ONLINE]",	// Dot is online , it will send
+		"[REPR]", 		// Micropython REPR return , V127 is REPR enabled !
+		"[EXCEPTION]",	// REPR Exception 
+		"[REQUEST]",	// Dot requests a file , codelab get the file , chop it and send piece by piece using repr (V127)
+		"[HEAP]",		// Dot return Heap available after executing the user code
+		"[REMOTE]",		// Dot IR Remote module return list of learned code
+		];
+	
     function initBlynk(deviceId, token) {
         if (angular.isUndefined(vm.blynk['"' + deviceId + '"'])) {
             vm.blynk['"' + deviceId + '"'] = new Blynk.Blynk(token, {
@@ -130,7 +147,22 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 
         logPin.on('write', function (param) {
             var log = param[0];
-            updateDevicesLogs(deviceId, log);
+			if (isInternalMsg(log))
+			{
+				handlerInternalMsg(deviceId,log);
+            }
+            
+            else if (vm.echoDeviceLog.includes(log))
+            {
+                vm.echoDeviceLog.pop(log);
+            }
+
+			else 
+			{
+				updateDevicesLogs(deviceId, log);
+				
+            }
+            $log.log("This" , log , vm.echoDeviceLog ,vm.echoDeviceLog.includes(log));
         });
 
         vm.blynk['"' + deviceId + '"'].on('connect', function () {
@@ -141,7 +173,152 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             $log.log(deviceId, 'Blynk disconnected.');
         });
     }
+	
+	function isInternalMsg(log)
+	{
+		for (var i = 0  ; i < internalToken.length ; i++)
+		{
+			if (log.startsWith(internalToken[i]))
+				return true;
+		}
+		return false;
+	}
+	function handlerInternalMsg(deviceId, log)
+	{
+		if ((log.startsWith('[OTA_READY]')||log.startsWith('[OTA_ACK]'))&&vm.otaInProgress)
+		{
+			$log.log('HANDLER' , otaRequest) ; 
+			otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
+            if (angular.isUndefined(otaRequest[0]) || otaRequest[0].length == 0) return;
+            vm.partTobeUploaded = vm.partTobeUploaded + 1;
+			var sha1 =  require('sha1');
+            //if (vm.partTobeUploaded > vm.splitString.length-1) return ;
+            otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
+            if (otaRequest)
+				$log.warn(otaRequest[1] , sha1(otaRequest[0]));
+                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
+				$timeout.cancel(vm.otaTimeout);
+				vm.otaTimeout = $timeout(function () {
+                toast.showError($translate.instant('script.script-upload-failed-error'));
+                vm.otaInProgress = false;
+            }, 10000);
+		}
+		else if (log.startsWith('[OTA_DONE]'))
+		{
+			if (vm.otaInProgress === null) { // Fix issue getting [OTA_DONE] message when reloading
+                return;
+            }
+            toast.showSuccess($translate.instant('script.script-upload-success'));
+            $timeout.cancel(vm.otaTimeout);
+            vm.otaInProgress = false;
+		}
+		else if (log.startsWith('[DOT_ONLINE]'))
+		{
+			toast.showSuccess('Your device is back online');
+		}
+		
+		else if (log.startsWith('[REQUEST]'))
+		{
+			const http = new XMLHttpRequest();
+			const url = 'https://raw.githubusercontent.com/curlyz/Firmware/master/z.mid';
+			http.open('GET' , url);
+			http.send()
+			http.onreadystatechange=(e)=>{
+				sendPackage(http.responseText);
+				$log.log("Response" , e);
+			}
+        }
+        else if (log.startsWith('[REMOTE] '))
+        {
+            /*  
+                When the irremote-send block is created . Codelab will yield the controller listdir of IR folder
+                The controller send back with format "[REPR] [REMOTE] ["TUrnOn.bin","Ru.bin"]"
+                This section will parse the list of file into the dropdown of the irremote-send block
+                Since the dropdown is not dynamic , we need to do :
+                    1 . Saved the user chosen value , if any
+                    2 . Get that dropdown field position
+                    3 . Delete that field
+                    4 . Create a new dropdown
+                    5 . Insert at that position
+                    6 . Select the user chosen value , if any
+            */
+            var targetBlocks = [];
+            var listAllBlock = vm.workspace.getAllBlocks();
+            for(var i = 0 ; i < listAllBlock.length ; i++)
+            {
+                var block = listAllBlock[i];
+                if (block.type == "irremote-send")
+                {
+                    targetBlocks.push(block);
+                }
+            }
+            var dropdown = []; 
+            var data = log.split("'")
+            for (var item = 0 ; item < data.length ; item ++)
+            {
+                if (data[item].includes('.'))
+                {
+                    dropdown.push([data[item].split('.')[0],data[item].split('.')[0]])
+                }
+            }
 
+            for (var u = 0 ; u < targetBlocks.length ; u ++)
+            {
+                var targetBlock = targetBlocks[u];
+                var currentValue = targetBlock.getFieldValue("CMD");
+                if (currentValue == "Syncing...") {
+                    currentValue = null;
+                }
+                var pos = targetBlock.getInput("MAIN").fieldRow.indexOf(targetBlock.getField("CMD"));
+                if (pos>0)
+                {
+                    targetBlock.getInput("MAIN").removeField("CMD");
+                    targetBlock.getInput("MAIN").insertFieldAt(pos , new Blockly.FieldDropdown(dropdown) , "CMD");
+                    
+                    if (currentValue != null){
+                        targetBlock.getField("CMD").setValue(currentValue);
+                    }
+                }
+            }
+        }
+	}
+	function hexdump(buffer, blockSize) {
+		blockSize = blockSize || 16;
+		var lines = [];
+		var hex = "0123456789ABCDEF";
+		for (var b = 0; b < buffer.length; b += blockSize) {
+			var block = buffer.slice(b, Math.min(b + blockSize, buffer.length));
+			var addr = ("0000" + b.toString(16)).slice(-4);
+			var codes = block.split('').map(function (ch) {
+				var code = ch.charCodeAt(0);
+				return " " + hex[(0xF0 & code) >> 4] + hex[0x0F & code];
+			}).join("");
+			codes += "   ".repeat(blockSize - block.length);
+			var chars = block.replace(/[\x00-\x1F\x20]/g, '.');
+			chars +=  " ".repeat(blockSize - block.length);
+			lines.push(addr + " " + codes + "  " + chars);
+		}
+    return lines.join("\n");
+}
+	function sendPackage(pack)
+	{
+		
+		$log.log('Packages' , hexdump(pack , 16));
+	}
+	
+	function updateDevicesLogs(deviceId, log) {
+        var deviceLog = store.get('deviceLog_' + deviceId) || '';
+        if (deviceLog.length) {
+            log = log + '<br>' + deviceLog;
+        }
+        log = log.slice(0, 1000);
+        log = log.slice(0, log.lastIndexOf('<br>'));
+        store.set('deviceLog_' + deviceId, log);
+        $timeout(function () {
+            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
+        });
+    }
+	
     function initScriptData() {
         if (vm.scriptId) { // Load existing script
             scriptService.getScript(vm.scriptId).then(
@@ -153,15 +330,21 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                     vm.script.mode = script.mode || 'block';
                     vm.script.isPublic = script.isPublic || 0;
                     if (vm.script.mode === 'block') {
-                        onResize();
+                        loadBlocks(vm.script.xml);
                     }
                 },
                 function fail() {
                     toast.showError($translate.instant('script.script-load-failed-error'));
+                    loadBlocks();
                 }
             );
         } else if (vm.localScript) {
             vm.script = vm.localScript;
+            if (vm.script.mode === 'block') {
+                loadBlocks(vm.script.xml);
+            }
+        } else {
+            loadBlocks();
         }
     }
 
@@ -174,11 +357,9 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             if (devices.length) {
                 vm.devices = devices;
 				$window.user_devices = devices  ; 
-				/*
                 for (var i = 0; i < vm.devices.length; i++) {
                     initBlynk(vm.devices[i].id, vm.devices[i].token);
                 }
-				*/
                 loadSelectedDevice();
             }
         });
@@ -200,43 +381,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         }
     }
 
-    function updateDevicesLogs(deviceId, log) {
-        if (log.indexOf('[NOTI]') >= 0) {
-            if (log.toLowerCase().indexOf('error') < 0) {
-                toast.showSuccess(log);
-            } else {
-                toast.showError(log);
-            }
-        } else if (log.indexOf('[OTA_READY]') >= 0 && vm.otaInProgress) {
-            otaRequest[0] = vm.splitedScripts[vm.partTobeUploaded];
-            if (otaRequest[0].length == 0) return;
-            vm.partTobeUploaded = vm.partTobeUploaded + 1;
-            //if (vm.partTobeUploaded > vm.splitString.length-1) return ;
-            otaRequest[1] = vm.partTobeUploaded.toString() + '/' + (vm.splitedScripts.length).toString();
-            if (otaRequest)
-                scriptService.sendOTA(vm.currentDevice.token, otaRequest);
-            $timeout.cancel(vm.otaTimeout);
-            vm.otaTimeout = $timeout(function () {
-                toast.showError($translate.instant('script.script-upload-failed-error'));
-                vm.otaInProgress = false;
-            }, 10000);
-        } else if (log.indexOf('[OTA_DONE]') >= 0) {
-            if (vm.otaInProgress === null) { // Fix issue getting [OTA_DONE] message when reloading
-                return;
-            }
-            toast.showSuccess($translate.instant('script.script-upload-success'));
-            $timeout.cancel(vm.otaTimeout);
-            vm.otaInProgress = false;
-        }
-        var deviceLog = store.get('deviceLog_' + deviceId) || '';
-        if (deviceLog.length) {
-            log = log + '<br>' + deviceLog;
-        }
-        store.set('deviceLog_' + deviceId, log);
-        $timeout(function () {
-            vm.currentLog = store.get('deviceLog_' + vm.currentDevice.id) || '';
-        });
-    }
+    
 
     function clearDeviceLog() {
         if (vm.currentDevice) {
@@ -262,22 +407,25 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 }
             });
 
-            Blockly.Xml.domToWorkspace(document.getElementById('workspaceBlocks'),
-                vm.workspace);
-
-            var blocklyArea = document.getElementById('main-content');
-            if (blocklyArea.offsetHeight) {
-                onResize();
-            } else {
-                $timeout(function () {
-                    onResize();
-                }, 500);
-            }
+            initScriptData();
         }
     }
 
+    function loadBlocks(xmlText) {
+        vm.workspace.clear();
+        var xml = '';
+        if (xmlText) {
+            xml = Blockly.Xml.textToDom(vm.script.xml);
+        } else {
+            xml = document.getElementById('workspaceBlocks');
+        }
+        Blockly.Xml.domToWorkspace(xml, vm.workspace);
+
+        onResize();
+    }
+
     function onResize() {
-        if (vm.script.mode !== 'block') {
+        if (vm.script.mode !== 'block' || !vm.workspace) {
             return;
         }
         var blocklyArea = document.getElementById('main-content');
@@ -294,17 +442,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         blocklyDiv.style.top = y + 'px';
         blocklyDiv.style.width = blocklyArea.offsetWidth + 'px';
         blocklyDiv.style.height = blocklyArea.offsetHeight + 'px';
-        if (vm.workspace) {
-            var xml = Blockly.Xml.workspaceToDom(vm.workspace);
-            if (vm.script.xml.length > (new XMLSerializer()).serializeToString(xml).length) {
-                xml = Blockly.Xml.textToDom(vm.script.xml);
-            }
-            if (angular.isDefined(Blockly.mainWorkspace)) {
-                Blockly.mainWorkspace.clear();
-            }
-            Blockly.Xml.domToWorkspace(xml, vm.workspace);
-            Blockly.svgResize(vm.workspace);
-        }
+        Blockly.svgResize(vm.workspace);
     }
 
     function changeMode($event) {
@@ -327,18 +465,13 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             vm.workspace.gl = 'some';
 
             vm.script.python = Blockly.Python.workspaceToCode(vm.workspace);
-            store.set('script', vm.script);
+            prepareProjectDataAndSaveToLocal();
         }
     }
 
     function restoreBlockMode() {
         vm.script.mode = 'block';
-        $timeout(function () {
-            if (document.getElementById('blocklyDiv').clientHeight === 0) {
-                onResize();
-            }
-        });
-        store.set('script', vm.script);
+        prepareProjectDataAndSaveToLocal();
     }
 
     function saveProject() {
@@ -351,7 +484,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 scriptService.saveScript(vm.script);
             }
         } else {
-            store.set('script', vm.script);
+            prepareProjectDataAndSaveToLocal();
             $rootScope.login();
         }
     }
@@ -399,7 +532,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         vm.script.name = vm.script.name + ' (Duplicated)';
         delete vm.script._id;
         vm.script.isPublic = 0;
-        store.set('script', vm.script);
+        prepareProjectDataAndSaveToLocal();
         $mdBottomSheet.hide();
         $state.go('home.codelab');
     }
@@ -411,7 +544,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         if (vm.script.python.length === 0) {
             return;
         }
-		$log.log($window.PORT_ASSIGN) ; 
         var maxSize = settings.maxBytesUpload;
         vm.otaInProgress = true;
         var scriptToBeUploaded = vm.script.python;
@@ -420,10 +552,9 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
             toast.showError($translate.instant('script.script-upload-failed-error'));
             vm.otaInProgress = false;
         }, 10000);
-
+		
         var hash = md5(scriptToBeUploaded);
         scriptService.sendOTA(vm.currentDevice.token, [hash, "OTA"]);
-        $log.log('sendOTA:', [hash, "OTA"]);
         vm.partTobeUploaded = 0;
         vm.splitedScripts = splitString(scriptToBeUploaded, maxSize);
     }
@@ -432,6 +563,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
 		initBlynk(vm.currentDevice.id, vm.currentDevice.token);
         var message = [];
         message[0] = "core.mainthread.call_soon(core.indicator.pulse(color=(0,0,50)))";
+        vm.echoDeviceLog.push(message[0]);
 		scriptService.sendCommand(vm.currentDevice.token,message);
         //scriptService.sendSocket(vm.currentDevice.token, message, settings.blynk.controllerPin);
     }
@@ -475,7 +607,6 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
                 targetEvent: $event
             }).then(function () { }, function () { });
         } else {
-            store.set('script', vm.script);
             $rootScope.login();
         }
     }
@@ -526,7 +657,7 @@ export default function CodeLabController($window , $mdSidenav, toast, scriptSer
         }
 
     }
-
+	
     function showSharedProject() {
         $mdDialog.show({
             controller: () => vm,

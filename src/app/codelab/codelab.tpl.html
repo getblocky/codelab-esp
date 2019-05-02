@@ -19,8 +19,8 @@
     <div flex id="main-content" layout="column">
         <div ng-include src="vm.blocklyToolbox"></div>
         <div ng-include src="vm.blocklyWorkspace"></div>
-        <div id="blocklyDiv" style="position: absolute" ng-show="!vm.script.mode || vm.script.mode ==='block'"></div>
-        <div flex ui-ace="vm.pythonEditorOptions" ng-show="vm.script.mode ==='python'" ng-model="vm.script.python"></div>
+        <div flex id="blocklyDiv" style="position: absolute" ng-style="{'visibility': vm.script.mode ==='block'?'visible':'hidden'}"></div>
+        <div flex ui-ace="vm.pythonEditorOptions" ng-style="{'visibility': vm.script.mode ==='python'?'visible':'hidden'}" ng-model="vm.script.python"></div>
     </div>
 
     <md-sidenav flex-gt-sm="25" flex="30" id="side-bar" class="md-whiteframe-1dp md-sidenav-right" md-is-locked-open="vm.isSidenavOpen && $mdMedia('gt-xs')"
@@ -45,8 +45,7 @@
                 </div>
                 <md-select ng-model="vm.currentDevice" placeholder="Select a device" class="md-no-underline" ng-disabled="vm.otaInProgress">
                     <md-option ng-repeat="device in vm.devices | orderBy:'name'" ng-value="device">
-                        <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'"
-                            aria-hidden="true"></i> {{device.name}}
+                        {{device.name}}
                     </md-option>
                 </md-select>
 
@@ -132,7 +131,6 @@
     </md-button>
     <md-select ng-model="vm.currentDevice" placeholder="Select a device" class="md-no-underline" hide-gt-xs ng-disabled="vm.otaInProgress">
         <md-option ng-repeat="device in vm.devices | orderBy:'name'" ng-value="device">
-            <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'" aria-hidden="true"></i>
             {{device.name}}
         </md-option>
     </md-select>

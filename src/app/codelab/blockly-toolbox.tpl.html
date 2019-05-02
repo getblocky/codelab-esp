@@ -18,7 +18,7 @@
 			<block type='weather-get'>
 				<field name = "MODE">temperature</field>
 			</block>
-			
+
 		</category>
 		<category name = "HUMIDITY">
 			<block type='weather-get'>
@@ -35,11 +35,11 @@
 			<block type='motion-event'>
 				<field name = "MODE">not_detect</field>
 			</block>
-			
+
 			<block type='motion-get'>
-			
+
 			</block>
-			
+
 		</category>
 		<category name='DISTANCE'>
 			<block type='distance-get'></block>
@@ -50,9 +50,30 @@
 		<category name='TOUCH'>
 			<block type='mpr121-event'></block>
 		</category>
+		<category name='RADIO'>
+			<block type='rfreceiver-event'></block>
+			<block type='rfreceiver_message'></block>
+			<label text = ''></label>
+			<label text = "Example Application"></label>
+			<block type = "controls_if">
+				<value name = "IF0">
+
+					<block type = "logic_compare">
+						<field name = "OP">EQ</field>
+						<value name = "A">
+							<block type = "rfreceiver_message"></block>
+						</value>
+						<value name = "B">
+							<block type = "rfreceiver_message_dropdown"></block>
+						</value>
+					</block>
+
+				</value>
+			</block>
+		</category>
 	</category>
 	<category name='CONTROL'>
-		
+
 		<category name='RELAY'>
 			<block type='relay-set'>
 				<value name='MAIN'>
@@ -61,9 +82,10 @@
 				</value>
 			</block>
 		</category>
-		
+
 
 		<category name='BUZZER'>
+			<button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button>
 			<block type='buzzer-set'>
 				<value name='MAIN'>
 					<shadow type='state_output'>
@@ -77,12 +99,16 @@
 				</value>
 
 			</block>
+			<block type='buzzer-play'>
+			</block>
 			<block type='buzzer-playnote'>
+			</block>
+			<block type='buzzer-playfreq'>
 				<value name="MAIN">
-					<shadow type="note_frequency">
+					<shadow type="number_output">
+						<field name= "NUM">3000</field>
 					</shadow>
 				</value>
-
 			</block>
 		</category>
 		<category name='MP3'>
@@ -92,12 +118,21 @@
 			<block type='music-set-pause'></block>
 		</category>
 		<category name='REMOTE'>
-			<block type='remote-learn'></block>
-			<block type='remote-send'></block>
+			<block type='irremote-learn'></block>
+			<block type='irremote-sendDirect'></block>
 		</category>
-		
+
 		<category name = "MOTOR"></category>
-		<category name = "SERVO"></category>
+		<category name = "SERVO">
+			<block type = 'servo-set'>
+				<value name="MAIN">
+					<shadow type="number_output">
+						
+					</shadow>
+				</value>
+			</block>
+			
+		</category>
 		<category name='LED' >
 			<block type='led-set'>
 				<value name='MAIN'>
@@ -113,9 +148,9 @@
 			</block>
 		</category>
 	</category>
-	
+
 	<category name = 'DISPLAY'>
-		
+
 
 		<category name = 'LCD' >
 			<block type = 'lcd-display'>
@@ -175,11 +210,19 @@
 					</shadow>
 				</value>
 			</block>
+			<block type = "rgb_brightness">
+			</block>
 		</category>
 	</category>
 	<category name='NETWORK'>
 		<block type='blynk_event_vr'></block>
-		<block type='blynk_write_vw'></block>
+		<block type='blynk_write_vw'>
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
 		<block type="blynk_notify">
 			<value name="DATA">
 				<shadow type="network_text">
@@ -200,11 +243,17 @@
 			</value>
 			<value name="CONTENT">
 				<shadow type="network_text">
-					<field name="TEXT">Hello World</field>
+					<field name="TEXT">        </field>
 				</shadow>
 			</value>
 		</block>
-		<block type='blynk_log'></block>
+		<block type='blynk_log'>
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
 		<block type='blynk_message'></block>
 		<block type='blynk_message_iter'></block>
 	</category>
@@ -335,7 +384,7 @@
 		<block type = "math_map">
 		</block>
 	</category>
-	
+
 	<sep></sep>
 	<category name = 'ADVANCED'>
 		<category name='TEXT'>
@@ -343,7 +392,7 @@
 				<field name="TEXT"></field>
 			</block>
 		</category>
-		
+
 		<category name='LIST'>
 			<block type="lists_create_with">
 			  <mutation items="3"></mutation>
@@ -412,7 +461,7 @@
 			  <field name="DIRECTION">1</field>
 			</block>
 		</category>
-		
+
 		<category name = 'FUNCTION' custom="PROCEDURE">
 		</category>
 	</category>

@@ -65,7 +65,7 @@ Blockly.Python['blynk_event_vr'] = function(block) {
   //AddToSection('once' ,"blynk.listen(channel=" + topic + ",function=" + function_name + ')\n' );
   //AddToSection('function' , async_cancellable+'async def '+function_name +"(topic,message):\n" + code );
 	AddToSection('function',async_cancellable + 'async def '+ function_name + "():\n"+GlobalVariable+Blockly.Python.INDENT + "message = core.blynk.message\n" + code);
-	AddToSection('once',"core.blynk.add_virtual_pin(pin=" + String(channel) + ",write=" + function_name + ")\n" );
+	AddToSection('event',"core.blynk.add_virtual_pin(pin=" + String(channel) + ",write=" + function_name + ")\n" );
   }
   return '';
 };
@@ -101,7 +101,7 @@ Blockly.Python['blynk_write_vw'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.virtual_write(" ;
+  var code = "await core.blynk.virtual_write(" ;
   
   if (device != "APP") code += "device='" + device + "'," ;
   
@@ -125,17 +125,15 @@ Blockly.Blocks['blynk_log'] = {
     this.setColour(BlynkColor);
 	this.setTooltip("");
 	this.setHelpUrl("");
-	
   }
 };
 Blockly.Python['blynk_log'] = function(block) {
-  var topic = this.getFieldValue('VP');
   var data = Blockly.Python.valueToCode(block, 'DATA', Blockly.Python.ORDER_NONE);
   if (!data.length)data = 'None' ;
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.log(" +  String(data) + ")\n";
+  var code = "await core.blynk.log(" +  String(data) + ")\n";
   return code;
 };
 Blockly.Blocks['blynk_notify'] = {
@@ -159,7 +157,7 @@ Blockly.Python['blynk_notify'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.notify(" +  String(data) + ")\n";
+  var code = "await core.blynk.notify(" +  String(data) + ")\n";
   return code;
 };
 Blockly.Blocks['blynk_email'] = {
@@ -189,7 +187,7 @@ Blockly.Python['blynk_email'] = function(block) {
   // TODO: Assemble Python into code variable.
   
   
-  var code = "core.blynk.email(mail=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
+  var code = "await core.blynk.email(email=" +  String(mail) +',subject='+String(subject)+',content=' +String(content) +")\n";
   return code;
 };
 

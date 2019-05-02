@@ -102,7 +102,7 @@ Blockly.Python['sound-event'] = function(block) {
 	var function_name = 'Event_' +port + '_' + type + '_' +  time   ;
 	AddToSection('import' , 'from Blocky.Sound import * ' + getLibraryVersion('Sound') + '\n');
 	AddToSection('declare' ,object + " = Sound(port='" + port +"')\n");
-	AddToSection('event' , object  + ".event(type='" + type + "',time=" + time + ",function="+function_name+")\n");
+	AddToSection('event' , object  + ".event(time=" + time + ",function="+function_name+")\n");
 
 	AddToSection('function', async_cancellable+'async def '+function_name+'():\n' + code + '\n');
 };

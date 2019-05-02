@@ -67,7 +67,6 @@ Blockly.Blocks['remote-learn'] =
 		this.category  = 'Output' ;
 		this.role = 'Set';
 		this.setColour(Colour[this.category]);
-		/*
 		this.setOnChange(
 			function(change)
 			{
@@ -80,27 +79,6 @@ Blockly.Blocks['remote-learn'] =
 					console.log("SEND" , command);
 					command.scriptService.sendCommand(command.currentDevice.token,message);
 				}
-			}
-		);
-		*/
-		this.setOnChange(
-			function (event)
-			{
-				if (this.isInFlyout||!this.getRootBlock()) return ;
-				if (event.type=='create'||event.type=='change'||event.type=='move')
-				{
-					if (this.getRootBlock().type.indexOf('button-event')==-1)
-					{
-						this.setDisabled(true);
-						this.setWarningText('This block should only be inside a Button block')
-					}
-					else 
-					{
-						this.setDisabled(false);
-						this.setWarningText();
-					}
-				}
-				
 			}
 		);
 	},
@@ -120,3 +98,50 @@ Blockly.Python['remote-learn'] = function(block) {
 	return code;
 };
 
+Blockly.Blocks['remote-send'] =
+{
+	init:function(){
+		this.appendDummyInput('MAIN')
+			.appendField('Remote on')
+			.appendField(new Blockly.FieldDropdown( PORT('remote') ) , 'PORT' )
+			.appendField('send command')
+			.appendField(new Blockly.FieldTextInput('TurnOn'),'CMD');
+			//.appendField(this.id);
+
+		this.setPreviousStatement(true , null);
+		this.setNextStatement(true , null);
+
+		this.module = 'remote' ;
+
+		this.setColour(230);
+		this.category  = 'Output' ;
+		this.role = 'Set';
+		this.setColour(Colour[this.category]);
+		this.setOnChange(
+			function(change)
+			{
+				if (change.type == 'ui' && change.blockId == this.id && change.element == 'click')
+				{
+					console.log('Remote will start learning' , this.getFieldValue('CMD'))
+					var message = [];
+					message[0] = 'PORT1.send("TurnOn")';
+					console.log("SEND" , command);
+					command.scriptService.sendCommand(command.currentDevice.token,message);
+				}
+			}
+		);
+	},
+};
+
+
+Blockly.Python['remote-send'] = function(block) {
+	var object = block.getFieldValue('PORT');
+	var command = block.getFieldValue('CMD');
+	if (object=='None') return '';
+	AddToSection('import' , 'from Blocky.Remote import * ' + getLibraryVersion('Remote') + '\n');
+	AddToSection('declare' , object + " = Remote(port='" + object +"')\n");
+	// TODO: Assemble Python into code variable.
+	// Do not let user put this anyywhere except from setup block;
+	var code = object + ".send('" + command + "')\n"
+	return code;
+};
