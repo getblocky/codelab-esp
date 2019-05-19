@@ -45,7 +45,8 @@
                 </div>
                 <md-select ng-model="vm.currentDevice" placeholder="Select a device" class="md-no-underline" ng-disabled="vm.otaInProgress">
                     <md-option ng-repeat="device in vm.devices | orderBy:'name'" ng-value="device">
-                        {{device.name}}
+                        <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'"
+                        aria-hidden="true"></i> {{device.name}}
                     </md-option>
                 </md-select>
 
@@ -131,7 +132,7 @@
     </md-button>
     <md-select ng-model="vm.currentDevice" placeholder="Select a device" class="md-no-underline" hide-gt-xs ng-disabled="vm.otaInProgress">
         <md-option ng-repeat="device in vm.devices | orderBy:'name'" ng-value="device">
-            {{device.name}}
+            <i ng-class="device.status ? 'fa fa-circle device-online' : 'fa fa-circle device-offline'" aria-hidden="true"></i> {{device.name}}
         </md-option>
     </md-select>
     <md-button ng-show="vm.isUserLoaded" ng-click="vm.reloadLoadUserDevices()" aria-label="Reload Device"
