@@ -39,12 +39,14 @@ function UserMenu() {
     };
 }
 
-function UserMenuController($scope, $rootScope, userService, $mdDialog, $document, $window) {
+function UserMenuController($scope, $rootScope, userService, $mdDialog, $document, $window, $log) {
 
     var vm = this;
 
     $rootScope.login = login;
     vm.logout = logout;
+    vm.registerUser = registerUser;
+    vm.registerDevice = registerDevice;
     vm.userDisplayName = '';
     vm.userLoaded = false;
 
@@ -75,5 +77,13 @@ function UserMenuController($scope, $rootScope, userService, $mdDialog, $documen
         userService.logout();
         $window.localStorage.clear();
         $window.location.reload();
+    }
+
+    function registerUser() {
+        $log.log("registerUser");
+    }
+
+    function registerDevice() {
+        $log.log("registerDevice");
     }
 }
