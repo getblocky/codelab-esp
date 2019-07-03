@@ -19,7 +19,7 @@ export default angular.module('blocky.api.login', [])
 
 /*@ngInject*/
 function LoginService($http, $q, settings) {
-
+    var vm = this;
     var service = {
         login: login,
         loginFacebook: loginFacebook
@@ -33,6 +33,7 @@ function LoginService($http, $q, settings) {
             email: user.name,
             password: user.password
         };
+        vm.loginInfo = loginRequest;
         var url = settings.baseApiUrl + '/user/login';
         $http.post(url, loginRequest).then(function success(response) {
             deferred.resolve(response);
