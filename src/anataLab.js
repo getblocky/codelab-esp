@@ -32,75 +32,111 @@ var Toolbox_Function = '#005a9e';
 var Toolbox_Advanced = '#00272b';
 var Toolbox_Warning = '#000000';
 
-var supported_modules = ['BUTTON' , 'BUZZER'];
-var SUPPORTED_MODULES =  [ ];
-for (var i=0;i<supported_modules.length;i++){
-    SUPPORTED_MODULES.push([supported_modules[i],supported_modules[i]]);
+var supported_modules = ['BUTTON', 'BUZZER'];
+var SUPPORTED_MODULES = [];
+for (var i = 0; i < supported_modules.length; i++) {
+    SUPPORTED_MODULES.push([supported_modules[i], supported_modules[i]]);
 }
-console.log('Supported modules' , SUPPORTED_MODULES);
+console.log('Supported modules', SUPPORTED_MODULES);
 
-var available_ports = ['PORT1' , 'PORT2' , 'PORT3' , 'PORT4'];
+var available_ports = ['PORT1', 'PORT2', 'PORT3', 'PORT4'];
 var AVAILABLE_PORTS = [];
-for (var i=0;i<available_ports.length;i++){
-    AVAILABLE_PORTS.push([available_ports[i],available_ports[i]]);
+for (var i = 0; i < available_ports.length; i++) {
+    AVAILABLE_PORTS.push([available_ports[i], available_ports[i]]);
 }
-console.log('Available port' , AVAILABLE_PORTS);
+console.log('Available port', AVAILABLE_PORTS);
 
- // =   =   =   ==      =   =   =   =   =   =   =   =   =   =   
+// =   =   =   ==      =   =   =   =   =   =   =   =   =   =   
 
 
- var port = {};
-var workspace = null ; 
-for (var i = 0 ; i < available_ports.length;i++){
+var port = {};
+var workspace = null;
+for (var i = 0; i < available_ports.length; i++) {
     port[available_ports[i]] = null;
 }
 
 variable = [];
 
 builtin = {
-    "BUTTON" : ["A" , "B" , "C"],
-    "AUDIO" : ["BUILTIN"]
+    "BUTTON": ["A", "B", "C"],
+    "AUDIO": ["BUILTIN"]
 }
 
 
+var portAssign = {};
 
 // every time a declare block is modified, 
 //all related block will change its "PORT" list or be disable
-function portService(){
+function portService() {
     console.info('__port_serive__');
     var listBlock = workspace.getAllBlocks();
 
-    var portAssign = {}
-    for (var i = 0 ; i < SUPPORTED_MODULES.length ; i ++){
-        portAssign[SUPPORTED_MODULES[0][i]] = [];
-        if (SUPPORTED_MODULES[0][i] in builtin){
+    portAssign = {}
+    for (var i = 0; i < SUPPORTED_MODULES.length; i++) {
+        portAssign[SUPPORTED_MODULES[i][0]] = [];
+        if (SUPPORTED_MODULES[i][0] in builtin) {
             // portAssign[SUPPORTED_MODULES[i]].push(...builtin[SUPPORTED_MODULES[i]])
-            for (var u = 0 ; u < builtin[SUPPORTED_MODULES[0][i]].length ; u ++){
-                portAssign[SUPPORTED_MODULES[0][i]].push(builtin[SUPPORTED_MODULES[0][i]][u])
+            for (var u = 0; u < builtin[SUPPORTED_MODULES[i][0]].length; u++) {
+                portAssign[SUPPORTED_MODULES[i][0]].push(builtin[SUPPORTED_MODULES[i][0]][u])
             }
         }
 
-        for (let [key , value] of Object.entries(port)) {
-            if (value == SUPPORTED_MODULES[0][i]){
-                portAssign[SUPPORTED_MODULES[0][i]].push(key)
+        for (let [key, value] of Object.entries(port)) {
+            if (value == SUPPORTED_MODULES[i][0]) {
+                portAssign[SUPPORTED_MODULES[i][0]].push(key)
             }
         }
+        portAssign[SUPPORTED_MODULES[i][0]] = portAssign[SUPPORTED_MODULES[i][0]] || [];
 
-        
 
     }
 
-    console.info('portAssign' , portAssign , port);
+    console.info('portAssign', portAssign, port);
 
-    for (var index = 0 ; index < listBlock.length ; index ++){
+    for (var index = 0; index < listBlock.length; index++) {
         var block = listBlock[index];
-        if (block.blockClass == null ) continue ; // this is not related block
+        if (block.blockClass == null) continue; // this is not related block
 
-        
+        // build the dropdown
+        var dropdown = [];
+        for (var t = 0; t < portAssign[block.blockClass].length; t++) {
+            var __port__ = portAssign[block.blockClass][t]
+            console.log(__port__);
+            dropdown.push([__port__, __port__])
+        }
+        console.info("dropdown", dropdown);
+        var currentPort = block.getFieldValue('PORT');
 
+        // case : if the current port is no longer belonged
+        if (portAssign[block.blockClass].indexOf(currentPort) == -1) {
+
+            block.setDisabled(true);
+            block.getField('PORT').setValue("NO PORT");
+            
+
+        } else {
+            block.setDisabled(false);
+        }
+
+        // else    
+        Blockly.Events.disable();
+        var pos = block.getInput("MAIN").fieldRow.indexOf(block.getField('PORT'));
+        if (pos > 0) {
+
+            block.getInput("MAIN").removeField('PORT');
+            block.getInput("MAIN").insertFieldAt(pos, new Blockly.FieldDropdown(dropdown), 'PORT');
+
+
+            block.getField('PORT').setValue(currentPort);
+            Blockly.Events.enable();
+
+        }
     }
+
 
 }
+
+
 
 
 // ===  =   =   =   =   =       =   =   ==  =       ====    =   =   =   =       
@@ -149,14 +185,46 @@ Blockly.Blocks['pxt-onStart'] = {
 
         ;
         this.appendStatementInput('CODE');
-        
+
         // set the global workspace , because this block always exist :))
         workspace = this.workspace;
 
-        
+        //patch , to push builtin into portAssign;
+        this.setOnChange(
+            function (change) {
+                // port service relevant event
+                // capture when the block is decalre block or the field of change is block
+                // three case
+                // 
+                if (change.type == "ui") return;
+                if ( (change.type == "change"&&change.element == "field"&&(change.name == "MODULE" || change.name == "PORT")) || change.type == "move" || change.type == "create" || change.type == "delete") {
+                    var block = workspace.getBlockById(change.blockId);
+                    if (block == null) return ;
+                    if (block.type == 'pxt-declarePort' ) {
+                        portService();
+                    }
+                    else{
+                        if (block.blockClass){
+                            if (change.name == "PORT"){
+                                Blockly.Events.disable();
+                                portService();
+                                Blockly.Events.enable();
+                            }
+                        }
+                    }
+                }
+                
+
+            }
+        );
+        portService();
+
+
 
     }
 };
+
+
 
 Blockly.Python['pxt-onStart'] = function (block) {
 
@@ -173,11 +241,11 @@ Blockly.Python['pxt-onStart'] = function (block) {
     Blockly.Python.definitions_['once'] = branch;
     Blockly.Python.definitions_['async'] = '';
 
-    variable = '' ; // __helper__
+    variable = ''; // __helper__
     allVariables = block.workspace.getAllVariables();
-    if (allVariables.length){
+    if (allVariables.length) {
         variable = 'global ';
-        for (var i = 0 ; i < allVariables.length ; i ++){
+        for (var i = 0; i < allVariables.length; i++) {
             variable += allVariables[i].name;
             variable += ','
             // Blockly.Python.definitions_['variable'] += allVariables[i].name  + " = None\n";
@@ -186,11 +254,11 @@ Blockly.Python['pxt-onStart'] = function (block) {
         variable = Blockly.Python.INDENT + variable + '\n';
     }
 
-    console.info('[VARIABLE]' , variable);
+    console.info('[VARIABLE]', variable);
 
-        
 
-   
+
+
     return '';
 
 }
@@ -213,8 +281,8 @@ Blockly.Blocks['pxt-portDeclare'] = {
             function (change) {
                 if (change.blockId != this.id || this.isInFlyout) return;
 
-                
-                console.warn(change);
+
+                // console.warn(change);
                 portService(); // __helper__
                 // set the warning text and disable block when not in the right position
                 if (change.type == 'move') {
@@ -250,7 +318,18 @@ Blockly.Blocks['pxt-portDeclare'] = {
                     }
                 }
 
+                if (change.type == 'change' && change.element == 'field' && (!this.disabled)) {
+                    if (change.name == "PORT") {
+                        port[change.oldValue] = null;
+                        port[change.newValue] = this.getFieldValue('MODULE')
+                    }
+                    if (change.name == "MODULE") {
+                        port[this.getFieldValue('PORT')] = change.newValue;
+                    }
+
+                }
                 // update the register
+                portService();
 
 
             }
@@ -262,18 +341,34 @@ Blockly.Blocks['pxt-portDeclare'] = {
 Blockly.Python['pxt-portDeclare'] = function (block) {
     var port = block.getFieldValue('PORT');
     var module = block.getFieldValue('MODULE');
-    
+
     var code = module + ' = ' + module[0] + module.slice(1).toLowerCase();
-    AddToSection('declare' , code);
-    console.info('[DECLARE]' , code);
+    AddToSection('declare', code);
+    console.info('[DECLARE]', code);
 };
 
+function getListPort(obj){
+    var listPort = portAssign[obj.blockClass] || [];
+
+    var dropdown = [];
+    for (var i = 0; i < listPort.length; i++) {
+        dropdown.push([listPort[i], listPort[i]])
+    }
+    if (dropdown.length == 0) {
+        dropdown = [
+            ["NO PORT", "NO PORT"]
+        ];
+        
+
+    }
+    console.log('ths' , dropdown);
+    return dropdown;
+}
 // Start of button Block 
 Blockly.Blocks['pxt-button-onClick'] = {
     init: function () {
         this.blockType = 'event';
         this.blockClass = 'BUTTON';
-
 
         this.setColour(Toolbox_Control);
         //this.setOutput(true,'Number')
@@ -281,12 +376,7 @@ Blockly.Blocks['pxt-button-onClick'] = {
 
         this.appendDummyInput('MAIN')
             .appendField('when press')
-            .appendField(new Blockly.FieldDropdown([
-                ['button PORT1', 'PORT1'],
-                ['button PORT2', 'PORT2'],
-                ['button PORT3', 'PORT3'],
-                ['button PORT4', 'PORT4'],
-            ]), 'PORT')
+            .appendField(new Blockly.FieldDropdown(getListPort(this)), 'PORT')
             .appendField(new Blockly.FieldDropdown(
                 [
                     ['1 times', '1'],
@@ -296,7 +386,14 @@ Blockly.Blocks['pxt-button-onClick'] = {
                 ]
             ), 'TIMES');
         this.appendStatementInput('CODE');
-
+        // this.setOnChange(
+        //     function (change) {
+        //         if (change.blockId != this.id) return;
+        //         // if (this.isInFlyout && getListPort(this).length == 0) {
+        //         //     this.setDisabled(true);
+        //         // }
+        //     }
+        // )
 
     }
 };
