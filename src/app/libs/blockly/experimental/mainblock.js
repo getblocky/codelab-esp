@@ -225,106 +225,109 @@ String.prototype.replaceAll = function (search, replacement) {
 	var target = this;
 	return target.replace(new RegExp(search, 'g'), replacement);
 };
-Blockly.Generator.prototype.workspaceToCode = function (workspace) {
-	globalWidgetDemand = [];
-	globalChannelCounter = 255;
-	console.error("WORKSPACE TO CODE");
-	if (!workspace) {
-		// Backwards compatibility from before there could be multiple workspaces.
-		console.warn('No workspace specified in workspaceToCode call.  Guessing.');
-		workspace = Blockly.getMainWorkspace();
-	}
-	var code = [];
-
-	// Adding GMT time
-	var currentTime = new Date();
-	var timezone = Math.abs(currentTime.getTimezoneOffset() / 60);
-	var timezoneStr = "eeprom.set('GMT' , " + String(timezone) + ")\n"
 
 
 
-	this.init(workspace);
-	var blocks = workspace.getTopBlocks(true);
-	//:: Swap the top block , the top block must always be the MainRunOnce
+// Blockly.Generator.prototype.workspaceToCode = function (workspace) {
+// 	globalWidgetDemand = [];
+// 	globalChannelCounter = 255;
+// 	console.error("WORKSPACE TO CODE");
+// 	if (!workspace) {
+// 		// Backwards compatibility from before there could be multiple workspaces.
+// 		console.warn('No workspace specified in workspaceToCode call.  Guessing.');
+// 		workspace = Blockly.getMainWorkspace();
+// 	}
+// 	var code = [];
 
-	if (blocks[0].type != 'MainRunOnce') {
-
-		var temp = null;
-		for (var i = 0; i < blocks.length; i++) {
-			if (blocks[i].type == 'MainRunOnce') {
-				temp = blocks[i];
-				blocks.splice(i, 1);
-				blocks.unshift(temp);
-				break;
-			}
-		}
-	}
-	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;;
-	for (var x = 0, block; block = blocks[x]; x++) {
-		var line = this.blockToCode(block);
-		if (goog.isArray(line)) {
-			// Value blocks return tuples of code and operator order.
-			// Top-level blocks don't care about operator order.
-			line = line[0];
-		}
-		if (line) {
-			if (block.outputConnection) {
-				// This block is a naked value.  Ask the language's code generator if
-				// it wants to append a semicolon, or something.
-				line = this.scrubNakedValue(line);
-			}
-			code.push(line);
-		}
-
-		// Modified here
-		if (x == blocks.length - 1) {
-			var a = Blockly.Python.definitions_['event'].replaceAll('\n', '#').replace('  ', '$');
-			var b = Blockly.Python.definitions_['async'].replaceAll('\n', '#').replace('  ', '$');
-		}
-		if (x == blocks.length - 1) {
-			Blockly.Python.definitions_['import'] = "from Blocky.Core import * " + getLibraryVersion('Core') + "\n" + Blockly.Python.definitions_['import'];
-			Blockly.Python.definitions_['import'] += timezoneStr;
-			var event = false;
-			if (Blockly.Python.definitions_['event'].length) {
-				event = true;
-				Blockly.Python.definitions_['event'] = Blockly.Python.INDENT + Blockly.Python.definitions_['event'];
-				Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].replaceAll('\n', '\n' + Blockly.Python.INDENT);
-				Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].slice(0, -2);
-				Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['event'];
-			}
-			if (Blockly.Python.definitions_['async'].length) {
-				Blockly.Python.definitions_['async'] = Blockly.Python.INDENT + Blockly.Python.definitions_['async'];
-				Blockly.Python.definitions_['async'] = Blockly.Python.definitions_['async'].replaceAll('\n', '\n' + Blockly.Python.INDENT);
-				Blockly.Python.definitions_['async'] = Blockly.Python.definitions_['async'].slice(0, -1);
-				Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['async'];
-			}
-			console.log('once', Blockly.Python.definitions_['once']);
-			Blockly.Python.definitions_['once'] += '\ncore.mainthread.create_task(core.asyn.Cancellable(main)())\n';
-			Blockly.Python.definitions_['async'] = '';
-			Blockly.Python.definitions_['event'] = '';
-
-		}
+// 	// Adding GMT time
+// 	var currentTime = new Date();
+// 	var timezone = Math.abs(currentTime.getTimezoneOffset() / 60);
+// 	var timezoneStr = "eeprom.set('GMT' , " + String(timezone) + ")\n"
 
 
-	}
-	code = code.join('\n'); // Blank line between each section.
-	code = this.finish(code);
 
-	// Final scrubbing of whitespace.
-	code = code.replace(/^\s+\n/, '');
-	code = code.replace(/\n\s+$/, '\n');
-	code = code.replace(/[ \t]+\n/g, '\n');
-	console.log('Usercode', code);
+// 	this.init(workspace);
+// 	var blocks = workspace.getTopBlocks(true);
+// 	//:: Swap the top block , the top block must always be the MainRunOnce
+
+// 	if (blocks[0].type != 'MainRunOnce') {
+
+// 		var temp = null;
+// 		for (var i = 0; i < blocks.length; i++) {
+// 			if (blocks[i].type == 'MainRunOnce') {
+// 				temp = blocks[i];
+// 				blocks.splice(i, 1);
+// 				blocks.unshift(temp);
+// 				break;
+// 			}
+// 		}
+// 	}
+// 	//:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;;
+// 	for (var x = 0, block; block = blocks[x]; x++) {
+// 		var line = this.blockToCode(block);
+// 		if (goog.isArray(line)) {
+// 			// Value blocks return tuples of code and operator order.
+// 			// Top-level blocks don't care about operator order.
+// 			line = line[0];
+// 		}
+// 		if (line) {
+// 			if (block.outputConnection) {
+// 				// This block is a naked value.  Ask the language's code generator if
+// 				// it wants to append a semicolon, or something.
+// 				line = this.scrubNakedValue(line);
+// 			}
+// 			code.push(line);
+// 		}
+
+// 		// Modified here
+// 		if (x == blocks.length - 1) {
+// 			var a = Blockly.Python.definitions_['event'].replaceAll('\n', '#').replace('  ', '$');
+// 			var b = Blockly.Python.definitions_['async'].replaceAll('\n', '#').replace('  ', '$');
+// 		}
+// 		if (x == blocks.length - 1) {
+// 			Blockly.Python.definitions_['import'] = "from Blocky.Core import * " + getLibraryVersion('Core') + "\n" + Blockly.Python.definitions_['import'];
+// 			Blockly.Python.definitions_['import'] += timezoneStr;
+// 			var event = false;
+// 			if (Blockly.Python.definitions_['event'].length) {
+// 				event = true;
+// 				Blockly.Python.definitions_['event'] = Blockly.Python.INDENT + Blockly.Python.definitions_['event'];
+// 				Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].replaceAll('\n', '\n' + Blockly.Python.INDENT);
+// 				Blockly.Python.definitions_['event'] = Blockly.Python.definitions_['event'].slice(0, -2);
+// 				Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['event'];
+// 			}
+// 			if (Blockly.Python.definitions_['async'].length) {
+// 				Blockly.Python.definitions_['async'] = Blockly.Python.INDENT + Blockly.Python.definitions_['async'];
+// 				Blockly.Python.definitions_['async'] = Blockly.Python.definitions_['async'].replaceAll('\n', '\n' + Blockly.Python.INDENT);
+// 				Blockly.Python.definitions_['async'] = Blockly.Python.definitions_['async'].slice(0, -1);
+// 				Blockly.Python.definitions_['once'] += Blockly.Python.definitions_['async'];
+// 			}
+// 			console.log('once', Blockly.Python.definitions_['once']);
+// 			Blockly.Python.definitions_['once'] += '\ncore.mainthread.create_task(core.asyn.Cancellable(main)())\n';
+// 			Blockly.Python.definitions_['async'] = '';
+// 			Blockly.Python.definitions_['event'] = '';
+
+// 		}
 
 
-	/*
-		Attempt Implementation of advance API
-	*/
+// 	}
+// 	code = code.join('\n'); // Blank line between each section.
+// 	code = this.finish(code);
+
+// 	// Final scrubbing of whitespace.
+// 	code = code.replace(/^\s+\n/, '');
+// 	code = code.replace(/\n\s+$/, '\n');
+// 	code = code.replace(/[ \t]+\n/g, '\n');
+// 	console.log('Usercode', code);
+
+
+// 	/*
+// 		Attempt Implementation of advance API
+// 	*/
 	
 
 
-	return code;
-};
+// 	return code;
+// };
 
 
 Blockly.Blocks['doubleclick_to_run'] = {
