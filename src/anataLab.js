@@ -375,7 +375,7 @@ Blockly.Blocks['pxt-button-onClick'] = {
         this.setOutputShape(Blockly.OUTPUT_SHAPE_ROUND);
 
         this.appendDummyInput('MAIN')
-            .appendField('when press')
+            .appendField('when press button')
             .appendField(new Blockly.FieldDropdown(getListPort(this)), 'PORT')
             .appendField(new Blockly.FieldDropdown(
                 [
