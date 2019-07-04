@@ -18,9 +18,9 @@ Colour.Function= 	'#005a9e';
 Colour.Advanced= 	'#00272b';
 Colour.Warning= 	'#000000';
 
-Blockly.Blocks.lists.HUE = Colour.List ;
-BKY_LISTS_HUE = Colour.List ;
-Blockly.Blocks.procedures.HUE = Colour.Function ;
+// Blockly.Blocks.lists.HUE = Colour.List ;
+// BKY_LISTS_HUE = Colour.List ;
+// Blockly.Blocks.procedures.HUE = Colour.Function ;
 /*
 var Colour = {};
 Colour.Input= '#0376f7';

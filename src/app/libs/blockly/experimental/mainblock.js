@@ -57,10 +57,10 @@ Blockly.Blocks['MainRunOnce'] = {
 		GlobalWorkspace = this.workspace;
 		this.setOnChange(
 			function (change) {
-
+				return;
 				//this.workspace.addChangeListener();
 				//Blockly['legit-declare'](change,this.workspace);
-				if (true) //change.type != 'ui'&&change.type != 'move')
+				if (false) //change.type != 'ui'&&change.type != 'move')
 				{
 					HandlerGlobal(change);
 					var blocks = this.workspace.getAllBlocks();

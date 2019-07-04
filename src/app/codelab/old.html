@@ -1,0 +1,481 @@
+<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+	<category name='APP'>
+		<block type='blynk_widget_button'></block>
+		<block type='blynk_widget_terminal'></block>
+		<block type='blynk_widget_superchart'></block>
+
+	</category>
+	<category name='INPUT'>
+		<category name='BUTTON'>
+			<block type='button-event'></block>
+			<block type='button-get'></block>
+		</category>
+		<category name='SOUND'>
+			<block type='sound-event'></block>
+		</category>
+		<category name='RFID'>
+			<block type='rfid-event'></block>
+		</category>
+		<category name='POTENTIOMETER'>
+			<block type='potentiometer-get'></block>
+		</category>
+		<category name='TEMPERATURE'>
+			<block type='weather-get'>
+				<field name = "MODE">temperature</field>
+			</block>
+
+		</category>
+		<category name = "HUMIDITY">
+			<block type='weather-get'>
+				<field name = "MODE">humidity</field>
+			</block>
+		</category>
+		<category name='LIGHT'>
+			<block type='light-get'></block>
+		</category>
+		<category name='MOTION'>
+			<block type='motion-event'>
+				<field name = "MODE">detect</field>
+			</block>
+			<block type='motion-event'>
+				<field name = "MODE">not_detect</field>
+			</block>
+
+			<block type='motion-get'>
+
+			</block>
+
+		</category>
+		<category name='DISTANCE'>
+			<block type='distance-get'></block>
+		</category>
+		<category name='WATER'>
+			<block type='moisture-get'></block>
+		</category>
+		<category name='TOUCH'>
+			<block type='mpr121-event'></block>
+		</category>
+		<category name='RADIO'>
+			<block type='rfreceiver-event'></block>
+			<block type='rfreceiver_message'></block>
+			<label text = ''></label>
+			<label text = "Example Application"></label>
+			<block type = "controls_if">
+				<value name = "IF0">
+
+					<block type = "logic_compare">
+						<field name = "OP">EQ</field>
+						<value name = "A">
+							<block type = "rfreceiver_message"></block>
+						</value>
+						<value name = "B">
+							<block type = "rfreceiver_message_dropdown"></block>
+						</value>
+					</block>
+
+				</value>
+			</block>
+		</category>
+	</category>
+	<category name='CONTROL'>
+
+		<category name='RELAY'>
+			<block type='relay-set'>
+				<value name='MAIN'>
+					<shadow type='state_output'>
+					</shadow>
+				</value>
+			</block>
+		</category>
+
+
+		<category name='BUZZER'>
+			<button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button>
+			<block type='buzzer-set'>
+				<value name='MAIN'>
+					<shadow type='state_output'>
+					</shadow>
+				</value>
+			</block>
+			<block type='buzzer-beep'>
+				<value name="MAIN">
+					<shadow type="number_output">
+					</shadow>
+				</value>
+
+			</block>
+			<block type='buzzer-play'>
+			</block>
+			<block type='buzzer-playnote'>
+			</block>
+			<block type='buzzer-playfreq'>
+				<value name="MAIN">
+					<shadow type="number_output">
+						<field name= "NUM">3000</field>
+					</shadow>
+				</value>
+			</block>
+		</category>
+		<category name='MP3'>
+			<block type='music-set-play'></block>
+			<block type='music-set-volume'></block>
+			<block type='music-set-stop'></block>
+			<block type='music-set-pause'></block>
+		</category>
+		<category name='REMOTE'>
+			<block type='irremote-learn'></block>
+			<block type='irremote-sendDirect'></block>
+		</category>
+
+		<category name = "MOTOR"></category>
+		<category name = "SERVO">
+			<block type = 'servo-set'>
+				<value name="MAIN">
+					<shadow type="number_output">
+						
+					</shadow>
+				</value>
+			</block>
+			
+		</category>
+		<category name='LED' >
+			<block type='led-set'>
+				<value name='MAIN'>
+					<shadow type='state_output'>
+					</shadow>
+				</value>
+			</block>
+			<block type='led-fade'>
+				<value name='MAIN'>
+					<shadow type='led_pwm_output'>
+					</shadow>
+				</value>
+			</block>
+		</category>
+	</category>
+
+	<category name = 'DISPLAY'>
+
+
+		<category name = 'LCD' >
+			<block type = 'lcd-display'>
+				<value name="LEFT">
+					<shadow type="display_text">
+						<field name="TEXT">        </field>
+					</shadow>
+				</value>
+				<value name="RIGHT">
+					<shadow type="display_text">
+						<field name="TEXT">        </field>
+					</shadow>
+				</value>
+			</block>
+			<block type = 'lcd-clear'>
+			</block>
+			<block type = 'lcd-backlight'>
+			</block>
+		</category>
+
+		<category name = "RGB">
+			<block type = "rgb-set-multiple">
+				<value name="COLOUR">
+					<shadow type="rgb_colour">
+					</shadow>
+				</value>
+				<value name="MAIN">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+				<value name="TO">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+			</block>
+			<block type = "indicator_set_multiple">
+				<value name="COLOUR">
+					<shadow type="rgb_colour">
+					</shadow>
+				</value>
+				<value name="MAIN">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+				<value name="TO">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+			</block>
+			<block type = "indicator_set_single">
+				<value name="COLOUR">
+					<shadow type="rgb_colour">
+					</shadow>
+				</value>
+				<value name="MAIN">
+					<shadow type="display_number">
+					</shadow>
+				</value>
+			</block>
+			<block type = "rgb_brightness">
+			</block>
+		</category>
+	</category>
+	<category name='NETWORK'>
+		<block type='blynk_event_vr'></block>
+		<block type='blynk_write_vw'>
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
+		<block type="blynk_notify">
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
+		<block type="blynk_email">
+			<value name="MAIL">
+				<shadow type="network_text">
+					<field name="TEXT">yourmail@gmail.com</field>
+				</shadow>
+			</value>
+			<value name="SUBJECT">
+				<shadow type="network_text">
+					<field name="TEXT">Your Subject</field>
+				</shadow>
+			</value>
+			<value name="CONTENT">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
+		<block type='blynk_log'>
+			<value name="DATA">
+				<shadow type="network_text">
+					<field name="TEXT">        </field>
+				</shadow>
+			</value>
+		</block>
+		<block type='blynk_message'></block>
+		<block type='blynk_message_iter'></block>
+	</category>
+	<category name='TIMER'>
+		<block type='timer-event-repeat'></block>
+		<block type='timer-event-alarm'></block>
+		<block type='timer-wait'></block>
+		<block type='timer-runtime'></block>
+		<block type='timer-ntp'></block>
+		<label text = "Advanced" ></label>
+		<block type='rtc-sync'></block>
+	</category>
+	<category name='LOOPS'>
+		<block type="controls_repeat_ext">2
+			<value name="TIMES">
+				<shadow type="math_number">
+					<field name="NUM">10</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="controls_whileUntil">
+			<field name="MODE">WHILE</field>
+		</block>
+		<block type="controls_for">
+			<field name="VAR" id="p(1APX:tPbR@_S=dKwsa" variabletype="">i</field>
+			<value name="FROM">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+			<value name="TO">
+				<shadow type="math_number">
+					<field name="NUM">10</field>
+				</shadow>
+			</value>
+			<value name="BY">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="controls_forEach">
+			<field name="VAR" id="LV!pxm=y2ER5K*iRn=gY" variabletype="">j</field>
+		</block>
+		<block type="controls_flow_statements">
+			<field name="FLOW">BREAK</field>
+		</block>
+	</category>
+	<category name='LOGIC'>
+		<block type="controls_if">
+			<value name="IF0">
+				<block type="logic_compare">
+					<field name="OP">EQ</field>
+				</block>
+			</value>
+		</block>
+		<block type="controls_if"></block>
+		<block type="logic_compare">
+			<field name="OP">EQ</field>
+		</block>
+		<block type="logic_operation">
+			<field name="OP">AND</field>
+		</block>
+		<block type="logic_negate"></block>
+		<block type="logic_boolean">
+			<field name="BOOL">TRUE</field>
+		</block>
+	</category>
+	<category name='VARIABLES' custom="VARIABLE"> </category>
+	<category name='MATH'>
+		<block type="math_number">
+			<field name="NUM">0</field>
+		</block>
+		<block type='math_convert'>
+		</block>
+		<block type="math_arithmetic">
+			<field name="OP">ADD</field>
+			<value name="A">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+			<value name="B">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="math_arithmetic">
+			<field name="OP">MINUS</field>
+			<value name="A">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+			<value name="B">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="math_arithmetic">
+			<field name="OP">MULTIPLY</field>
+			<value name="A">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+			<value name="B">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+		</block>
+		<block type="math_arithmetic">
+			<field name="OP">DIVIDE</field>
+			<value name="A">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+			<value name="B">
+				<shadow type="math_number">
+					<field name="NUM">1</field>
+				</shadow>
+			</value>
+		</block>
+		<block type = "math_map">
+		</block>
+	</category>
+
+	<sep></sep>
+	<category name = 'ADVANCED'>
+		<category name='TEXT'>
+			<block type="text">
+				<field name="TEXT"></field>
+			</block>
+		</category>
+
+		<category name='LIST'>
+			<block type="lists_create_with">
+			  <mutation items="3"></mutation>
+			</block>
+			<block type="lists_indexOf">
+			  <field name="END">FIRST</field>
+			  <value name="VALUE">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_repeat">
+			  <value name="NUM">
+				<shadow type="math_number">
+				  <field name="NUM">5</field>
+				</shadow>
+			  </value>
+			</block>
+			<block type="lists_length"></block>
+			<block type="lists_isEmpty"></block>
+			<block type="lists_create_with">
+			  <mutation items="0"></mutation>
+			</block>
+			<block type="lists_getIndex">
+			  <mutation statement="false" at="true"></mutation>
+			  <field name="MODE">GET</field>
+			  <field name="WHERE">FROM_START</field>
+			  <value name="VALUE">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_setIndex">
+			  <mutation at="true"></mutation>
+			  <field name="MODE">SET</field>
+			  <field name="WHERE">FROM_START</field>
+			  <value name="LIST">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_getSublist">
+			  <mutation at1="true" at2="true"></mutation>
+			  <field name="WHERE1">FROM_START</field>
+			  <field name="WHERE2">FROM_START</field>
+			  <value name="LIST">
+				<block type="variables_get">
+				  <field name="VAR" id="5`P=m6T`ovSUq,V:[B[;" variabletype="">list</field>
+				</block>
+			  </value>
+			</block>
+			<block type="lists_split">
+			  <mutation mode="SPLIT"></mutation>
+			  <field name="MODE">SPLIT</field>
+			  <value name="DELIM">
+				<shadow type="text">
+				  <field name="TEXT">,</field>
+				</shadow>
+			  </value>
+			</block>
+			<block type="lists_sort">
+			  <field name="TYPE">NUMERIC</field>
+			  <field name="DIRECTION">1</field>
+			</block>
+		</category>
+
+		<category name = 'FUNCTION' custom="PROCEDURE">
+		</category>
+	</category>
+
+
+</xml>
+<style>
+	.myLabelStyle>.blocklyFlyoutLabelText {
+		font-style: italic;
+		fill: green;
+	}
+</style>

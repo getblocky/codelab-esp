@@ -10,14 +10,10 @@ Blockly.Blocks['relay-set']=
 		this.appendValueInput('MAIN')
 			.appendField('Relay')
 			.appendField('on')
-			.appendField(new Blockly.FieldDropdown( PORT('relay') ) , 'PORT' ) 
-			.appendField('turn')
 			;
-		
-		this.category  = 'Output' ;
-		this.role = 'Set';
-		this.module = 'relay';
-		this.setColour(Colour[this.category]);
+		this.setColour('#ff0000','#00ff00','#0000ff');
+
+
 		this.setPreviousStatement(true , null);
 		this.setNextStatement(true , null);
 		
