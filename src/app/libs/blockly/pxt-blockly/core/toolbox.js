@@ -189,7 +189,7 @@ Blockly.Toolbox.prototype.init = function() {
   this.tree_ = tree;
   tree.setShowRootNode(false);
   tree.setShowLines(false);
-  tree.setShowExpandIcons(false);
+  tree.setShowExpandIcons(true);
   tree.setSelectedItem(null);
   var openNode = this.populate_(workspace.options.languageTree);
   tree.render(this.HtmlDiv);
@@ -428,11 +428,13 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
                   if (!this.isSelected()) {
                     this.getRowElement().style.background = (this.hexColour || '#ddd');
                   }
+                  this.getRowElement().setExpanded(false);
                 });
           }
         }
       } else {
-        if (toolboxOptions.border) {
+        if (true) {
+        // if (toolboxOptions.border) {
           // Only show if the toolbox type is not noborder
           if (this.hasColours_) {
             var border = '8px solid ' + (child.hexColour || '#ddd');
@@ -446,8 +448,11 @@ Blockly.Toolbox.prototype.addColour_ = function(opt_tree) {
           }
         }
         // support for a coloured toolbox
-        if (toolboxOptions.colour && this.hasColours_) {
-          element.style.color = (child.hexColour || '#000');
+        if (true && this.hasColours_) {
+        // if (toolboxOptions.colour && this.hasColours_) {
+          element.style.backgroundColor = (child.hexColour || '#000');
+          
+          element.style.color = '#fff';
         }
       }
       // if disabled, show disabled opacity
@@ -622,7 +627,7 @@ Blockly.Toolbox.TreeControl.prototype.setSelectedItem = function(node) {
   }
   // pxtblockly: don't reset the toolbox category background color for inverted toolboxes
   if (toolbox.lastCategory_ && !toolbox.isInverted_()) {
-    toolbox.lastCategory_.getRowElement().style.backgroundColor = '';
+    // toolbox.lastCategory_.getRowElement().style.backgroundColor = '';
   }
   if (node) {
     var hexColour = node.hexColour || '#57e';
@@ -754,295 +759,3 @@ Blockly.Toolbox.TreeSeparator = function(config) {
 };
 goog.inherits(Blockly.Toolbox.TreeSeparator, Blockly.Toolbox.TreeNode);
 
-
-/**
- * Copyright © 2017 The Blocky Authors
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-@import '../../scss/constants';
-
-#footer {
-  height: 60px;
-
-  i {
-    vertical-align: middle;
-    font-size: 1.5em !important;
-  }
-
-  .md-button {
-    text-transform: none;
-  }
-
-  md-select {
-    margin: 0;
-    max-width: 45%;
-
-    @media (max-width: $layout-breakpoint-xs) {
-      max-width: 30% !important;
-    }
-
-    padding-bottom: 2px;
-  }
-
-  md-select-value {
-    i {
-      font-size: 1em !important;
-    }
-  }
-
-  .md-button {
-    min-width: 1%;
-    min-height: 1%;
-  }
-}
-
-#footer md-input-container {
-  margin-left: 20px;
-}
-
-.tb-editor-mode {
-  min-width: 130px !important;
-
-  @media (max-width: $layout-breakpoint-sm) {
-    min-width: 40px !important;
-  }
-}
-
-#side-bar {
-  img {
-    height: auto;
-    width: 90%;
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  #device-actions {
-    &>div>button:nth-child(1) {
-      margin-right: 0;
-    }
-
-    &>div>button:nth-child(2) {
-      margin-left: 0;
-    }
-
-    button>i {
-      font-size: 1.5em;
-    }
-
-    md-select-value {
-      i {
-        font-size: 18px;
-      }
-    }
-
-    md-select {
-      margin: 0;
-      max-width: 65%;
-      @media (max-width: $layout-breakpoint-md) {
-        max-width: 50%;
-      }
-      @media (max-width: $layout-breakpoint-sm) {
-        max-width: 40%;
-      }
-    }
-  }
-
-  md-toolbar {
-    min-height: 30px;
-
-    .md-title {
-      font-size: 18px;
-    }
-
-    md-card-header {
-      padding-top: 8px;
-      padding-bottom: 8px;
-      border-radius: 25px;
-    }
-  }
-}
-
-.device {
-  font-size: 18px !important;
-
-  &-online {
-    color: green !important;
-  }
-
-  &-offline {
-    color: gray !important;
-  }
-}
-
-.ace_editor {
-  height: 100%;
-  font-size: 14px !important;
-}
-
-.md-toolbar-tools {
-  align-items: center !important;
-}
-
-md-bottom-sheet {
-  z-index: 100 !important;
-
-  i {
-    font-size: 1.5em !important;
-    vertical-align: middle;
-    margin-right: 8px;
-  }
-
-  .md-subheader-inner {
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-    font-size: 18px;
-  }
-}
-
-#device-log {
-  md-card-header-text {
-    justify-content: center;
-  }
-
-  .md-button {
-    height: 30px;
-    margin: 0;
-
-    i {
-      font-size: 1.5em !important;
-    }
-  }
-
-  md-card-content {
-    overflow-y: auto;
-
-    p {
-      font: 14px Consolas;
-    }
-  }
-}
-
-#device-log-bottom-sheet {
-  p {
-    font: 14px Consolas;
-    max-height: 100px;
-    overflow-y: auto;
-  }
-
-  .md-button {
-    min-width: 1%;
-    height: 30px;
-    width: 30px;
-  }
-}
-
-.md-table {
-
-  .md-checkbox-column,
-  .md-checkbox-cell {
-    display: none;
-  }
-}
-
-/* Customize toolbox */
-#code-lab {
-  .blocklyTreeRow {
-    height: 30px;
-    line-height: 30px;
-    position: relative;
-  }
-
-  .blocklyTreeLabel {
-    @media (max-width: $layout-breakpoint-xs) {
-      display: none;
-      font-family  : Comic Sans MS;
-      padding : 0 10px;
-      font-size : 20px;
-      vertical-align:  middle ;
-    }
-  }
-
-  .blocklyTreeIcon {
-    font-size: 1.5rem;
-    margin-left: 5px;
-    margin-right: 12px;
-    border-radius: 25px;
-  }
-
-  .blocklyTreeSelected {
-    .blocklyTreeIcon.blocklyTreeIconNone:before {
-      color: #ffffff !important;
-      position: relative;
-      font-size : 30px ;
-      bottom : 60px
-    }
-
-    .blocklyTreeIcon {
-
-      &.blocklyTreeIconClosedLtr,
-      &.blocklyTreeIconOpen {
-        margin-right: unset;
-      }
-    }
-  }
-
-  .blocklyTreeIcon:before {
-    font-family: FontAwesome;
-    position: relative;
-    font-size : 30px ;
-    bottom : 60px
-  }
-
-  /* 
-    CORE PATCH < THIS WILL OVERIDE EVERTHING ABOVE 
-  */
-
-  /*          APP.          */
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-        &:before {
-        content: "\f0e6";
-        color : #fae2e2 ;
-        }
-    }
-  }   
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    color: rgb(255, 255, 255);
-  }
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(1)>div.blocklyTreeRow {
-    background-color: #22bd89;
-    color: #ffffff;
-  }
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(3)>div.blocklyTreeRow {
-    .blocklyTreeIconClosedLtr,
-    .blocklyTreeIconOpen {
-        &:before {
-        content: "\f0e6";
-        color : #fae2e2 ;
-        }
-    }
-  }   
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>.blocklyTreeRow>.blocklyTreeIcon:before {
-    color: rgb(255, 255, 255);
-  }
-  #blocklyDiv>div>div>div>div:nth-child(2)>div:nth-child(2)>div.blocklyTreeRow {
-    background-color: #22bd89;
-    color: #ffffff;
-  }
-
-
- 
-
-}

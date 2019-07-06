@@ -20141,6 +20141,7 @@ Blockly.WorkspaceSvg.prototype.addTrashcan_ = function (a) {
   return this.trashcan.init(a)
 };
 Blockly.WorkspaceSvg.prototype.addZoomControls_ = function (a) {
+  return ; // patch TODO 
   this.zoomControls_ = new Blockly.ZoomControls(this);
   var b = this.zoomControls_.createDom();
   this.svgGroup_.appendChild(b);

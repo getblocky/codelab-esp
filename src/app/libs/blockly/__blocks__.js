@@ -659,9 +659,9 @@ Blockly.Blocks['pxt.blynk.email'] = {
             // .appendField(new Blockly.FieldDropdown(['APP','APP']) , 'DEST')
             ;
         this.appendValueInput('SUBJECT').appendField('with subject');
-        this.appendDummyInput('CONTENT')
-            .appendField('with content')
-            .appendField(new Blockly.FieldArgumentEditor('My Content') , 'CONTENT');
+        this.appendValueInput('CONTENT');
+            // .appendField('with content')
+            // .appendField(new Blockly.FieldArgumentEditor('My Content') , 'CONTENT');
         this.inputsInline = false;
         this.setOnChange(function(change){changeHandle(this,change);});
     }

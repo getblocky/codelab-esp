@@ -1,40 +1,40 @@
-<xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
+<xml id="toolbox" style="display: none">
    
-    <category name="INPUT">
-        <category name="BUTTON">
-            <block type="pxt-portDeclare">
+    <category name="INPUT" colour = '%{BKY_TOOLBOX_INPUT_SOURCE}' iconclass = "Hello">
+        <category name="BUTTON" colour = '%{BKY_TOOLBOX_INPUT}'>
+            <block type="pxt.portDeclare">
                 <field name="MODULE">BUTTON</field>
             </block>
             <block type="pxt.button.onClick"></block>
             <block type="pxt.button.getState"></block>
         </category>
-        <category name="CLAP">
-            <block type="pxt-portDeclare">
+        <category name="CLAP" colour = '%{BKY_TOOLBOX_INPUT}'>
+            <block type="pxt.portDeclare">
                 <field name="MODULE">CLAP</field>
             </block>
             <block type="pxt.clap.onClap"></block>
         </category>
-        <category name="POTENTIOMETER">
-            <block type="pxt-portDeclare">
+        <category name="POTENTIOMETER" colour = '%{BKY_TOOLBOX_INPUT}'>
+            <block type="pxt.portDeclare">
                 <field name="MODULE">POTENTIOMETER</field>
             </block>
             <block type="pxt.potentiometer.getValue"></block>
         </category>
-        <category name="TEMPERATURE">
+        <category name="TEMPERATURE" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.weather.getValue">
                 <field name="MODE">temperature</field>
             </block>
 
         </category>
-        <category name="HUMIDITY">
+        <category name="HUMIDITY" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.weather.getValue">
                 <field name="MODE">humidity</field>
             </block>
         </category>
-        <category name="LIGHT">
+        <category name="LIGHT" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.light.getValue"></block>
         </category>
-        <category name="MOTION">
+        <category name="MOTION" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.motion.onDetect">
                 <!-- <field name="MODE">detect</field> -->
             </block>
@@ -47,16 +47,16 @@
             </block>
 
         </category>
-        <category name="DISTANCE">
+        <category name="DISTANCE" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.distance.getValue"></block>
         </category>
-        <category name="WATER">
+        <category name="WATER" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.moisture.getValue"></block>
         </category>
         <!-- <category name="TOUCH">
             <block type="mpr121-event"></block>
         </category> -->
-        <category name="REMOTE">
+        <category name="REMOTE" colour = '%{BKY_TOOLBOX_INPUT}'>
             <block type="pxt.remote.onPress"></block>
             <!-- <block type="rfreceiver_message"></block>
             <label text=""></label>
@@ -78,8 +78,8 @@
             </block> -->
         </category>
     </category>
-    <category name="CONTROL">
-        <category name = "PIXEL">
+    <category name="CONTROL" colour = '%{BKY_TOOLBOX_OUTPUT_SOURCE}'>
+        <category name = "PIXEL" colour = '%{BKY_TOOLBOX_OUTPUT}'>
             <block type = "pxt.pixel.setColour">
                 <value name = "MAIN">
                     <shadow type = "pxt.dropdown.onoff"></shadow>
@@ -91,7 +91,7 @@
                 </value>
             </block>
         </category>
-        <category name="RELAY">
+        <category name="RELAY" colour = '%{BKY_TOOLBOX_OUTPUT}'>
             <block type="pxt.relay.setValue">
                 <value name="MAIN">
                     <shadow type="pxt.dropdown.onoff">
@@ -101,7 +101,7 @@
         </category>
 
 
-        <category name="BUZZER">
+        <category name="BUZZER" colour = '%{BKY_TOOLBOX_OUTPUT}'>
             <!-- <button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button> -->
             <block type="pxt.buzzer.setValue">
                 <value name="MAIN">
@@ -134,7 +134,7 @@
             <block type="music-set-stop"></block>
             <block type="music-set-pause"></block>
         </category> -->
-        <category name="INFRARED">
+        <category name="INFRARED" colour = '%{BKY_TOOLBOX_OUTPUT}'>
             <block type="pxt.infrared.learn">
                 <value name= "MAIN">
                     <block type = "text">
@@ -156,7 +156,7 @@
 
             </block>
         </category> -->
-        <category name="SERVO">
+        <category name="SERVO" colour = '%{BKY_TOOLBOX_OUTPUT}'>
             <block type="pxt.servo.setAngle">
                 <value name="MAIN">
                     <shadow type="math_number">
@@ -188,7 +188,7 @@
             </block>
         </category> -->
     </category>
-    <category name="APP">
+    <category name="APP" colour = '%{BKY_TOOLBOX_APP}'>
         <block type="pxt.app.setProjectColour">
             <value name="COLOUR">
                 <block type="colour_picker">
@@ -208,8 +208,8 @@
         <block type="pxt.app.button.onRelease"></block>
 
     </category>
-    <category name="DISPLAY">
-        <category name="LCD">
+    <category name="DISPLAY" colour = '%{BKY_TOOLBOX_DISPLAY_SOURCE}'>
+        <!-- <category name="LCD" colour = '%{BKY_TOOLBOX_DISPLAY}'> -->
             <block type="pxt.lcd.display">
                 <value name="LEFT">
                     <shadow type="text">
@@ -229,7 +229,7 @@
                     <shadow type = "pxt.dropdown.onoff"></shadow>
                 </value>
             </block>
-        </category>
+        <!-- </category> -->
 <!-- 
         <category name="RGB">
             <block type="rgb-set-multiple">
@@ -274,7 +274,7 @@
             </block>
         </category> -->
     </category>
-    <category name="NETWORK">
+    <category name="NETWORK" colour = '%{BKY_TOOLBOX_NETWORK}'>
         <block type="pxt.blynk.onReceive"></block>
         <block type="pxt.blynk.onRequest"></block>
         <block type="pxt.blynk.virtualWrite">
@@ -302,11 +302,11 @@
                     <field name="TEXT">Your Subject</field>
                 </shadow>
             </value>
-            <!-- <value name="CONTENT">
+            <value name="CONTENT">
                 <shadow type="text">
                     <field name="TEXT"> </field>
                 </shadow>
-            </value> -->
+            </value>
         </block>
         <block type="pxt.blynk.log">
             <value name="DATA">
@@ -318,7 +318,7 @@
         <block type="pxt.blynk.getMessage"></block>
         <!-- <block type="pxt.blynk.getMessageIteration"></block> -->
     </category>
-    <category name="TIMER">
+    <category name="TIMER" colour = '%{BKY_TOOLBOX_TIMER}'>
         <!-- <block type="timer-event-repeat"></block>
 		<block type="timer-event-alarm"></block>
 		<block type="timer-wait"></block>
@@ -345,7 +345,7 @@
         <block type="pxt.timer.createAlarm"></block>
 
     </category>
-    <category name="LOOPS">
+    <category name="LOOPS" colour="%{BKY_LOOPS_HUE}">
         <block type="controls_repeat_ext">2
             <value name="TIMES">
                 <shadow type="math_number">
@@ -381,7 +381,7 @@
             <field name="FLOW">BREAK</field>
         </block>
     </category>
-    <category name="LOGIC">
+    <category name="LOGIC" colour="%{BKY_LOGIC_HUE}">
         <block type="controls_if">
             <value name="IF0">
                 <block type="logic_compare">
@@ -401,8 +401,8 @@
             <field name="BOOL">TRUE</field>
         </block>
     </category>
-    <category name="VARIABLES" custom="VARIABLE"> </category>
-    <category name="MATH">
+    <category name="VARIABLES" custom="VARIABLE" colour="%{BKY_VARIABLES_HUE}"> </category>
+    <category name="MATH" colour="%{BKY_MATH_HUE}">
         <block type="math_number">
             <field name="NUM">123</field>
         </block>
@@ -440,7 +440,7 @@
         </block>
         <block type="math_random_float"></block>
     </category>
-    <category name="TEXT" colour="160">
+    <category name="TEXT" colour="%{BKY_TEXTS_HUE}">
         <block type="text"></block>
         <block type="text_join"></block>
         <block type="text_append">
@@ -518,10 +518,10 @@
         </block>
     </category>
     <sep></sep>
-    <category name="ADVANCED">
+    <category name="ADVANCED" colour = '#000000'>
         
 
-        <category name="ARRAYS">
+        <category name="ARRAYS" colour="%{BKY_LISTSHUE}"></category>>
             <block type="lists_create_with">
                 <mutation items="3"></mutation>
             </block>
@@ -590,7 +590,7 @@
             </block>
         </category>
 
-        <category name="FUNCTIONS" custom="PROCEDURE">
+        <category name="FUNCTIONS" custom="PROCEDURE"  colour="%{BKY_PROCEDURES_HUE}"></category>>
         </category>
     </category>
 

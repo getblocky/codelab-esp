@@ -9,7 +9,7 @@
   "scripts": {
     "start": "webpack-dev-server --open --port 6969",
     "build": "cross-env NODE_ENV=production webpack -p",
-    "deploy": "cross-env NODE_ENV=production webpack -p && surge --project dist --domain https://blocky-esp.surge.sh"
+    "deploy": "cross-env NODE_ENV=production webpack -p && surge --project dist --domain https://blocky_makecode.surge.sh"
   },
   "dependencies": {
     "Propeller": "^0.3.2",
