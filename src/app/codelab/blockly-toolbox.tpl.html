@@ -1,84 +1,65 @@
 <xml xmlns="http://www.w3.org/1999/xhtml" id="toolbox" style="display: none;">
-    <category name="BLYNK">
-        <block type="pxt-blynk-setProjectColour">
-            <value name='COLOUR'>
-                <block type='colour_picker'>
-                    <field name="TEXT">My Button</field>
-                </block>
-            </value>
-
-        </block>
-        <block type='pxt-blynk-widgetDeclare'>
-            <value name='WIDGETNAME'>
-                <block type='text'>
-                    <field name='TEXT'>My New Widget</field>
-                </block>
-            </value>
-
-        </block>
-        <block type='pxt-blynk-onButtonEvent'></block>
-
-    </category>
-    <category name='INPUT'>
-        <category name='BUTTON'>
-            <block type='pxt-portDeclare'>
-                <field name='MODULE'>BUTTON</field>
+   
+    <category name="INPUT">
+        <category name="BUTTON">
+            <block type="pxt-portDeclare">
+                <field name="MODULE">BUTTON</field>
             </block>
-            <block type='pxt-button-onClick'></block>
-            <block type='pxt-button-isPressed'></block>
+            <block type="pxt.button.onClick"></block>
+            <block type="pxt.button.getState"></block>
         </category>
-        <category name='CLAP'>
-            <block type='pxt-portDeclare'>
-                <field name='MODULE'>CLAP</field>
+        <category name="CLAP">
+            <block type="pxt-portDeclare">
+                <field name="MODULE">CLAP</field>
             </block>
-            <block type='pxt-clap-onClap'></block>
+            <block type="pxt.clap.onClap"></block>
         </category>
-        <category name='POTENTIOMETER'>
-            <block type='pxt-portDeclare'>
-                <field name='MODULE'>POTENTIOMETER</field>
+        <category name="POTENTIOMETER">
+            <block type="pxt-portDeclare">
+                <field name="MODULE">POTENTIOMETER</field>
             </block>
-            <block type='pxt-potentiometer-get'></block>
+            <block type="pxt.potentiometer.getValue"></block>
         </category>
-        <category name='TEMPERATURE'>
-            <block type='pxt-weather-get'>
+        <category name="TEMPERATURE">
+            <block type="pxt.weather.getValue">
                 <field name="MODE">temperature</field>
             </block>
 
         </category>
         <category name="HUMIDITY">
-            <block type='pxt-weather-get'>
+            <block type="pxt.weather.getValue">
                 <field name="MODE">humidity</field>
             </block>
         </category>
-        <category name='LIGHT'>
-            <block type='pxt-light-get'></block>
+        <category name="LIGHT">
+            <block type="pxt.light.getValue"></block>
         </category>
-        <category name='MOTION'>
-            <block type='pxt-motion-event'>
-                <field name="MODE">detect</field>
+        <category name="MOTION">
+            <block type="pxt.motion.onDetect">
+                <!-- <field name="MODE">detect</field> -->
             </block>
-            <block type='motion-event'>
+            <!-- <block type="motion-event">
                 <field name="MODE">not_detect</field>
+            </block> -->
+
+            <block type="motion-get">
+
             </block>
 
-            <block type='motion-get'>
-
-            </block>
-
         </category>
-        <category name='DISTANCE'>
-            <block type='distance-get'></block>
+        <category name="DISTANCE">
+            <block type="pxt.distance.getValue"></block>
         </category>
-        <category name='WATER'>
-            <block type='moisture-get'></block>
+        <category name="WATER">
+            <block type="pxt.moisture.getValue"></block>
         </category>
-        <category name='TOUCH'>
-            <block type='mpr121-event'></block>
-        </category>
-        <category name='RADIO'>
-            <block type='rfreceiver-event'></block>
-            <block type='rfreceiver_message'></block>
-            <label text=''></label>
+        <!-- <category name="TOUCH">
+            <block type="mpr121-event"></block>
+        </category> -->
+        <category name="REMOTE">
+            <block type="pxt.remote.onPress"></block>
+            <!-- <block type="rfreceiver_message"></block>
+            <label text=""></label>
             <label text="Example Application"></label>
             <block type="controls_if">
                 <value name="IF0">
@@ -94,108 +75,162 @@
                     </block>
 
                 </value>
-            </block>
+            </block> -->
         </category>
     </category>
-    <category name='CONTROL'>
-
-        <category name='RELAY'>
-            <block type='relay-set'>
-                <value name='MAIN'>
-                    <shadow type='state_output'>
-                    </shadow>
+    <category name="CONTROL">
+        <category name = "PIXEL">
+            <block type = "pxt.pixel.setColour">
+                <value name = "MAIN">
+                    <shadow type = "pxt.dropdown.onoff"></shadow>
+                </value>
+            </block>
+            <block type = "pxt.pixel.setColour">
+                <value name = "MAIN">
+                    <shadow type = "colour_picker"></shadow>
                 </value>
             </block>
         </category>
-
-
-        <category name='BUZZER'>
-            <button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button>
-            <block type='buzzer-set'>
-                <value name='MAIN'>
-                    <shadow type='state_output'>
-                    </shadow>
-                </value>
-            </block>
-            <block type='buzzer-beep'>
+        <category name="RELAY">
+            <block type="pxt.relay.setValue">
                 <value name="MAIN">
-                    <shadow type="number_output">
+                    <shadow type="pxt.dropdown.onoff">
                     </shadow>
                 </value>
+            </block>
+        </category>
 
-            </block>
-            <block type='buzzer-play'>
-            </block>
-            <block type='buzzer-playnote'>
-            </block>
-            <block type='buzzer-playfreq'>
+
+        <category name="BUZZER">
+            <!-- <button text="Create your song now !" callbackKey="buzzerKeyboardTrigger"></button> -->
+            <block type="pxt.buzzer.setValue">
                 <value name="MAIN">
-                    <shadow type="number_output">
-                        <field name="NUM">3000</field>
+                    <shadow type="pxt.dropdown.onoff">
+                    </shadow>
+                </value>
+            </block>
+            <block type="pxt.buzzer.beep">
+                <value name="MAIN">
+                    <shadow type="math_number">
+                    </shadow>
+                </value>
+
+            </block>
+            <block type="pxt.buzzer.playMelody">
+            </block>
+            <block type="pxt.buzzer.playNote">
+            </block>
+            <block type="pxt.buzzer.playFrequency">
+                <value name="MAIN">
+                    <shadow type="math_number">
+                        <!-- <field name="NUM">3000</field> -->
                     </shadow>
                 </value>
             </block>
         </category>
-        <category name='MP3'>
-            <block type='music-set-play'></block>
-            <block type='music-set-volume'></block>
-            <block type='music-set-stop'></block>
-            <block type='music-set-pause'></block>
-        </category>
-        <category name='REMOTE'>
-            <block type='irremote-learn'></block>
-            <block type='irremote-sendDirect'></block>
+        <!-- <category name="MP3">
+            <block type="music-set-play"></block>
+            <block type="music-set-volume"></block>
+            <block type="music-set-stop"></block>
+            <block type="music-set-pause"></block>
+        </category> -->
+        <category name="INFRARED">
+            <block type="pxt.infrared.learn">
+                <value name= "MAIN">
+                    <block type = "text">
+                        <field name = "TEXT">Turn On</field>
+                    </block>
+                </value>
+            </block>
+            <block type="pxt.infrared.send">
+                <value name= "MAIN">
+                    <block type = "text">
+                        <field name = "TEXT">Turn On</field>
+                    </block>
+                </value>
+            </block>
         </category>
 
-        <category name="MOTOR"></category>
+        <!-- <category name="MOTOR">
+            <block type = "pxt.motor.setValue">
+
+            </block>
+        </category> -->
         <category name="SERVO">
-            <block type='servo-set'>
+            <block type="pxt.servo.setAngle">
                 <value name="MAIN">
-                    <shadow type="number_output">
+                    <shadow type="math_number">
+
+                    </shadow>
+                </value>
+            </block>
+            <block type="pxt.servo.setAngle">
+                <value name="MAIN">
+                    <shadow type="pxt.field.angle">
 
                     </shadow>
                 </value>
             </block>
 
         </category>
-        <category name='LED'>
-            <block type='led-set'>
-                <value name='MAIN'>
-                    <shadow type='state_output'>
+        <!-- <category name="LED">
+            <block type="led-set">
+                <value name="MAIN">
+                    <shadow type="state_output">
                     </shadow>
                 </value>
             </block>
-            <block type='led-fade'>
-                <value name='MAIN'>
-                    <shadow type='led_pwm_output'>
+            <block type="led-fade">
+                <value name="MAIN">
+                    <shadow type="led_pwm_output">
                     </shadow>
                 </value>
             </block>
-        </category>
+        </category> -->
     </category>
+    <category name="APP">
+        <block type="pxt.app.setProjectColour">
+            <value name="COLOUR">
+                <block type="colour_picker">
+                    <field name="TEXT">My Button</field>
+                </block>
+            </value>
+        </block>
+        <block type="pxt.app.declareWidget">
+            <value name="WIDGETNAME">
+                <block type="text">
+                    <field name="TEXT">My New Widget</field>
+                </block>
+            </value>
 
-    <category name='DISPLAY'>
+        </block>
+        <block type="pxt.app.button.onPress"></block>
+        <block type="pxt.app.button.onRelease"></block>
 
-
-        <category name='LCD'>
-            <block type='lcd-display'>
+    </category>
+    <category name="DISPLAY">
+        <category name="LCD">
+            <block type="pxt.lcd.display">
                 <value name="LEFT">
-                    <shadow type="display_text">
-                        <field name="TEXT"> </field>
+                    <shadow type="text">
+                        <field name="TEXT">     </field>
                     </shadow>
                 </value>
                 <value name="RIGHT">
-                    <shadow type="display_text">
-                        <field name="TEXT"> </field>
+                    <shadow type="text">
+                        <field name="TEXT">     </field>
                     </shadow>
                 </value>
             </block>
-            <block type='lcd-clear'>
+            <block type="pxt.lcd.clear">
             </block>
-            <block type='lcd-backlight'>
+            <block type="pxt.lcd.backlight">
+                <value name = "MAIN">
+                    <shadow type = "pxt.dropdown.onoff"></shadow>
+                </value>
             </block>
         </category>
-
+<!-- 
         <category name="RGB">
             <block type="rgb-set-multiple">
                 <value name="COLOUR">
@@ -237,71 +272,80 @@
             </block>
             <block type="rgb_brightness">
             </block>
-        </category>
+        </category> -->
     </category>
-    <category name='NETWORK'>
-        <block type='blynk_event_vr'></block>
-        <block type='blynk_write_vw'>
+    <category name="NETWORK">
+        <block type="pxt.blynk.onReceive"></block>
+        <block type="pxt.blynk.onRequest"></block>
+        <block type="pxt.blynk.virtualWrite">
             <value name="DATA">
-                <shadow type="network_text">
+                <shadow type="text">
                     <field name="TEXT"> </field>
                 </shadow>
             </value>
         </block>
-        <block type="blynk_notify">
+        <block type="pxt.blynk.notify">
             <value name="DATA">
-                <shadow type="network_text">
+                <shadow type="text">
                     <field name="TEXT"> </field>
                 </shadow>
             </value>
         </block>
-        <block type="blynk_email">
-            <value name="MAIL">
-                <shadow type="network_text">
+        <block type="pxt.blynk.email">
+            <value name="EMAIL">
+                <shadow type="text">
                     <field name="TEXT">yourmail@gmail.com</field>
                 </shadow>
             </value>
             <value name="SUBJECT">
-                <shadow type="network_text">
+                <shadow type="text">
                     <field name="TEXT">Your Subject</field>
                 </shadow>
             </value>
-            <value name="CONTENT">
-                <shadow type="network_text">
+            <!-- <value name="CONTENT">
+                <shadow type="text">
                     <field name="TEXT"> </field>
                 </shadow>
-            </value>
+            </value> -->
         </block>
-        <block type='blynk_log'>
+        <block type="pxt.blynk.log">
             <value name="DATA">
-                <shadow type="network_text">
+                <shadow type="text">
                     <field name="TEXT"> </field>
                 </shadow>
             </value>
         </block>
-        <block type='blynk_message'></block>
-        <block type='blynk_message_iter'></block>
+        <block type="pxt.blynk.getMessage"></block>
+        <!-- <block type="pxt.blynk.getMessageIteration"></block> -->
     </category>
-    <category name='TIMER'>
-        <!-- <block type='timer-event-repeat'></block>
-		<block type='timer-event-alarm'></block>
-		<block type='timer-wait'></block>
-		<block type='timer-runtime'></block>
-		<block type='timer-ntp'></block>
+    <category name="TIMER">
+        <!-- <block type="timer-event-repeat"></block>
+		<block type="timer-event-alarm"></block>
+		<block type="timer-wait"></block>
+		<block type="timer-runtime"></block>
+		<block type="timer-ntp"></block>
 		<label text = "Advanced" ></label>
-		<block type='rtc-sync'></block> -->
+		<block type="rtc-sync"></block> -->
 
-        <block type="pxt-coroutine-scheduler"></block>
-        <block type="pxt-coroutine-wait">
-            <value name="TIME">
-                <shadow type='pxt-coroutine-numberdropdown'></shadow>
+        <block type="pxt.timer.createTask">
+            <!-- <value name = "MAIN">
+                <block type = "pxt.dropdown.timeselect">
+
+                </block>
+            </value> -->
+        </block>
+        <block type="pxt.timer.wait">
+            <value name="MAIN">
+                <shadow type="pxt.dropdown.timeselect"></shadow>
             </value>
         </block>
-        <block type="pxt-coroutine-runtime"></block>
-        <block type="pxt-calendar-schedule"></block>
+        <block type="pxt.timer.runtime">
+           
+        </block>
+        <block type="pxt.timer.createAlarm"></block>
 
     </category>
-    <category name='LOOPS'>
+    <category name="LOOPS">
         <block type="controls_repeat_ext">2
             <value name="TIMES">
                 <shadow type="math_number">
@@ -337,7 +381,7 @@
             <field name="FLOW">BREAK</field>
         </block>
     </category>
-    <category name='LOGIC'>
+    <category name="LOGIC">
         <block type="controls_if">
             <value name="IF0">
                 <block type="logic_compare">
@@ -357,8 +401,8 @@
             <field name="BOOL">TRUE</field>
         </block>
     </category>
-    <category name='VARIABLES' custom="VARIABLE"> </category>
-    <category name='MATH'>
+    <category name="VARIABLES" custom="VARIABLE"> </category>
+    <category name="MATH">
         <block type="math_number">
             <field name="NUM">123</field>
         </block>
@@ -396,16 +440,88 @@
         </block>
         <block type="math_random_float"></block>
     </category>
-
-    <sep></sep>
-    <category name='ADVANCED'>
-        <category name='TEXT'>
-            <block type="text">
-                <field name="TEXT"></field>
+    <category name="TEXT" colour="160">
+        <block type="text"></block>
+        <block type="text_join"></block>
+        <block type="text_append">
+          <value name="TEXT">
+            <shadow type="text"></shadow>
+          </value>
+        </block>
+        <block type="text_length">
+          <value name="VALUE">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="text_isEmpty">
+          <value name="VALUE">
+            <shadow type="text">
+              <field name="TEXT"></field>
+            </shadow>
+          </value>
+        </block>
+        <block type="text_indexOf">
+          <value name="VALUE">
+            <block type="variables_get">
+              <field name="VAR">text</field>
             </block>
-        </category>
+          </value>
+          <value name="FIND">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="text_charAt">
+          <value name="VALUE">
+            <block type="variables_get">
+              <field name="VAR">text</field>
+            </block>
+          </value>
+        </block>
+        <block type="text_getSubstring">
+          <value name="STRING">
+            <block type="variables_get">
+              <field name="VAR">text</field>
+            </block>
+          </value>
+        </block>
+        <block type="text_changeCase">
+          <value name="TEXT">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="text_trim">
+          <value name="TEXT">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="text_print">
+          <value name="TEXT">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
+        <block type="text_prompt_ext">
+          <value name="TEXT">
+            <shadow type="text">
+              <field name="TEXT">abc</field>
+            </shadow>
+          </value>
+        </block>
+    </category>
+    <sep></sep>
+    <category name="ADVANCED">
+        
 
-        <category name='LIST'>
+        <category name="ARRAYS">
             <block type="lists_create_with">
                 <mutation items="3"></mutation>
             </block>
@@ -474,7 +590,7 @@
             </block>
         </category>
 
-        <category name='FUNCTION' custom="PROCEDURE">
+        <category name="FUNCTIONS" custom="PROCEDURE">
         </category>
     </category>
 

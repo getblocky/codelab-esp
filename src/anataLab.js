@@ -12,8 +12,6 @@ goog.require('Blockly');
 */
 // ===========================================================
 
-
-
 var Toolbox_Input = '#d65cd6';
 var Toolbox_Sensor = "#d65cd6";
 var Toolbox_Control = "#f55d3e";

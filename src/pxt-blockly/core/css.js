@@ -834,6 +834,10 @@ Blockly.Css.CONTENT = [
     'z-index: 40;', /* so blocks go over toolbox when dragging */
     //'z-index: 70;', /* so blocks go under toolbox when dragging */
     '-webkit-tap-highlight-color: transparent;', /* issue #1345 */
+    'border-radius:5px',
+    'box-shadow:5px',
+    'padding-left:10px',
+    'padding-right:10px',
   '}',
 
   '.blocklyTreeRoot {',
@@ -850,6 +854,14 @@ Blockly.Css.CONTENT = [
     'margin-bottom: 3px;',
     'padding-right: 8px;',
     'white-space: nowrap;',
+    '-webkit-border-radius:10px;',
+    '-webkit-padding-before:10px;',
+    '-webkit-padding-after:10px;',
+    // 'box-shadow:5px',
+    // 'padding-right : 20px',
+    // 'padding-left:20px',
+    // 'padding-top:20px',
+    // 'padding-bottom:20px',
   '}',
 
   '.blocklyHorizontalTree {',
@@ -884,7 +896,7 @@ Blockly.Css.CONTENT = [
   '}',
 
   '.blocklyTreeIcon {',
-    'background-image: url(<<<PATH>>>/sprites.png);',
+    // 'background-image: url(<<<PATH>>>/sprites.png);',
     'height: 16px;',
     'vertical-align: middle;',
     'width: 16px;',
@@ -921,9 +933,9 @@ Blockly.Css.CONTENT = [
 
   '.blocklyTreeLabel {',
     'cursor: default;',
-    'font-family: "Helvetica Neue", "Segoe UI", Helvetica, sans-serif;',
-    'font-size: 16px;',
-    'padding: 0 3px;',
+    'font-family: "Comic Sans MS";',
+    'font-size: 20px;',
+    'padding: 0 10px;',
     'vertical-align: middle;',
   '}',
 

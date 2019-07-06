@@ -52,7 +52,7 @@ goog.require('goog.userAgent');
  */
 Blockly.FieldDropdown = function(menuGenerator, opt_validator) {
   this.menuGenerator_ = menuGenerator;
-  // this.trimOptions_();
+  this.trimOptions_();
   var firstTuple = this.getOptions()[0];
 
   // Call parent's constructor.
@@ -407,14 +407,15 @@ Blockly.FieldDropdown.prototype.trimOptions_ = function() {
     this.suffixField = strings[0].substr(1 - suffixLength);
   }
   // Remove the prefix and suffix from the options.
-  var newOptions = [];
-  for (var i = 0; i < options.length; i++) {
-    var text = options[i][0];
-    var value = options[i][1];
-    text = text.substring(prefixLength, text.length - suffixLength);
-    newOptions[i] = [text, value];
-  }
-  this.menuGenerator_ = newOptions;
+  // Don't remove :))
+  // var newOptions = [];
+  // for (var i = 0; i < options.length; i++) {
+  //   var text = options[i][0];
+  //   var value = options[i][1];
+  //   text = text.substring(prefixLength, text.length - suffixLength);
+  //   newOptions[i] = [text, value];
+  // }
+  // this.menuGenerator_ = newOptions;
 };
 
 /**

@@ -25,12 +25,15 @@ goog.provide('Blockly.Colours');
 Blockly.Colours = {
   // SVG colours: these must be specificed in #RRGGBB style
   // To add an opacity, this must be specified as a separate property (for SVG fill-opacity)
-  "text": "#575E75",
+  "text": "#000000",
+  // "text": "#575E75",
   "workspace": "#F9F9F9",
   "toolboxHover": "#4C97FF",
   "toolboxSelected": "#e9eef2",
-  "toolboxText": "#575E75",
-  "toolbox": "#FFFFFF",
+  "toolboxText": "#000000",
+  // "toolboxText": "#575E75",
+  "toolbox": "#424a51",
+  // "toolbox": "#FFFFFF",
   "flyout": "#444",
   "scrollbar": "#CECDCE",
   "scrollbarHover": '#CECDCE',

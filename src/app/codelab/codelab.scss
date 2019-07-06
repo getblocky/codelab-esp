@@ -201,14 +201,18 @@ md-bottom-sheet {
 /* Customize toolbox */
 #code-lab {
   .blocklyTreeRow {
-    height: 40px;
-    line-height: 40px;
+    height: 30px;
+    line-height: 30px;
     position: relative;
   }
 
   .blocklyTreeLabel {
     @media (max-width: $layout-breakpoint-xs) {
       display: none;
+      font-family  : Comic Sans MS;
+      padding : 0 10px;
+      font-size : 20px;
+      vertical-align:  middle ;
     }
   }
 
@@ -222,6 +226,9 @@ md-bottom-sheet {
   .blocklyTreeSelected {
     .blocklyTreeIcon.blocklyTreeIconNone:before {
       color: #ffffff !important;
+      position: relative;
+      font-size : 30px ;
+      bottom : 60px
     }
 
     .blocklyTreeIcon {
@@ -235,8 +242,9 @@ md-bottom-sheet {
 
   .blocklyTreeIcon:before {
     font-family: FontAwesome;
-    position: absolute;
-    top: 0;
+    position: relative;
+    font-size : 30px ;
+    bottom : 60px
   }
 
   /* --- App ---*/

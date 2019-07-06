@@ -22,5 +22,6 @@
         "activityBar.background": "#173413",
         "titleBar.activeBackground": "#20491A",
         "titleBar.activeForeground": "#F8FCF7"
-    }
+    },
+    "eslint.enable": false
 }
